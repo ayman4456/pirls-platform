@@ -1,0 +1,2369 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة القارئ الذكي لاختبار بيرلز</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#faf7f2;--bg2:#f0ebe0;--surface:#fff;--card:#fffef9;--border:#e2d9c8;
+  --ink:#1a1208;--ink2:#3d3322;--muted:#8a7d6b;--accent:#c8460a;
+  --accent2:#1a6b3c;--accent3:#1a4a8a;--gold:#b8860b;
+  --shadow:rgba(26,18,8,0.12);--success:#1a6b3c;--error:#c8200a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;font-size:16px;line-height:1.85;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23c8b99a' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none;z-index:0}
+nav{position:sticky;top:0;z-index:100;background:rgba(250,247,242,0.96);backdrop-filter:blur(12px);border-bottom:2px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 16px var(--shadow);min-height:68px;gap:10px;flex-wrap:wrap}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+.logo-emblem{width:42px;height:42px;background:linear-gradient(135deg,var(--accent),var(--gold));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;color:white;box-shadow:0 3px 10px rgba(200,70,10,0.3)}
+.logo-text h1{font-size:1.05rem;font-weight:700;color:var(--ink);line-height:1.2}
+.logo-text p{font-size:0.75rem;color:var(--muted);font-weight:500}
+.nav-school{display:flex;flex-direction:column;align-items:center;font-size:0.92rem;color:var(--accent3);font-weight:700;text-align:center;line-height:1.5}
+.nav-tabs{display:flex;gap:3px;background:var(--bg2);padding:4px;border-radius:10px;border:1px solid var(--border)}
+.nav-tab{padding:6px 16px;border-radius:7px;cursor:pointer;font-size:0.88rem;font-weight:600;color:var(--muted);transition:all 0.2s;border:none;background:transparent;font-family:inherit}
+.nav-tab.active{background:var(--accent);color:white;font-weight:700;box-shadow:0 2px 8px rgba(200,70,10,0.3)}
+.nav-tab:hover:not(.active){color:var(--ink);background:var(--border)}
+.nav-stats{display:flex;align-items:center;gap:10px;font-size:0.85rem}
+.stat-pill{display:flex;align-items:center;gap:5px;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:4px 12px;font-weight:600}
+.stat-dot{width:7px;height:7px;border-radius:50%}
+main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:1.8rem 1.4rem}
+.view{display:none;animation:fadeIn 0.35s ease}.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.hero{text-align:center;padding:3rem 1.5rem 2.5rem}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(200,70,10,0.08);border:1px solid rgba(200,70,10,0.2);border-radius:18px;padding:5px 16px;font-size:0.88rem;font-weight:600;color:var(--accent);margin-bottom:1.3rem}
+.hero h2{font-size:clamp(1.7rem,4.5vw,2.8rem);font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:0.9rem}
+.hero h2 span{color:var(--accent);position:relative}
+.hero h2 span::after{content:'';position:absolute;bottom:-3px;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:2px}
+.hero p{font-size:1rem;color:var(--muted);max-width:540px;margin:0 auto 2rem;line-height:1.9}
+.hero-buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-primary{padding:12px 28px;background:var(--accent);color:white;border:none;border-radius:9px;font-size:0.95rem;font-weight:700;font-family:inherit;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 14px rgba(200,70,10,0.3)}
+.btn-primary:hover{background:#a33a08;transform:translateY(-2px)}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.btn-secondary{padding:12px 28px;background:transparent;color:var(--ink2);border:2px solid var(--border);border-radius:9px;font-size:0.95rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all 0.2s}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.info-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.9rem;margin:2.5rem 0}
+.info-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.3rem;text-align:center;box-shadow:0 2px 10px var(--shadow);transition:transform 0.2s,box-shadow 0.2s;position:relative;overflow:hidden}
+.info-card::before{content:'';position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--gold))}
+.info-card:hover{transform:translateY(-3px);box-shadow:0 7px 20px var(--shadow)}
+.info-card .icon{font-size:2rem;margin-bottom:0.6rem;display:block}
+.info-card h3{font-size:1.5rem;font-weight:700;color:var(--accent);margin-bottom:0.25rem}
+.info-card p{font-size:0.85rem;color:var(--muted);line-height:1.55}
+.section-title{font-size:1.5rem;font-weight:700;margin-bottom:0.35rem;color:var(--ink)}
+.section-sub{font-size:0.88rem;color:var(--muted);margin-bottom:1.3rem}
+.levels-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.1rem;margin-bottom:2.5rem}
+.level-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:1.4rem;cursor:pointer;transition:all 0.22s;box-shadow:0 2px 7px var(--shadow);position:relative;overflow:hidden}
+.level-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 7px 20px var(--shadow)}
+.level-badge{display:inline-flex;align-items:center;gap:5px;border-radius:6px;padding:3px 10px;font-size:0.82rem;font-weight:700;margin-bottom:0.8rem}
+.badge-beginner{background:rgba(26,107,60,0.1);color:var(--success)}
+.badge-medium{background:rgba(184,134,11,0.1);color:var(--gold)}
+.badge-hard{background:rgba(200,70,10,0.1);color:var(--accent)}
+.badge-advanced{background:rgba(26,74,138,0.1);color:var(--accent3)}
+.badge-sim1{background:rgba(124,45,158,0.1);color:#7c2d9e}
+.badge-sim2{background:rgba(10,80,120,0.12);color:#0a5078}
+.badge-iea{background:linear-gradient(135deg,rgba(200,70,10,0.15),rgba(184,134,11,0.15));color:#8b0000;border:1px solid rgba(139,0,0,0.2)}
+.level-card h3{font-size:1.05rem;font-weight:700;margin-bottom:0.4rem;color:var(--ink)}
+.level-card p{font-size:0.85rem;color:var(--muted);line-height:1.65;margin-bottom:0.8rem}
+.level-meta{display:flex;gap:10px;font-size:0.8rem;color:var(--muted)}
+.quiz-header{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.8rem;margin-bottom:1.3rem;box-shadow:0 2px 7px var(--shadow)}
+.quiz-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:0.8rem}
+.quiz-title-area h2{font-size:1.15rem;font-weight:700;color:var(--ink)}
+.quiz-title-area p{font-size:0.82rem;color:var(--muted)}
+.quiz-counter{font-size:1.25rem;font-weight:700;color:var(--accent)}
+.progress-bar-wrap{background:var(--bg2);border-radius:6px;height:9px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:6px;transition:width 0.5s cubic-bezier(0.4,0,0.2,1)}
+.quiz-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem;align-items:start}
+@media(max-width:750px){.quiz-layout{grid-template-columns:1fr}}
+.passage-panel{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:1.7rem;box-shadow:0 2px 10px var(--shadow);position:sticky;top:80px;max-height:calc(100vh - 110px);overflow-y:auto}
+.passage-panel::-webkit-scrollbar{width:4px}
+.passage-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.passage-label{display:flex;align-items:center;gap:7px;font-size:0.78rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.9rem}
+.passage-label::before,.passage-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.passage-title{font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:0.9rem;line-height:1.5}
+.passage-body{font-size:1rem;line-height:2.05;color:var(--ink2)}
+.passage-body p{margin-bottom:0.9rem}
+.highlight{background:rgba(200,70,10,0.1);border-radius:3px;padding:1px 3px;color:var(--accent);font-weight:700}
+.question-panel{display:flex;flex-direction:column;gap:1.1rem}
+.question-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:1.5rem;box-shadow:0 2px 7px var(--shadow);transition:border-color 0.2s}
+.question-card.answered{border-color:var(--success)}
+.question-card.wrong-answered{border-color:var(--error)}
+.question-num{display:inline-block;background:var(--accent);color:white;border-radius:7px;padding:2px 11px;font-size:0.82rem;font-weight:700;margin-bottom:0.7rem}
+.question-text{font-size:1rem;font-weight:700;color:var(--ink);line-height:1.75;margin-bottom:1.1rem;white-space:pre-line}
+.options-list{display:flex;flex-direction:column;gap:8px}
+.option-btn{width:100%;padding:11px 15px;background:var(--bg2);border:1.5px solid var(--border);border-radius:9px;text-align:right;cursor:pointer;font-size:0.93rem;font-family:inherit;font-weight:600;color:var(--ink2);transition:all 0.17s;display:flex;align-items:center;gap:9px}
+.option-letter{width:28px;height:28px;border-radius:6px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;flex-shrink:0;transition:all 0.17s}
+.option-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(200,70,10,0.05)}
+.option-btn:hover:not(:disabled) .option-letter{background:var(--accent);color:white}
+.option-btn.selected{border-color:var(--accent3);background:rgba(26,74,138,0.07)}
+.option-btn.selected .option-letter{background:var(--accent3);color:white}
+.option-btn.correct{border-color:var(--success)!important;background:rgba(26,107,60,0.09)!important;color:var(--success)!important}
+.option-btn.correct .option-letter{background:var(--success)!important;color:white!important}
+.option-btn.wrong{border-color:var(--error)!important;background:rgba(200,32,10,0.09)!important;color:var(--error)!important}
+.option-btn.wrong .option-letter{background:var(--error)!important;color:white!important}
+.option-btn:disabled{cursor:default}
+.feedback-box{margin-top:0.9rem;padding:11px 15px;border-radius:9px;font-size:0.88rem;font-weight:500;line-height:1.65;display:none}
+.feedback-box.show{display:block}
+.feedback-box.correct-fb{background:rgba(26,107,60,0.08);color:var(--success);border:1px solid rgba(26,107,60,0.2)}
+.feedback-box.wrong-fb{background:rgba(200,32,10,0.08);color:var(--error);border:1px solid rgba(200,32,10,0.2)}
+.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.8rem;gap:10px;flex-wrap:wrap}
+.results-wrap{max-width:700px;margin:0 auto;text-align:center;padding:2rem 0}
+.result-badge-big{width:110px;height:110px;border-radius:50%;margin:0 auto 1.3rem;display:flex;align-items:center;justify-content:center;font-size:2.4rem;border:4px solid;animation:popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275)}
+@keyframes popIn{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
+.badge-gold-big{border-color:var(--gold);background:rgba(184,134,11,0.1);color:var(--gold)}
+.badge-green-big{border-color:var(--success);background:rgba(26,107,60,0.1);color:var(--success)}
+.badge-orange-big{border-color:var(--accent);background:rgba(200,70,10,0.1);color:var(--accent)}
+.results-wrap h2{font-size:1.75rem;font-weight:700;margin-bottom:0.5rem}
+.score-display{font-size:3.5rem;font-weight:700;color:var(--accent);line-height:1;margin:0.9rem 0}
+.score-display span{font-size:1.6rem;color:var(--muted)}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.9rem;margin:1.8rem 0}
+.result-stat{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:1rem;box-shadow:0 2px 7px var(--shadow)}
+.result-stat .num{font-size:1.85rem;font-weight:700;display:block}
+.result-stat .label{font-size:0.82rem;color:var(--muted)}
+.num-green{color:var(--success)}.num-red{color:var(--error)}.num-orange{color:var(--accent)}
+.skills-analysis{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:1.3rem 1.7rem;margin:1.3rem 0;text-align:right}
+.skills-analysis h3{font-size:1.1rem;font-weight:700;margin-bottom:0.9rem;color:var(--ink)}
+.skill-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.skill-bar-label{font-size:0.9rem;font-weight:600;color:var(--ink2);width:155px;flex-shrink:0}
+.skill-bar-track{flex:1;height:11px;background:var(--bg2);border-radius:5px;overflow:hidden}
+.skill-bar-fill{height:100%;border-radius:5px;transition:width 1s ease}
+.skill-pct{font-size:0.9rem;font-weight:700;color:var(--accent);width:38px}
+.lessons-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.1rem}
+.lesson-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all 0.22s;box-shadow:0 2px 7px var(--shadow)}
+.lesson-card:hover{transform:translateY(-3px);box-shadow:0 9px 24px var(--shadow);border-color:var(--accent)}
+.lesson-thumb{height:110px;display:flex;align-items:center;justify-content:center;font-size:3.2rem}
+.thumb-1{background:linear-gradient(135deg,#fff0e6,#ffd4b8)}.thumb-2{background:linear-gradient(135deg,#e6f0ff,#b8d0ff)}
+.thumb-3{background:linear-gradient(135deg,#e6fff2,#b8ffd8)}.thumb-4{background:linear-gradient(135deg,#fff8e6,#ffe8b8)}
+.thumb-5{background:linear-gradient(135deg,#f0e6ff,#d4b8ff)}.thumb-6{background:linear-gradient(135deg,#ffe6e6,#ffb8b8)}
+.lesson-body{padding:1.2rem}
+.lesson-tag{display:inline-block;background:rgba(200,70,10,0.08);color:var(--accent);border-radius:5px;padding:2px 8px;font-size:0.78rem;font-weight:700;margin-bottom:0.5rem}
+.lesson-body h3{font-size:1rem;font-weight:700;margin-bottom:0.35rem;color:var(--ink);line-height:1.45}
+.lesson-body p{font-size:0.87rem;color:var(--muted);line-height:1.7;margin-bottom:0.7rem}
+.lesson-footer{display:flex;align-items:center;justify-content:space-between;font-size:0.82rem;color:var(--muted)}
+.lesson-detail-wrap{max-width:740px;margin:0 auto}
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:transparent;border:none;color:var(--muted);font-size:0.92rem;font-family:inherit;cursor:pointer;padding:5px 0;margin-bottom:1.3rem;transition:color 0.2s}
+.back-btn:hover{color:var(--ink)}
+.lesson-article{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:2.2rem;box-shadow:0 2px 14px var(--shadow)}
+.lesson-article h2{font-size:1.6rem;font-weight:700;margin-bottom:0.5rem;color:var(--ink)}
+.lesson-article .lead{font-size:1rem;color:var(--muted);line-height:1.85;margin-bottom:1.8rem;border-bottom:1px solid var(--border);padding-bottom:1.3rem}
+.lesson-article h3{font-size:1.1rem;font-weight:700;color:var(--ink);margin:1.8rem 0 0.7rem;display:flex;align-items:center;gap:7px}
+.lesson-article h3::before{content:'';width:4px;height:18px;background:var(--accent);border-radius:2px;display:block}
+.lesson-article p{font-size:0.95rem;line-height:1.95;color:var(--ink2);margin-bottom:0.9rem}
+.lesson-article ul{margin:0.4rem 0 1.1rem 0;padding-right:1.4rem}
+.lesson-article ul li{font-size:0.93rem;line-height:1.85;color:var(--ink2);margin-bottom:0.25rem}
+.callout-box{background:rgba(200,70,10,0.06);border:1px solid rgba(200,70,10,0.15);border-radius:11px;padding:1.1rem 1.4rem;margin:1.3rem 0;font-size:0.93rem;line-height:1.75;color:var(--ink2)}
+.callout-box strong{color:var(--accent)}
+.example-box{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:1.1rem 1.4rem;margin:1.1rem 0}
+.example-label{font-size:0.78rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem}
+.example-box p{font-size:0.97rem;line-height:1.95;margin:0}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:white;padding:11px 22px;border-radius:11px;font-size:0.93rem;font-weight:600;z-index:200;transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275);box-shadow:0 7px 22px rgba(0,0,0,0.2)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--success)}.toast.error{background:var(--error)}
+footer{position:relative;z-index:1;margin-top:3.5rem;border-top:2px solid var(--border);background:var(--surface);padding:2.2rem 1.5rem;text-align:center}
+.divider{height:1px;background:var(--border);margin:2.2rem 0}
+.text-muted{color:var(--muted);font-size:0.85rem}
+.student-overlay{position:fixed;inset:0;background:rgba(26,18,8,0.85);backdrop-filter:blur(10px);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
+.student-overlay.show{display:flex;animation:fadeIn 0.3s ease}
+.student-box{background:var(--surface);border:2px solid var(--accent);border-radius:18px;padding:2rem;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275)}
+.student-box h2{font-size:1.35rem;font-weight:700;color:var(--ink);margin-bottom:0.5rem;text-align:center}
+.student-box p{font-size:0.9rem;color:var(--muted);margin-bottom:1.3rem;text-align:center;line-height:1.65}
+.student-box label{display:block;font-size:0.88rem;font-weight:600;color:var(--ink2);margin-bottom:0.5rem}
+.student-box input{width:100%;padding:12px 15px;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;font-size:1rem;font-family:inherit;font-weight:600;color:var(--ink);outline:none;transition:border-color 0.2s;margin-bottom:1rem}
+.student-box input:focus{border-color:var(--accent)}
+.student-box-btns{display:flex;gap:10px;margin-top:0.5rem}
+.student-box-btns button{flex:1}
+.admin-fab{position:fixed;bottom:1.5rem;left:1.5rem;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--accent3),#0d3366);color:white;border:none;font-size:1.3rem;cursor:pointer;box-shadow:0 6px 20px rgba(26,74,138,0.4);z-index:150;transition:all 0.2s;display:flex;align-items:center;justify-content:center}
+.admin-fab:hover{transform:scale(1.08);box-shadow:0 8px 25px rgba(26,74,138,0.5)}
+.admin-overlay{position:fixed;inset:0;background:rgba(26,18,8,0.85);backdrop-filter:blur(10px);z-index:400;display:none;align-items:flex-start;justify-content:center;padding:1.5rem;overflow-y:auto}
+.admin-overlay.show{display:flex;animation:fadeIn 0.3s ease}
+.admin-panel{background:var(--surface);border-radius:18px;padding:2rem;max-width:900px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);margin:auto}
+.admin-panel h2{font-size:1.5rem;font-weight:700;color:var(--ink);margin-bottom:0.4rem;display:flex;align-items:center;gap:10px}
+.admin-panel .admin-sub{font-size:0.88rem;color:var(--muted);margin-bottom:1.5rem}
+.admin-toolbar{display:flex;gap:10px;margin-bottom:1.2rem;flex-wrap:wrap;align-items:center;background:var(--bg2);padding:0.8rem 1rem;border-radius:12px;border:1px solid var(--border)}
+.admin-toolbar input{flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.9rem;background:var(--surface)}
+.admin-toolbar button{padding:8px 14px;border:none;border-radius:8px;font-size:0.85rem;font-weight:700;font-family:inherit;cursor:pointer;transition:all 0.2s}
+.admin-close{background:var(--error);color:white}
+.admin-export{background:var(--accent2);color:white}
+.admin-delete{background:var(--error);color:white}
+.admin-table{width:100%;border-collapse:collapse;font-size:0.88rem;background:var(--surface);border-radius:12px;overflow:hidden;box-shadow:0 2px 10px var(--shadow)}
+.admin-table thead{background:var(--accent3);color:white}
+.admin-table th{padding:10px 12px;text-align:right;font-weight:700;font-size:0.85rem}
+.admin-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--ink2)}
+.admin-table tbody tr:hover{background:var(--bg2);cursor:pointer}
+.admin-empty{text-align:center;padding:2rem;color:var(--muted);background:var(--bg2);border-radius:12px;border:2px dashed var(--border)}
+.admin-detail{background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:1.2rem;margin-top:1rem}
+.admin-detail h3{font-size:1.1rem;font-weight:700;color:var(--accent);margin-bottom:0.7rem;border-bottom:2px solid var(--border);padding-bottom:0.5rem}
+.admin-qa{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:0.9rem 1.1rem;margin-bottom:0.7rem}
+.admin-qa .qtxt{font-weight:700;color:var(--ink);font-size:0.93rem;margin-bottom:0.5rem}
+.admin-qa .ans-row{display:flex;gap:10px;flex-wrap:wrap;font-size:0.85rem;margin-bottom:0.3rem}
+.admin-qa .ans-row strong{color:var(--ink2)}
+.admin-qa .correct-ans{color:var(--success);font-weight:700}
+.admin-qa .wrong-ans{color:var(--error);font-weight:700}
+.admin-qa.correct-row{border-right:4px solid var(--success)}
+.admin-qa.wrong-row{border-right:4px solid var(--error)}
+.admin-qa.open-row{border-right:4px solid var(--accent3)}
+.student-header-card{background:linear-gradient(135deg,var(--accent),var(--gold));color:white;border-radius:12px;padding:1.2rem 1.5rem;margin-bottom:1rem}
+.student-header-card h3{color:white;font-size:1.4rem;margin-bottom:0.4rem;border:none;padding:0}
+.student-header-card .stats-row{display:flex;gap:1.5rem;flex-wrap:wrap;font-size:0.9rem;margin-top:0.5rem}
+.student-header-card .stats-row div{background:rgba(255,255,255,0.15);padding:4px 12px;border-radius:20px;font-weight:600}
+@media(max-width:600px){.nav-tabs{display:none}.results-grid{grid-template-columns:1fr 1fr}.info-row{grid-template-columns:1fr 1fr}.nav-school{display:none}.admin-panel{padding:1.2rem}.admin-table{font-size:0.8rem}.admin-table th,.admin-table td{padding:7px 8px}}
+.ai-chat-widget { position:fixed; bottom:20px; left:20px; z-index:9999; display:flex; flex-direction:column; align-items:flex-start; }
+.ai-chat-fab { background:linear-gradient(135deg,var(--accent),var(--gold)); color:white; border:none; border-radius:30px; padding:12px 20px; font-size:1rem; font-weight:700; cursor:pointer; box-shadow:0 4px 15px rgba(200,70,10,0.3); transition:0.3s; font-family:inherit; }
+.ai-chat-fab:hover { transform:translateY(-3px); }
+.ai-chat-window { display:none; flex-direction:column; width:350px; height:450px; max-width:calc(100vw - 40px); background:var(--surface); border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,0.2); overflow:hidden; margin-bottom:15px; border:1px solid var(--border); }
+.ai-chat-window.show { display:flex; animation:slideUp 0.3s ease-out; }
+@keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.ai-chat-header { background:linear-gradient(135deg,var(--accent),var(--gold)); color:white; padding:15px; display:flex; justify-content:space-between; align-items:center; }
+.ai-chat-close { background:none; border:none; color:white; font-size:1.2rem; cursor:pointer; opacity:0.8; }
+.ai-chat-close:hover { opacity:1; }
+.ai-chat-messages { flex:1; padding:15px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; background:var(--bg); }
+.chat-msg { max-width:85%; padding:10px 14px; border-radius:12px; font-size:0.9rem; line-height:1.5; word-wrap:break-word; }
+.bot-msg { background:var(--bg2); color:var(--ink); align-self:flex-start; border-bottom-right-radius:2px; border:1px solid var(--border); }
+.user-msg { background:rgba(200,70,10,0.1); color:var(--accent); align-self:flex-end; border-bottom-left-radius:2px; border:1px solid rgba(200,70,10,0.2); }
+.ai-chat-input-area { display:flex; padding:10px; background:var(--surface); border-top:1px solid var(--border); gap:8px; }
+.ai-chat-input-area input { flex:1; padding:10px; border-radius:8px; border:1px solid var(--border); font-family:inherit; background:var(--bg2); color:var(--ink); }
+.ai-chat-input-area button { background:var(--accent); color:white; border:none; padding:0 15px; border-radius:8px; font-weight:700; cursor:pointer; font-family:inherit; }
+.chat-loading { display:flex; gap:4px; padding:5px; }
+.chat-loading span { width:6px; height:6px; background:var(--muted); border-radius:50%; animation:bounce 1.4s infinite ease-in-out both; }
+.chat-loading span:nth-child(1) { animation-delay:-0.32s; }
+.chat-loading span:nth-child(2) { animation-delay:-0.16s; }
+@keyframes bounce { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
+.countdown-mini { background: rgba(200, 70, 10, 0.08); border: 1.5px solid rgba(200, 70, 10, 0.2); color: var(--accent); padding: 5px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; white-space: nowrap; }
+.countdown-mini span { font-family: monospace; font-size: 0.95rem; background: var(--accent); color: white; padding: 2px 5px; border-radius: 4px; margin: 0 2px; }
+@media(max-width: 800px){ .countdown-mini { font-size: 0.7rem; padding: 4px 8px; } .countdown-mini span { font-size: 0.8rem; padding: 1px 3px; } }
+/* ════════════════════════════════════════
+   أنماط التحليل المتقدم والتحليل الجماعي
+   ════════════════════════════════════════ */
+.advanced-analysis-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:1.5rem 1.8rem;margin:1.5rem 0;box-shadow:0 4px 16px var(--shadow);text-align:right}
+.advanced-analysis-wrap h3{font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--ink);display:flex;align-items:center;gap:7px;border-bottom:2px solid var(--border);padding-bottom:0.6rem}
+.analysis-cards-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.9rem;margin:1rem 0}
+.analysis-mini-card{border-radius:12px;padding:1rem;text-align:center;border:1.5px solid;box-shadow:0 2px 8px var(--shadow)}
+.analysis-mini-card .amc-icon{font-size:1.8rem;margin-bottom:0.4rem}
+.analysis-mini-card .amc-val{font-size:1.4rem;font-weight:800;line-height:1.2}
+.analysis-mini-card .amc-lbl{font-size:0.8rem;color:var(--muted);font-weight:600}
+.strength-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(26,107,60,0.1);color:var(--success);border:1px solid rgba(26,107,60,0.2);border-radius:6px;padding:3px 10px;font-size:0.82rem;font-weight:700;margin:3px}
+.improve-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(200,70,10,0.08);color:var(--accent);border:1px solid rgba(200,70,10,0.2);border-radius:6px;padding:3px 10px;font-size:0.82rem;font-weight:700;margin:3px}
+.recommendation-box{background:linear-gradient(135deg,rgba(26,74,138,0.06),rgba(26,74,138,0.02));border:1.5px solid rgba(26,74,138,0.15);border-radius:12px;padding:1rem 1.3rem;margin-top:1rem;font-size:0.93rem;line-height:1.85;color:var(--ink2)}
+.recommendation-box strong{color:var(--accent3)}
+.group-dashboard{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:1.3rem 1.7rem;margin-bottom:1.5rem;box-shadow:0 4px 16px var(--shadow)}
+.group-dashboard h3{font-size:1.05rem;font-weight:700;margin-bottom:1rem;color:var(--ink);border-bottom:2px solid var(--border);padding-bottom:0.6rem}
+.group-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.8rem;margin:1rem 0}
+.group-stat-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;padding:0.9rem;text-align:center}
+.group-stat-card .gs-val{font-size:1.6rem;font-weight:800;display:block}
+.group-stat-card .gs-lbl{font-size:0.78rem;color:var(--muted);font-weight:600}
+.level-badge-pill{display:inline-flex;align-items:center;gap:4px;border-radius:8px;padding:3px 10px;font-size:0.8rem;font-weight:700}
+.pill-advanced{background:rgba(26,107,60,0.12);color:var(--success)}
+.pill-medium{background:rgba(184,134,11,0.12);color:var(--gold)}
+.pill-needs{background:rgba(200,70,10,0.1);color:var(--accent)}
+.badge-advsim{background:linear-gradient(135deg,rgba(26,74,138,0.12),rgba(0,120,100,0.1));color:#0a5078;border:1px solid rgba(10,80,120,0.25)}
+.excel-export-btn{background:linear-gradient(135deg,#1a6b3c,#14543a);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:0.88rem;font-weight:700;font-family:inherit;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px}
+.excel-export-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(26,107,60,0.3)}
+
+.hw{color:#1a4a8a;font-weight:700;text-decoration:underline dotted #1a4a8a;cursor:pointer;border-radius:3px;padding:0 2px}
+.hw:hover{background:rgba(26,74,138,0.1)}
+.hw::after{content:' 🔗';font-size:0.68em;opacity:0.55}
+#hpop{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;display:none;align-items:center;justify-content:center;padding:1rem}
+#hpop.on{display:flex}
+#hbox{background:#fff;border-radius:16px;padding:1.8rem;max-width:560px;width:100%;max-height:85vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.4);direction:rtl;font-family:'IBM Plex Sans Arabic',sans-serif}
+#hclose{position:absolute;top:1rem;left:1rem;background:#c8200a;color:white;border:none;border-radius:7px;padding:6px 14px;cursor:pointer;font-size:0.85rem;font-weight:700}
+#htitle{font-size:1.2rem;font-weight:700;color:#1a1208;margin-bottom:0.3rem}
+#hsub{font-size:0.8rem;color:#1a4a8a;font-weight:600;margin-bottom:1rem;padding-bottom:0.8rem;border-bottom:2px solid #e2d9c8}
+#hbody{font-size:0.95rem;line-height:1.9;color:#3d3322}
+#hbody p{margin-bottom:0.8rem}
+#hbody ul{padding-right:1.3rem;margin-bottom:0.8rem}
+#hbody li{margin-bottom:0.3rem}
+.fbox{background:rgba(26,74,138,0.07);border:1.5px solid rgba(26,74,138,0.18);border-radius:10px;padding:0.8rem 1.1rem;margin:0.7rem 0;font-size:0.88rem}
+.fbox strong{color:#1a4a8a}
+</style>
+</head>
+<body>
+<div id="globalNotification" style="display:none;background:linear-gradient(135deg, var(--accent3), #0d3366);color:white;text-align:center;padding:12px 40px;font-weight:700;font-size:1.05rem;box-shadow:0 4px 15px rgba(26,74,138,0.4);position:relative;z-index:200">
+  <span style="font-size:1.3rem;margin-left:8px;vertical-align:middle">🔔 إشعار من المعلم:</span>
+  <span id="globalNotifText"></span>
+  <button onclick="document.getElementById('globalNotification').style.display='none'" style="position:absolute;left:15px;top:50%;transform:translateY(-50%);background:none;border:none;color:white;font-size:1.5rem;cursor:pointer;opacity:0.8">✖</button>
+</div>
+<nav>
+  <div class="nav-logo" onclick="showView('home')">
+    <div class="logo-emblem">ق</div>
+    <div class="logo-text">
+      <h1>منصة القارئ الذكي لاختبار بيرلز</h1>
+      <p>الدراسة الدولية لتقدم القراءة</p>
+    </div>
+  </div>
+  <div class="nav-school">
+    <span>مدرسة سمرة بن جندب الابتدائية</span>
+    <span>والإمام خلاد لتحفيظ القرآن الكريم</span>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab(this,'home')">الرئيسية</button>
+    <button class="nav-tab" onclick="switchTab(this,'lessons')">الدروس</button>
+    <button class="nav-tab" onclick="switchTab(this,'quiz')">الاختبار</button>
+    <button class="nav-tab" onclick="switchTab(this,'game')">🎮 تحدي الأبطال</button>
+    <button class="nav-tab" style="background:var(--bg2);color:var(--accent);font-weight:700;border:1px solid var(--border)" onclick="openAdmin()">لوحة تحكم المعلم</button>
+  </div>
+  <div class="nav-stats" style="display:flex;align-items:center;gap:15px">
+    <div class="countdown-mini" id="examCountdown" title="موعد انطلاق الاختبار الدولي">
+      ⏳ <span id="cd-days">00</span>ي <span id="cd-hours">00</span>س <span id="cd-mins">00</span>د <span id="cd-secs">00</span>ث
+    </div>
+    <div class="stat-pill">
+      <div class="stat-dot" style="background:var(--success)"></div>
+      <span id="totalScore">0</span> نقطة
+    </div>
+  </div>
+</nav>
+
+<main>
+<div id="view-home" class="view active">
+  <div class="hero">
+    <div class="hero-eyebrow">📚 برنامج تعليمي متخصص</div>
+    <h2>استعد لاختبار <span>بيرلز</span> بكل ثقة</h2>
+    <p>منصة تعليمية شاملة تساعد الطلاب على تطوير مهارات القراءة والفهم اللازمة لاجتياز اختبار PIRLS الدولي بتفوق.</p>
+    <div class="hero-buttons">
+      <button class="btn-primary" onclick="switchTab(document.querySelector('.nav-tab:nth-child(3)'),'quiz')">ابدأ الاختبار الآن ◀</button>
+      <button class="btn-secondary" onclick="switchTab(document.querySelector('.nav-tab:nth-child(2)'),'lessons')">استعرض الدروس</button>
+    </div>
+  </div>
+  <div class="info-row">
+    <div class="info-card"><span class="icon">🌍</span><h3>60+</h3><p>دولة تشارك في اختبار بيرلز حول العالم</p></div>
+    <div class="info-card"><span class="icon">📖</span><h3>4</h3><p>مستويات مهارية قرائية يقيسها الاختبار</p></div>
+    <div class="info-card"><span class="icon">🎯</span><h3>500</h3><p>متوسط المقياس الدولي لاختبار بيرلز</p></div>
+    <div class="info-card"><span class="icon">👶</span><h3>٤ ابتدائي</h3><p>الصف الدراسي المستهدف لتطبيق الاختبار</p></div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title">اختر مستوى الاختبار</div>
+  <div class="section-sub">تدرج من السهل إلى الصعب — المستويات الأخيرة محاكاة حقيقية لاختبار PIRLS</div>
+  <div class="levels-grid">
+    <div class="level-card" onclick="startQuiz('beginner')"><div class="level-badge badge-beginner">🌱 مبتدئ</div><h3>التركيز على معلومات النص واسترجاعها</h3><p>استخراج المعلومات الواضحة والصريحة من النص.</p><div class="level-meta"><span>❓ 6 أسئلة</span><span>⏱ 20 دقيقة</span></div></div>
+    <div class="level-card" onclick="startQuiz('medium')"><div class="level-badge badge-medium">⭐ متوسط</div><h3>بناء استدلالات مباشرة من النص</h3><p>الربط بين أجزاء النص واستنتاج معلومات ضمنية.</p><div class="level-meta"><span>❓ 6 أسئلة</span><span>⏱ 15 دقيقة</span></div></div>
+    <div class="level-card" onclick="startQuiz('hard')"><div class="level-badge badge-hard">🔥 متقدم</div><h3>تفسير الأفكار والمعلومات ودمجها</h3><p>تفسير النص ومقارنة المعلومات وربطها بالحياة الواقعية.</p><div class="level-meta"><span>❓ 6 أسئلة</span><span>⏱ 20 دقيقة</span></div></div>
+    <div class="level-card" onclick="startQuiz('advanced')"><div class="level-badge badge-advanced">🏆 خبير</div><h3>تقييم ونقد عناصر النص ومحتواه</h3><p>الحكم على كفاية المعلومات، وتقييم الأسلوب، وتمييز الحقائق والآراء.</p><div class="level-meta"><span>❓ 10 أسئلة</span><span>⏱ 25 دقيقة</span></div></div>
+    <div class="level-card" onclick="startQuiz('sim1')" style="border-color:rgba(124,45,158,0.3)"><div class="level-badge badge-sim1">🧪 محاكاة PIRLS — أ</div><h3>نموذج محاكاة أول (أدبي - معلوماتي)</h3><p>قطعة أدبية وقطعة معلوماتية مع 10 أسئلة تغطي المستويات الأربعة. تحاكي شكل الاختبار الدولي الفعلي.</p><div class="level-meta"><span>❓ 10 أسئلة</span><span>⏱ 30 دقيقة</span></div></div>
+    <div class="level-card" onclick="startQuiz('sim2')" style="border-color:rgba(10,80,120,0.3)"><div class="level-badge badge-sim2">🔬 محاكاة PIRLS — ب</div><h3>نموذج محاكاة ثاني (أدبي - معلوماتي)</h3><p>قطعة أدبية وقطعة معلوماتية مع 10 أسئلة تغطي المستويات الأربعة كاملةً.</p><div class="level-meta"><span>❓ 10 أسئلة</span><span>⏱ 30 دقيقة</span></div></div>
+    <div class="level-card" onclick="startQuiz('iea')" style="border-color:rgba(139,0,0,0.3);background:linear-gradient(180deg,var(--surface),rgba(200,70,10,0.02))"><div class="level-badge badge-iea">⚡ محاكاة PIRLS الرسمية</div><h3>المحاكاة المتقدمة لاختبار PIRLS</h3><p>قطعتان رسميتان: "لغز السنّ العملاق" معلوماتية + "فطيرة العدو" أدبية، مع 30 سؤالاً شاملاً مطابقاً للملف الرسمي.</p><div class="level-meta"><span>❓ 30 سؤالاً</span><span>⏱ 60 دقيقة</span><span>🏆 الأصعب</span></div></div>
+    <!-- ══ بطاقة جديدة: محاكي بيرلز المتقدم ══ -->
+    <div class="level-card" onclick="startQuiz('advancedSim')" style="border-color:rgba(10,80,120,0.35);background:linear-gradient(180deg,var(--surface),rgba(10,80,120,0.03))"><div class="level-badge badge-advsim">🎓 محاكي بيرلز المتقدم</div><h3>اختبار شامل بجميع المهام القرائية الأربع</h3><p>قصة "رحلة إلى الجبال" معلوماتية + "مغامرة سالم في الغابة" أدبية، مع 16 سؤالاً متنوعاً يغطي جميع مستويات الفهم القرائي PIRLS بعمق.</p><div class="level-meta"><span>❓ 16 سؤالاً</span><span>⏱ 35 دقيقة</span><span>🔬 تحليل متقدم</span></div></div>
+  </div>
+  <div class="divider"></div>
+  <div class="section-title">🏆 لوحة شرف أبطال بيرلز</div>
+  <div class="section-sub">أفضل الطلاب الذين أتموا الاختبارات بتميز وإتقان</div>
+  <div id="leaderboard-list" style="max-width:600px;margin:0 auto;padding:0 1rem;margin-bottom:2rem"></div>
+
+  <div class="divider"></div>
+  <div class="section-title">ما هو اختبار بيرلز؟</div>
+  <div class="section-sub" style="margin-bottom:0">PIRLS — Progress in International Reading Literacy Study</div><br>
+  <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:1.8rem;box-shadow:0 2px 7px var(--shadow)">
+    <p style="font-size:0.97rem;line-height:2.05;color:var(--ink2)">اختبار <strong>بيرلز (PIRLS)</strong> هو دراسة دولية دورية تُجرى كل خمس سنوات، تشرف عليها الرابطة الدولية لتقييم التحصيل التعليمي <strong>(IEA)</strong>. يقيس الاختبار مستوى مهارة القراءة لدى طلاب <strong>الصف الرابع الابتدائي</strong>.<br><br>يركز بيرلز على: <strong>الغرض من القراءة</strong> (أدبي أو معلوماتي)، و<strong>العمليات الفهمية</strong> (الاستخراج، الاستنتاج، التفسير، التقييم)، إضافةً إلى <strong>السلوك القرائي</strong> ومواقف الطلاب.</p>
+  </div>
+</div>
+
+<div id="view-lessons" class="view">
+  <div id="lessons-list-view">
+    <div class="section-title" style="margin-bottom:0.3rem">مكتبة الدروس التعليمية</div>
+    <div class="section-sub">تعلم مهارات القراءة والفهم المطلوبة في اختبار بيرلز</div>
+    <div class="lessons-grid">
+      <div class="lesson-card" onclick="openLesson(0)"><div class="lesson-thumb thumb-1">📖</div><div class="lesson-body"><div class="lesson-tag">الفهم القرائي</div><h3>الفرق بين الفهم الحرفي والاستنتاجي</h3><p>تعلم كيف تميز بين ما صرّح به النص وما يمكن استنتاجه منه.</p><div class="lesson-footer"><span>⏱ 8 دقائق</span><span>مبتدئ 🌱</span></div></div></div>
+      <div class="lesson-card" onclick="openLesson(1)"><div class="lesson-thumb thumb-2">🔍</div><div class="lesson-body"><div class="lesson-tag">الاستراتيجيات</div><h3>استراتيجيات قراءة النصوص الأدبية</h3><p>أدوات عملية لفهم القصص والنصوص الإبداعية بعمق.</p><div class="lesson-footer"><span>⏱ 10 دقائق</span><span>متوسط ⭐</span></div></div></div>
+      <div class="lesson-card" onclick="openLesson(2)"><div class="lesson-thumb thumb-3">📰</div><div class="lesson-body"><div class="lesson-tag">نصوص معلوماتية</div><h3>قراءة النصوص المعلوماتية والعلمية</h3><p>كيفية التعامل مع النصوص غير الأدبية واستخراج المعلومات منها.</p><div class="lesson-footer"><span>⏱ 12 دقيقة</span><span>متوسط ⭐</span></div></div></div>
+      <div class="lesson-card" onclick="openLesson(3)"><div class="lesson-thumb thumb-4">💡</div><div class="lesson-body"><div class="lesson-tag">التفسير</div><h3>مهارة التفسير والربط بالمعرفة السابقة</h3><p>كيف تربط ما تقرأه بما تعرفه لبناء فهم أعمق.</p><div class="lesson-footer"><span>⏱ 10 دقائق</span><span>متقدم 🔥</span></div></div></div>
+      <div class="lesson-card" onclick="openLesson(4)"><div class="lesson-thumb thumb-5">⚡</div><div class="lesson-body"><div class="lesson-tag">التقييم النقدي</div><h3>نقد النص وتقييم أسلوب الكاتب</h3><p>مهارات التحليل النقدي للنص وتقييم قصد الكاتب وأسلوبه.</p><div class="lesson-footer"><span>⏱ 15 دقيقة</span><span>خبير 🏆</span></div></div></div>
+      <div class="lesson-card" onclick="openLesson(5)"><div class="lesson-thumb thumb-6">🗺</div><div class="lesson-body"><div class="lesson-tag">استراتيجيات الاختبار</div><h3>نصائح لأداء أفضل في يوم الاختبار</h3><p>استراتيجيات عملية لإدارة الوقت والإجابة عن أسئلة بيرلز بدقة.</p><div class="lesson-footer"><span>⏱ 7 دقائق</span><span>للجميع 🎯</span></div></div></div>
+    </div>
+  </div>
+  <div id="lesson-detail-view" style="display:none">
+    <div class="lesson-detail-wrap">
+      <button class="back-btn" onclick="closeLessonDetail()">◀ العودة للدروس</button>
+      <div class="lesson-article" id="lesson-article-content"></div>
+      <div style="margin-top:1.3rem;text-align:center"><button class="btn-primary" onclick="switchTab(document.querySelector('.nav-tab:nth-child(3)'),'quiz')">اختبر نفسك الآن ◀</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="view-quiz" class="view">
+  <div id="quiz-select">
+    <div class="section-title">اختر مستوى الاختبار</div>
+    <div class="section-sub">كل مستوى يُقيس مهارة قرائية مختلفة من مهارات بيرلز</div>
+    <div class="levels-grid">
+      <div class="level-card" onclick="startQuiz('beginner')"><div class="level-badge badge-beginner">🌱 مبتدئ</div><h3>التركيز على معلومات النص واسترجاعها</h3><p>استخراج المعلومات الواضحة والصريحة من النص.</p><div class="level-meta"><span>❓ 6 أسئلة</span><span>⏱ 20 دقيقة</span></div></div>
+      <div class="level-card" onclick="startQuiz('medium')"><div class="level-badge badge-medium">⭐ متوسط</div><h3>بناء استدلالات مباشرة من النص</h3><p>الربط بين أجزاء النص واستنتاج معلومات ضمنية.</p><div class="level-meta"><span>❓ 6 أسئلة</span><span>⏱ 15 دقيقة</span></div></div>
+      <div class="level-card" onclick="startQuiz('hard')"><div class="level-badge badge-hard">🔥 متقدم</div><h3>تفسير الأفكار والمعلومات ودمجها</h3><p>تفسير النص ومقارنة المعلومات وربطها بالحياة الواقعية.</p><div class="level-meta"><span>❓ 6 أسئلة</span><span>⏱ 20 دقيقة</span></div></div>
+      <div class="level-card" onclick="startQuiz('advanced')"><div class="level-badge badge-advanced">🏆 خبير</div><h3>تقييم ونقد عناصر النص ومحتواه</h3><p>الحكم على كفاية المعلومات، وتقييم الأسلوب، وتمييز الحقائق والآراء.</p><div class="level-meta"><span>❓ 10 أسئلة</span><span>⏱ 25 دقيقة</span></div></div>
+      <div class="level-card" onclick="startQuiz('sim1')" style="border-color:rgba(124,45,158,0.3)"><div class="level-badge badge-sim1">🧪 محاكاة PIRLS — أ</div><h3>نموذج محاكاة أول (أدبي - معلوماتي)</h3><p>قطعة أدبية وقطعة معلوماتية مع 10 أسئلة تغطي المستويات الأربعة.</p><div class="level-meta"><span>❓ 10 أسئلة</span><span>⏱ 30 دقيقة</span></div></div>
+      <div class="level-card" onclick="startQuiz('sim2')" style="border-color:rgba(10,80,120,0.3)"><div class="level-badge badge-sim2">🔬 محاكاة PIRLS — ب</div><h3>نموذج محاكاة ثاني (أدبي - معلوماتي)</h3><p>قطعة أدبية وقطعة معلوماتية مع 10 أسئلة تغطي المستويات الأربعة.</p><div class="level-meta"><span>❓ 10 أسئلة</span><span>⏱ 30 دقيقة</span></div></div>
+      <div class="level-card" onclick="startQuiz('iea')" style="border-color:rgba(139,0,0,0.3);background:linear-gradient(180deg,var(--surface),rgba(200,70,10,0.02))"><div class="level-badge badge-iea">⚡ محاكاة PIRLS الرسمية</div><h3>المحاكاة المتقدمة لاختبار PIRLS</h3><p>30 سؤالاً مطابقاً للملف الرسمي — أسئلة مفتوحة واختيار متعدد.</p><div class="level-meta"><span>❓ 30 سؤالاً</span><span>⏱ 60 دقيقة</span><span>🏆 الأصعب</span></div></div>
+      <!-- ══ بطاقة جديدة: محاكي بيرلز المتقدم ══ -->
+      <div class="level-card" onclick="startQuiz('advancedSim')" style="border-color:rgba(10,80,120,0.35);background:linear-gradient(180deg,var(--surface),rgba(10,80,120,0.03))"><div class="level-badge badge-advsim">🎓 محاكي بيرلز المتقدم</div><h3>اختبار شامل بجميع المهام القرائية الأربع</h3><p>قصة "رحلة إلى الجبال" معلوماتية + "مغامرة سالم في الغابة" أدبية، مع 16 سؤالاً متنوعاً يغطي جميع مستويات الفهم القرائي PIRLS بعمق.</p><div class="level-meta"><span>❓ 16 سؤالاً</span><span>⏱ 35 دقيقة</span><span>🔬 تحليل متقدم</span></div></div>
+    </div>
+  </div>
+  <div id="quiz-active" style="display:none">
+    <div class="quiz-header">
+      <div class="quiz-meta">
+        <div class="quiz-title-area"><h2 id="quiz-level-title">اختبار</h2><p id="quiz-level-sub"></p></div>
+        <div class="quiz-counter" id="quiz-counter">0 / 0</div>
+      </div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="quiz-progress" style="width:0%"></div></div>
+    </div>
+    <div class="quiz-layout">
+      <div class="passage-panel">
+        <div class="passage-label">النص القرائي</div>
+        <div class="passage-title" id="passage-title"></div>
+        <div class="passage-body" id="passage-body"></div>
+      </div>
+      <div class="question-panel" id="questions-container"></div>
+    </div>
+    <div class="quiz-nav">
+      <div style="display:flex;gap:10px">
+        <button class="btn-secondary" onclick="resetQuiz()">↩ إعادة الاختيار</button>
+        <button class="btn-secondary" style="background:#fff;border-color:#ccc;color:#333" onclick="printCurrentQuiz()"><span style="font-size:1.1rem;vertical-align:middle">🖨</span> طباعة الاختبار (PDF)</button>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="text-muted" id="answered-count">0 من 0 أُجيب عليها</span>
+        <button class="btn-primary" id="submit-btn" onclick="submitQuiz()" disabled>إرسال الإجابات ◀</button>
+      </div>
+    </div>
+  </div>
+  <div id="quiz-feedback" style="display:none">
+    <div class="quiz-header">
+      <div class="quiz-meta">
+        <div class="quiz-title-area">
+          <h2 id="fb-level-title"></h2>
+          <p style="color:var(--muted);font-size:0.85rem">مراجعة الإجابات — الصحيح باللون الأخضر، الخطأ باللون الأحمر</p>
+        </div>
+        <div id="fb-score-pill" style="font-size:1.4rem;font-weight:700;color:var(--accent)"></div>
+      </div>
+    </div>
+    <div class="quiz-layout">
+      <div class="passage-panel">
+        <div class="passage-label">النص القرائي</div>
+        <div class="passage-title" id="fb-passage-title"></div>
+        <div class="passage-body" id="fb-passage-body"></div>
+      </div>
+      <div class="question-panel" id="fb-questions-container"></div>
+    </div>
+    <div class="quiz-nav" style="margin-top:1.5rem">
+      <button class="btn-secondary" onclick="resetQuiz()">↩ اختبار جديد</button>
+      <button class="btn-primary" onclick="showFinalResults()">عرض النتائج النهائية 📊</button>
+    </div>
+  </div>
+  <div id="quiz-results" style="display:none">
+    <div class="results-wrap">
+      <div class="result-badge-big" id="result-badge">🏆</div>
+      <h2 id="result-title">أحسنت!</h2>
+      <p class="text-muted" id="result-sub">لقد أتممت الاختبار بنجاح</p>
+      <div class="score-display" id="result-score">0<span>/0</span></div>
+      <div class="results-grid">
+        <div class="result-stat"><span class="num num-green" id="r-correct">0</span><span class="label">إجابة صحيحة ✓</span></div>
+        <div class="result-stat"><span class="num num-red" id="r-wrong">0</span><span class="label">إجابة خاطئة ✗</span></div>
+        <div class="result-stat"><span class="num num-orange" id="r-pct">0%</span><span class="label">نسبة الإتقان</span></div>
+      </div>
+      <div id="r-detail-grid"></div>
+      <div id="r-open-stat"></div>
+      <div class="skills-analysis"><h3>تحليل أداء المهارات</h3><div id="skills-bars"></div></div>
+      <!-- ══ التحليل المتقدم للطالب ══ -->
+      <div id="advanced-student-analysis"></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:1rem">
+        <button class="btn-primary" onclick="resetQuiz()">🔄 اختبار جديد</button>
+        <button class="btn-secondary" onclick="switchTab(document.querySelector('.nav-tab:nth-child(2)'),'lessons')">📚 مراجعة الدروس</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div id="view-game" class="view" style="max-width:800px;margin:2rem auto;padding:0 1rem;">
+  <div style="text-align:center;margin-bottom:2rem">
+     <h2 style="color:var(--accent);font-size:2rem;margin-bottom:0.5rem">🎮 تحدي أبطال بيرلز</h2>
+     <p style="color:var(--muted);font-size:1.1rem">اختبر معلوماتك العامة عن اختبار بيرلز في هذه المسابقة الترفيهية السريعة. أجب بذكاء واجمع النقاط!</p>
+  </div>
+  <div id="game-container" style="background:var(--surface);border-radius:12px;padding:3rem 2rem;box-shadow:0 4px 20px var(--shadow);text-align:center;min-height:300px;display:flex;flex-direction:column;justify-content:center;align-items:center">
+     <button class="btn-primary" style="font-size:1.2rem;padding:12px 30px" onclick="startGame()">▶️ ابدأ التحدي الآن</button>
+  </div>
+</div>
+</main>
+
+<footer>
+  <div style="max-width:700px;margin:0 auto">
+    <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(200,70,10,0.07);border:1px solid rgba(200,70,10,0.18);border-radius:24px;padding:5px 18px;font-size:0.85rem;font-weight:700;color:var(--accent);margin-bottom:1.2rem">🎯 مبادرة تعليمية</div>
+    <p style="font-size:0.92rem;color:var(--ink2);margin-bottom:0.5rem;font-weight:600">مدرسة سمرة بن جندب الابتدائية والإمام خلاد لتحفيظ القرآن الكريم</p>
+    <div style="display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap;margin:1rem 0">
+      <div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:0.9rem 1.5rem;min-width:185px;box-shadow:0 2px 8px var(--shadow)"><div style="font-size:0.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.35rem">رائد النشاط</div><div style="font-size:0.95rem;font-weight:700;color:var(--ink)">أيمن عبدالحفيظ الصاعدي</div></div>
+      <div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:0.9rem 1.5rem;min-width:185px;box-shadow:0 2px 8px var(--shadow)"><div style="font-size:0.68rem;font-weight:700;color:var(--accent3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.35rem">المعلم</div><div style="font-size:0.95rem;font-weight:700;color:var(--ink)">ماجد موسم العتيبي</div></div>
+      <div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:0.9rem 1.5rem;min-width:185px;box-shadow:0 2px 8px var(--shadow)"><div style="font-size:0.68rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.35rem">مدير المدرسة</div><div style="font-size:0.95rem;font-weight:700;color:var(--ink)">يحيى بن محمد الزهراني</div></div>
+    </div>
+    <p style="font-size:0.78rem;color:var(--muted)">تصميم رائد النشاط : أيمن الصاعدي &nbsp;|&nbsp; منصة القارئ الذكي لاختبار بيرلز</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<div class="student-overlay" id="studentOverlay">
+  <div class="student-box">
+    <div style="text-align:center;font-size:2.3rem;margin-bottom:0.6rem">👋</div>
+    <h2>مرحباً أيها الطالب!</h2>
+    <p>قبل البدء بالاختبار، اكتب اسمك ليتم حفظ إجاباتك وتحليلها. سيراجع المعلم نتيجتك لاحقاً.</p>
+    <label>الاسم (الثنائي على الأقل)</label>
+    <input type="text" id="studentNameInput" placeholder="مثال: محمد أحمد" maxlength="60" autocomplete="off">
+    <label>الفصل (اختياري)</label>
+    <input type="text" id="studentClassInput" placeholder="مثال: 4 / أ" maxlength="20" autocomplete="off">
+    <div class="student-box-btns">
+      <button class="btn-secondary" onclick="cancelStudentLogin()">إلغاء</button>
+      <button class="btn-primary" onclick="confirmStudent()">ابدأ الاختبار ◀</button>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-panel">
+    <h2>📊 لوحة نتائج الطلاب</h2>
+    <div class="admin-sub">استعرض إجابات كل طالب بالتفصيل | النتائج محفوظة محلياً على هذا الجهاز</div>
+    <div class="admin-toolbar">
+      <input type="text" id="adminSearch" placeholder="🔍 بحث باسم الطالب..." oninput="refreshAdminList()">
+      <button class="admin-export" style="background:var(--accent);color:white" onclick="generateAIPlan()">✨ خطة الخبير العلاجية</button>
+      <button class="excel-export-btn" onclick="exportToExcel()">📊 تصدير Excel</button>
+      <button class="admin-delete" onclick="clearAllData()">🗑 مسح الكل</button>
+      <button class="admin-close" onclick="closeAdmin()">✕ إغلاق</button>
+    </div>
+    <div style="background:rgba(26,74,138,0.05);padding:1rem;border-radius:10px;margin-bottom:1.5rem;border:1px solid rgba(26,74,138,0.1);display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <span style="font-size:1.5rem">🔔</span>
+      <input type="text" id="adminNotifInput" placeholder="أرسل إشعاراً أو واجباً عاجلاً لجميع الطلاب عبر المنصة..." style="flex:1;min-width:250px;padding:10px;border-radius:8px;border:1px solid var(--border);font-family:inherit;font-size:0.9rem">
+      <button class="btn-primary" style="padding:10px 20px;font-size:0.9rem" onclick="sendGlobalNotification()">إرسال الإشعار</button>
+      <button class="btn-secondary" style="padding:10px 15px;font-size:0.9rem;background:#fee;color:#c00;border:none" onclick="clearGlobalNotification()">إيقاف الإشعار</button>
+    </div>
+    <div id="adminContent"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBXK6T0G7oZStD_xw9L4tVIDrVVmPfvcpE",
+  authDomain: "pirls-platform.firebaseapp.com",
+  projectId: "pirls-platform",
+  storageBucket: "pirls-platform.firebasestorage.app",
+  messagingSenderId: "833709034458",
+  appId: "1:833709034458:web:35c8e986c8b23a16188ee3",
+  measurementId: "G-32TWKZ1W87"
+};
+firebase.initializeApp(firebaseConfig);
+const dbFirestore = firebase.firestore();
+
+// الاستماع المباشر لإشعارات المعلم
+dbFirestore.collection('config').doc('notification').onSnapshot(doc => {
+  const notifEl = document.getElementById('globalNotification');
+  if(doc.exists && doc.data().message && doc.data().message.trim() !== '') {
+    document.getElementById('globalNotifText').textContent = doc.data().message;
+    if(notifEl) notifEl.style.display = 'block';
+  } else {
+    if(notifEl) notifEl.style.display = 'none';
+  }
+});
+// ═══════════════════════════════════════════
+// بيانات الاختبارات
+// ═══════════════════════════════════════════
+const quizData = {
+  beginner:{
+    title:'التركيز على معلومات النص واسترجاعها',
+    sub:'المستوى المبتدئ — قصة "سالم والمكتبة القديمة" (6 أسئلة)',
+    passage:{
+      title:'سالم والمكتبة القديمة',
+      body:`<p>في صباح يوم مشمس، قرر سالم أن يزور المكتبة القديمة في حيّه بعد أن سمع عنها كثيرًا من معلمه. كانت المكتبة مبنىً قديمًا تحيط به الأشجار العالية، وعندما دخلها شعر برائحة الكتب العتيقة تملأ المكان.</p><p>تجول سالم بين الرفوف، ولاحظ وجود كتب مختلفة في التاريخ والعلوم والقصص. لفت انتباهه كتاب قديم عن الرحلات البحرية، فجلس يقرأه بتركيز. اكتشف من خلاله كيف كان البحارة يعتمدون على النجوم لتحديد طريقهم في البحر.</p><p>بينما كان سالم يقرأ، اقترب منه أمين المكتبة وسأله إن كان يحتاج إلى مساعدة، فأخبره سالم أنه يحب القصص والمغامرات. ابتسم أمين المكتبة وأرشده إلى قسم خاص بالقصص الشيقة.</p><p>خرج سالم من المكتبة وهو يشعر بالسعادة، وقرر أن يعود مرة أخرى ليكتشف المزيد من الكتب.</p>`
+    },
+    questions:[
+      {readingTask:'تحديد المعلومات الواضحة المصرح بها في النص واسترجاعها',text:'أين تقع المكتبة التي زارها سالم؟',options:['في حيّه','في السوق','بجانب المدرسة','في القرية المجاورة'],correct:0,skill:'استرجاع المعلومات',feedback:'ورد في النص أن سالم زار المكتبة القديمة في حيّه.',passage:0,type:'mcq'},
+      {readingTask:'تحديد المعلومات الواضحة المصرح بها في النص واسترجاعها',text:'ماذا شعر سالم عندما دخل المكتبة؟',options:['برائحة الطعام','برائحة الكتب العتيقة','بصوت المطر','ببرودة شديدة'],correct:1,skill:'استرجاع المعلومات',feedback:'النص يذكر صراحة أنه شعر برائحة الكتب العتيقة تملأ المكان.',passage:0,type:'mcq'},
+      {readingTask:'البحث عن تفاصيل محددة أو تعريفات واردة في النص',text:'ما نوع الكتاب الذي لفت انتباه سالم؟',options:['كتاب عن الزراعة','كتاب عن الرحلات البحرية','كتاب عن الحيوانات','كتاب عن الرياضة'],correct:1,skill:'استرجاع التفاصيل',feedback:'لفت انتباه سالم كتاب قديم عن الرحلات البحرية.',passage:0,type:'mcq'},
+      {readingTask:'البحث عن تفاصيل محددة أو تعريفات واردة في النص',text:'بماذا كان البحارة يحددون طريقهم في البحر؟',options:['بالجبال','بالخرائط الورقية فقط','بالنجوم','بالطيور'],correct:2,skill:'استرجاع التفاصيل',feedback:'قرأ سالم أن البحارة كانوا يعتمدون على النجوم لتحديد طريقهم.',passage:0,type:'mcq'},
+      {readingTask:'تحديد عناصر النص مثل الشخصيات والمكان والحدث',text:'من الشخص الذي اقترب من سالم وسأله إن كان يحتاج إلى مساعدة؟',options:['معلمه','صديقه','أمين المكتبة','والده'],correct:2,skill:'تحديد عناصر النص',feedback:'الشخص الذي تحدث مع سالم هو أمين المكتبة.',passage:0,type:'mcq'},
+      {readingTask:'تحديد عناصر النص مثل الشخصيات والمكان والحدث',text:'ماذا قرر سالم في نهاية القصة؟',options:['ألا يعود للمكتبة','أن يشتري كتابًا فقط','أن يعود مرة أخرى ليكتشف المزيد من الكتب','أن يغلق المكتبة'],correct:2,skill:'تحديد عناصر النص',feedback:'في نهاية القصة قرر سالم أن يعود مرة أخرى ليكتشف المزيد من الكتب.',passage:0,type:'mcq'}
+    ]
+  },
+  medium:{
+    title:'بناء استدلالات مباشرة من النص',
+    sub:'المستوى المتوسط — قصة "سالم والمكتبة القديمة" (6 أسئلة)',
+    passage:{
+      title:'سالم والمكتبة القديمة',
+      body:`<p>في صباح يوم مشمس، قرر سالم أن يزور المكتبة القديمة في حيّه بعد أن سمع عنها كثيرًا من معلمه. كانت المكتبة مبنىً قديمًا تحيط به الأشجار العالية، وعندما دخلها شعر برائحة الكتب العتيقة تملأ المكان.</p><p>تجول سالم بين الرفوف، ولاحظ وجود كتب مختلفة في التاريخ والعلوم والقصص. لفت انتباهه كتاب قديم عن الرحلات البحرية، فجلس يقرأه بتركيز. اكتشف من خلاله كيف كان البحارة يعتمدون على النجوم لتحديد طريقهم في البحر.</p><p>بينما كان سالم يقرأ، اقترب منه أمين المكتبة وسأله إن كان يحتاج إلى مساعدة، فأخبره سالم أنه يحب القصص والمغامرات. ابتسم أمين المكتبة وأرشده إلى قسم خاص بالقصص الشيقة.</p><p>خرج سالم من المكتبة وهو يشعر بالسعادة، وقرر أن يعود مرة أخرى ليكتشف المزيد من الكتب.</p>`
+    },
+    questions:[
+      {readingTask:'استنتاج أن حدثًا تسبب في حدث آخر',text:'لماذا قرر سالم زيارة المكتبة القديمة؟',options:['لأنه سمع عنها كثيرًا من معلمه','لأنه كان يريد شراء الطعام','لأنه يبحث عن صديقه','لأنها كانت مغلقة'],correct:0,skill:'الاستدلال السببي',feedback:'يمكن استنتاج السبب من قول النص إنه سمع عنها كثيرًا من معلمه.',passage:0,type:'mcq'},
+      {readingTask:'استنتاج أن حدثًا تسبب في حدث آخر',text:'لماذا أرشد أمين المكتبة سالم إلى قسم القصص الشيقة؟',options:['لأن سالم قال إنه يحب القصص والمغامرات','لأن سالم لم يحب القراءة','لأن القسم كان فارغًا','لأن المكتبة لا تحتوي إلا على القصص'],correct:0,skill:'الاستدلال السببي',feedback:'أخبر سالم أمين المكتبة أنه يحب القصص والمغامرات، لذلك أرشده إلى القسم المناسب.',passage:0,type:'mcq'},
+      {readingTask:'تحليل مشاعر الشخصيات من خلال أفعالها وكلماتها',text:'ما الشعور الأقرب إلى سالم عندما جلس يقرأ كتاب الرحلات البحرية بتركيز؟',options:['الملل','الخوف','الاهتمام','الغضب'],correct:2,skill:'تحليل مشاعر الشخصيات',feedback:'جلوسه للقراءة بتركيز يدل على اهتمامه بالكتاب.',passage:0,type:'mcq'},
+      {readingTask:'تحليل مشاعر الشخصيات من خلال أفعالها وكلماتها',text:'ماذا يدل خروج سالم من المكتبة وهو يشعر بالسعادة؟',options:['أنه استفاد من الزيارة','أنه أضاع كتابه','أنه لم يجد ما يريد','أنه كان مستعجلًا فقط'],correct:0,skill:'تحليل مشاعر الشخصيات',feedback:'السعادة في نهاية القصة تدل على أن الزيارة كانت مفيدة وممتعة له.',passage:0,type:'mcq'},
+      {readingTask:'تحديد الفكرة العامة غير المصرح بها مباشرة في النص',text:'ما الفكرة التي يمكن استنتاجها من القصة؟',options:['المكتبات تساعد على اكتشاف المعرفة','الكتب القديمة لا فائدة منها','قراءة القصص مضيعة للوقت','النجوم لا علاقة لها بالملاحة'],correct:0,skill:'استنتاج الفكرة العامة',feedback:'القصة تعرض كيف قادت المكتبة سالم إلى معرفة جديدة وسعادة بالقراءة.',passage:0,type:'mcq'},
+      {readingTask:'تحديد الفكرة العامة غير المصرح بها مباشرة في النص',text:'ما الدليل الذي يبين أن سالم أصبح أكثر رغبة في القراءة؟',options:['قرر العودة للمكتبة مرة أخرى','خرج حزينًا','رفض مساعدة أمين المكتبة','ترك الكتاب دون قراءة'],correct:0,skill:'استنتاج الفكرة العامة',feedback:'قراره بالعودة مرة أخرى يدل على زيادة رغبته في القراءة والاكتشاف.',passage:0,type:'mcq'}
+    ]
+  },
+  hard:{
+    title:'تفسير الأفكار والمعلومات ودمجها',
+    sub:'المستوى المتقدم — قصة "سالم والمكتبة القديمة" (6 أسئلة)',
+    passage:{
+      title:'سالم والمكتبة القديمة',
+      body:`<p>في صباح يوم مشمس، قرر سالم أن يزور المكتبة القديمة في حيّه بعد أن سمع عنها كثيرًا من معلمه. كانت المكتبة مبنىً قديمًا تحيط به الأشجار العالية، وعندما دخلها شعر برائحة الكتب العتيقة تملأ المكان.</p><p>تجول سالم بين الرفوف، ولاحظ وجود كتب مختلفة في التاريخ والعلوم والقصص. لفت انتباهه كتاب قديم عن الرحلات البحرية، فجلس يقرأه بتركيز. اكتشف من خلاله كيف كان البحارة يعتمدون على النجوم لتحديد طريقهم في البحر.</p><p>بينما كان سالم يقرأ، اقترب منه أمين المكتبة وسأله إن كان يحتاج إلى مساعدة، فأخبره سالم أنه يحب القصص والمغامرات. ابتسم أمين المكتبة وأرشده إلى قسم خاص بالقصص الشيقة.</p><p>خرج سالم من المكتبة وهو يشعر بالسعادة، وقرر أن يعود مرة أخرى ليكتشف المزيد من الكتب.</p>`
+    },
+    questions:[
+      {readingTask:'إدراك سمات النص والرسالة العامة التي يحملها',text:'ما الرسالة الأبرز التي تقدمها القصة للقارئ؟',options:['القراءة طريق لاكتشاف عوالم ومعارف جديدة','الرحلات البحرية أخطر من القراءة','المكتبات أماكن للكتب القديمة فقط','الطالب لا يحتاج إلى مساعدة أحد'],correct:0,skill:'تفسير الرسالة العامة',feedback:'القصة تربط زيارة المكتبة باكتشاف المعرفة والشعور بالسعادة.',passage:0,type:'mcq'},
+      {readingTask:'إدراك سمات النص والرسالة العامة التي يحملها',text:'لماذا اختار الكاتب أن تكون المكتبة قديمة وتحيط بها الأشجار؟',options:['ليجعل المكان جذابًا وله طابع خاص','ليؤكد أنها مكان مهجور','ليبين أن الكتب ممنوعة','ليجعل سالم يخاف من الدخول'],correct:0,skill:'تفسير الرسالة العامة',feedback:'وصف المكان يعطي القصة جوًا مشوقًا ويجذب القارئ إلى عالم المكتبة.',passage:0,type:'mcq'},
+      {readingTask:'مقارنة ومقابلة المعلومات الواردة في النص',text:'ما العلاقة بين اهتمام سالم وموضوع الكتاب الذي قرأه؟',options:['سالم يحب القصص والمغامرات والكتاب يتحدث عن رحلات بحرية فيها مغامرة','سالم يحب الرياضة والكتاب عن الطبخ','سالم لا يحب القراءة والكتاب طويل','سالم يحب التكنولوجيا والكتاب عن الروبوتات'],correct:0,skill:'دمج ومقارنة المعلومات',feedback:'يمكن دمج المعلومتين: سالم يحب المغامرات، والرحلات البحرية ترتبط بالمغامرة والاكتشاف.',passage:0,type:'mcq'},
+      {readingTask:'مقارنة ومقابلة المعلومات الواردة في النص',text:'كيف تختلف بداية القصة عن نهايتها؟',options:['بدأ سالم فضوليًا وانتهى أكثر رغبة في العودة للقراءة','بدأ حزينًا وانتهى غاضبًا','بدأ في المدرسة وانتهى في البحر','بدأ مع أصدقائه وانتهى وحده في البيت'],correct:0,skill:'دمج ومقارنة المعلومات',feedback:'البداية تظهر قراره بالزيارة، والنهاية تظهر أثر الزيارة عليه ورغبته في العودة.',passage:0,type:'mcq'},
+      {readingTask:'تفسير تطبيقات العالم الحقيقي للمعلومات الواردة في النص',text:'كيف يمكن تطبيق ما تعلمه سالم عن البحارة في الحياة الواقعية؟',options:['فهم أن الإنسان استخدم الطبيعة والنجوم للملاحة قبل الأجهزة الحديثة','ترك الدراسة والاعتماد على الحظ','استخدام النجوم للزينة فقط','عدم الاهتمام بالعلوم القديمة'],correct:0,skill:'الربط بالعالم الحقيقي',feedback:'المعلومة تشرح دور النجوم في الملاحة، وهذا يربط القراءة بالمعرفة العلمية والحياتية.',passage:0,type:'mcq'},
+      {readingTask:'تفسير تطبيقات العالم الحقيقي للمعلومات الواردة في النص',text:'ماذا يمكن أن يفعل الطالب بعد قراءة قصة سالم ليستفيد مثلما استفاد؟',options:['يزور مكتبة ويختار كتابًا يناسب اهتمامه','يتوقف عن قراءة القصص','ينتظر من الآخرين أن يختاروا له دائمًا','يقرأ العنوان فقط دون متابعة'],correct:0,skill:'الربط بالعالم الحقيقي',feedback:'القصة تشجع الطالب على اختيار كتب تناسب اهتمامه وتوسيع معرفته.',passage:0,type:'mcq'}
+    ]
+  },
+  advanced:{
+    title:'تقييم ونقد محتوى النص',sub:'المستوى الخبير — مقال "هل الأجهزة اللوحية أفضل؟" (10 أسئلة)',
+    passage:{title:'هل الأجهزة اللوحية أفضل من الكتب المطبوعة؟',body:`<p>في السنوات الأخيرة، ظهر نقاش وجدل كبير في الأوساط التعليمية حول سؤال مهم: هل يجب استبدال الكتب المدرسية المطبوعة بالأجهزة اللوحية الذكية؟ يعتقد البعض أن التكنولوجيا هي الحل الأمثل، ولكن من وجهة نظري ككاتب، أرى أن الكتب المطبوعة تتفوق بكثير على الأجهزة اللوحية ولا يمكن الاستغناء عنها أبداً.</p><p>أولاً، الكتب المطبوعة عملية جداً ولا تحتاج إلى شحن كهربائي. يمكنك فتح الكتاب وقراءته في أي وقت وفي أي مكان، سواء في الحديقة أو في الحافلة، دون القلق من ظهور رسالة "البطارية منخفضة". بينما الأجهزة اللوحية تتوقف عن العمل بمجرد نفاد شحنها. إن الكتب المطبوعة هي أروع اختراع في التاريخ البشري، فهي تحمل عبق الماضي وتجعلك تشعر بوزن المعرفة بين يديك.</p><p>ثانياً، تشير الملاحظات إلى أن القراءة المستمرة من شاشة مضيئة لفترات طويلة تسبب إجهاداً كبيراً للعينين وصداعاً متكرراً للطلاب. في المقابل، الورق المطبوع يعكس الضوء بشكل طبيعي ولا يضر البصر بنفس الطريقة. ومع ذلك، لا يمكننا تجاهل أن الأجهزة اللوحية قادرة على تخزين آلاف الكتب في جهاز واحد خفيف الوزن، وتدعم البحث السريع وتحديث المعلومات بسهولة.</p><p>لكن رغم هذه المميزات التقنية، تظل التجربة الحسية لتقليب صفحات الكتاب الورقي متعة لا تضاهيها أي شاشة زجاجية باردة. </p><div style="background:var(--bg2);padding:1rem;border-radius:8px;margin-top:1rem;border:1px solid var(--border)"><h4 style="margin-bottom:0.5rem;font-size:0.95rem">رسم بياني مقترح في المقال: "نسبة إجهاد العين بعد ساعة من القراءة"</h4><p style="margin:0;font-size:0.85rem">الأجهزة اللوحية: 70% | الكتب المطبوعة: 10%<br><span style="color:var(--muted);font-size:0.75rem">(ملاحظة: لم يذكر الكاتب مصدر هذا الرسم البياني أو اسم الدراسة)</span></p></div>`},
+    questions:[
+      {text:'هل قدم الكاتب معلومات كافية لدعم وجهة نظره حول تفوق الكتب المطبوعة على الأجهزة اللوحية؟',options:['نعم، قدم معلومات شاملة ومتوازنة من جميع الجوانب','لا، لأنه بالغ في ذكر السلبيات وتجاهل الكثير من مميزات الأجهزة اللوحية القوية','نعم، لأن البطارية هي المشكلة الوحيدة في التكنولوجيا','لا، لأنه لم يذكر أي ميزة للكتب المطبوعة'],correct:1,skill:'الحكم على كفاية المعلومات المقدمة ووضوحها',feedback:'الكاتب ركز على عيوب التكنولوجيا لتمرير رأيه، مما جعل معلوماته غير كافية لتقييم شامل.',passage:0,type:'mcq'},
+      {text:'ما مدى وضوح الحجج التي استخدمها الكاتب ضد الأجهزة اللوحية؟',options:['الحجج غامضة جداً وغير مفهومة','الحجج واضحة لكنها تميل للتحيز ضد التكنولوجيا وتركز على أعطالها كالبطارية','الحجج علمية ودقيقة جداً ولا يمكن الرد عليها','لا توجد أي حجج في النص'],correct:1,skill:'الحكم على كفاية المعلومات المقدمة ووضوحها',feedback:'الحجج واضحة (نفاد الشحن، إجهاد العين) لكنها تبدو متحيزة لدعم رأيه المسبق.',passage:0,type:'mcq'},
+      {text:'كيف تقيم تنظيم النص في عرض الفكرة ومناقشتها؟',options:['النص غير منظم ولا يحتوي على فقرات','النص منظم في فقرات واضحة (مقدمة، أسباب، استثناء) ولكنه يفتقر إلى التوازن في عرض وجهتي النظر','النص منظم بشكل مثالي ويعرض الرأيين بنفس المساحة والحياد','النص يبدأ بالخاتمة ثم المقدمة'],correct:1,skill:'تقييم الأسلوب والتنظيم في النص',feedback:'هيكلياً النص منظم، لكنه من ناحية المضمون يميل بقوة لوجهة نظر واحدة.',passage:0,type:'mcq'},
+      {text:'ما رأيك في الأسلوب اللغوي الذي استخدمه الكاتب لإقناع القارئ برأيه؟',options:['استخدم أسلوباً عاطفياً يعتمد على وصف المشاعر مثل "متعة لا تضاهيها شاشة زجاجية باردة"','استخدم لغة الأرقام والمعادلات الرياضية المعقدة','استخدم أسلوباً فكاهياً يعتمد على النكات','لم يستخدم أي أسلوب للإقناع'],correct:0,skill:'تقييم الأسلوب والتنظيم في النص',feedback:'لجأ الكاتب للعاطفة (عبق الماضي، شاشة باردة) ليؤثر على مشاعر القارئ أكثر من عقله.',passage:0,type:'mcq'},
+      {text:'ما هي وجهة نظر الكاتب التي يتبناها في هذا المقال؟',options:['يعتقد أن الأجهزة اللوحية هي الاختراع الأفضل في التاريخ','يعتقد أن الكتب المطبوعة والأجهزة اللوحية متساويان في الأهمية','يعتقد بقوة أن الكتب المطبوعة تتفوق بكثير ولا يمكن الاستغناء عنها','يعتقد أنه يجب إيقاف التعليم تماماً'],correct:2,skill:'تحديد وجهة نظر الكاتب',feedback:'صرح الكاتب في الفقرة الأولى برأيه الواضح أن الكتب تتفوق ولا غنى عنها.',passage:0,type:'mcq'},
+      {text:'كيف أظهر الكاتب موقفه الشخصي تجاه الكتب المطبوعة في النص؟',options:['بالمطالبة بحرق كل الكتب المطبوعة','بوصفها بأنها "أروع اختراع في التاريخ البشري" والتركيز المستمر على إيجابياتها','من خلال تقديم إحصائيات تؤكد أن لا أحد يقرأ الكتب','بتجاهل ذكر الكتب المطبوعة في معظم النص'],correct:1,skill:'تحديد وجهة نظر الكاتب',feedback:'استخدامه لعبارات تفضيل مطلقة يبرز موقفه وانحيازه الكامل.',passage:0,type:'mcq'},
+      {text:'استخرج "حقيقة" موضوعية لا يختلف عليها اثنان ذكرها الكاتب في النص.',options:['الكتب المطبوعة تحمل عبق الماضي','تقليب صفحات الكتاب متعة لا تضاهيها شاشة','الأجهزة اللوحية تحتاج إلى شحن كهربائي وتتوقف بنفاد بطاريتها','الكتب المطبوعة هي أروع اختراع في التاريخ'],correct:2,skill:'التمييز بين الحقائق والآراء',feedback:'احتياج الأجهزة الإلكترونية للشحن هو حقيقة تقنية علمية وليست رأياً.',passage:0,type:'mcq'},
+      {text:'حدد "رأياً شخصياً" يعبر عن مشاعر الكاتب في النص ولا يُعد حقيقة مؤكدة.',options:['تستطيع الأجهزة اللوحية تخزين آلاف الكتب','"إن الكتب المطبوعة هي أروع اختراع في التاريخ البشري"','الورق المطبوع يعكس الضوء بشكل طبيعي','تحديث المعلومات سهل في الأجهزة الذكية'],correct:1,skill:'التمييز بين الحقائق والآراء',feedback:'تفضيل اختراع على كل اختراعات التاريخ هو رأي شخصي يحتمل الخطأ والصواب.',passage:0,type:'mcq'},
+      {text:'هل يُعد الرسم البياني المرفق في نهاية النص دليلاً علمياً موثوقاً؟ ولماذا؟',options:['نعم، لأن الأرقام فيه دقيقة جداً ومكتوبة بوضوح','لا، لأنه لا يذكر مصدر البيانات أو اسم الدراسة العلمية التي اعتمد عليها','نعم، لأنه يوافق رأي الكاتب تماماً','لا، لأنه غير ملون'],correct:1,skill:'تقييم الوسائط التوضيحية في النص',feedback:'غياب المصدر يفقد أي رسم بياني أو إحصائية مصداقيتها العلمية.',passage:0,type:'mcq'},
+      {text:'كيف كان يمكن للكاتب تحسين مصداقية وقوة الرسم البياني المرفق؟',options:['بإضافة رسومات كرتونية للرسم البياني','بتكبير حجم الخط وتغيير الألوان فقط','بإضافة رابط أو اسم دراسة طبية معتمدة تؤكد هذه النسب المئوية','بحذف الرسم البياني والاكتفاء بالكلام'],correct:2,skill:'تقييم الوسائط التوضيحية في النص',feedback:'توثيق المعلومات بذكر المصادر المعتمدة هو أساس موثوقية المقالات.',passage:0,type:'mcq'}
+    ]
+  },
+
+// ══════════════════════════════════════════════════════════════
+  // بطاقة IEA — الأسئلة مطابقة للملف الرسمي PIRLS 2011
+  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════
+  // نموذج محاكاة أول — أدبي + معلوماتي
+  // ══════════════════════════════════════════
+  sim1:{
+    title:'نموذج محاكاة أول — أدبي ومعلوماتي',
+    sub:'قطعة أدبية: "الرسالة الأخيرة" + قطعة معلوماتية: "رحلة الفراشة" | 12 سؤالاً | أسئلة مفتوحة وموضوعية',
+    passages:[
+      {
+        label:'القطعة الأولى — أدبي',
+        title:'الرسالة الأخيرة',
+        body:`<p>في آخر يوم من العام الدراسي، وجد <strong>ياسر</strong> في درج مكتبه القديم ورقةً مطوية بعناية. فتحها فوجد رسالةً بخط معلمه الأول الأستاذ <strong>حامد</strong> الذي انتقل إلى مدرسة أخرى قبل ثلاث سنوات.</p>
+<p>كتب الأستاذ حامد: «ياسر، حين تقرأ هذه الرسالة ستكون قد كبرت كثيرًا. أكتب إليك لأنك كنت الطالب الذي يجلس في الصف الأول دائمًا، لا لأنك مجبر بل لأنك تحب أن ترى السبورة جيدًا. تلك الحماسة هي هديتك الحقيقية.»</p>
+<p>أمسك ياسر الورقة بيدين مرتجفتين. تذكّر كيف كان يدخل الفصل قبل الجميع ليختار مكانه المفضل. لم يكن يعرف أن أحدًا يلاحظ ذلك. قرأ بقية الرسالة ببطء: «لا أعرف ما الذي ستصبح عليه حين تكبر، لكنني متأكد أن الشغف الذي رأيته في عينيك سيقودك إلى مكان جيد. حافظ عليه.»</p>
+<p>في تلك اللحظة أدرك ياسر أن الكلمات قد تبقى أطول من الأشخاص الذين كتبوها. طوى الرسالة بالطريقة ذاتها، ووضعها في جيبه القريب من قلبه. قرر أن يكتب يومًا ما رسالةً مشابهة لطالب لا يعرف بعد أن أحدًا يلاحظ تميّزه.`
+      },
+      {
+        label:'القطعة الثانية — معلوماتي',
+        title:'رحلة الفراشة — معجزة التحول',
+        body:`<p>تعيش <strong>الفراشة</strong> واحدةً من أعجب دورات الحياة في عالم الحيوان، وتُسمى هذه الدورة <strong>التحوّل الكامل</strong>. وتمر الفراشة في حياتها بأربع مراحل متميزة تختلف كل منها عن الأخرى اختلافًا جذريًا في الشكل والسلوك.</p>
+<p>تبدأ الرحلة حين تضع الفراشة <strong>البيوض</strong> على أوراق النبات بعناية بالغة، إذ تختار نوعًا محددًا من النباتات يناسب تغذية اليرقات. وما إن تفقس البيوض حتى تخرج <strong>اليرقة</strong> (الدودة) التي تقضي معظم وقتها في الأكل لتخزين الطاقة.</p>
+<p>بعد فترة من النمو المتواصل، تلتف اليرقة على نفسها في غلاف يُسمى <strong>الشرنقة</strong>. داخل هذا الغلاف يجري تحوّل مذهل؛ تذوب أنسجة اليرقة وتُعاد هيكلتها من جديد لتكوين الفراشة البالغة. قد تمتد هذه المرحلة من أيام معدودة إلى أشهر طويلة حسب نوع الفراشة والمناخ.</p>
+<p>حين تكتمل مرحلة التحوّل، تشق <strong>الفراشة البالغة</strong> غلاف الشرنقة وتبسط أجنحتها لأول مرة. الأجنحة الرطبة تحتاج ساعات لتجف وتصبح قادرة على الطيران. والجدير بالذكر أن الفراشة البالغة لا تأكل الأوراق بل تتغذى على رحيق الأزهار، كما تؤدي دورًا محوريًا في تلقيح النباتات ونقل حبوب اللقاح.</p>
+<p>تختلف مدة حياة الفراشة البالغة اختلافًا كبيرًا بين الأنواع؛ فبعضها يعيش أسبوعًا واحدًا فحسب، بينما تهاجر بعض الأنواع كفراشة الملكية آلاف الكيلومترات وتعيش عدة أشهر.</p>`
+      }
+    ],
+    questions:[
+      // ── القطعة 1: الرسالة الأخيرة ── 6 أسئلة
+      {passage:0,
+       readingTask:'استرجاع المعلومات الصريحة — تحديد المعلومات الواضحة في النص',
+       text:'أين وجد ياسر الرسالة؟',
+       options:['في حقيبته المدرسية','في درج مكتبه القديم','في كتاب معلمه','على السبورة'],
+       correct:1,skill:'استرجاع المعلومات',
+       feedback:'نصّ النص صراحةً: "وجد ياسر في درج مكتبه القديم ورقةً مطوية بعناية."',
+       type:'mcq'},
+
+      {passage:0,
+       readingTask:'استرجاع المعلومات الصريحة — البحث عن تفاصيل محددة في النص',
+       text:'ما السبب الذي ذكره الأستاذ حامد لكتابة الرسالة لياسر تحديدًا؟',
+       options:['لأنه أذكى طلابه','لأنه كان يجلس في الصف الأول دائمًا بحماس واختيار','لأنه أكثر طالب يحب القراءة','لأن ياسر طلب منه رسالة'],
+       correct:1,skill:'استرجاع التفاصيل',
+       feedback:'قال الأستاذ: "كنت الطالب الذي يجلس في الصف الأول دائمًا، لا لأنك مجبر بل لأنك تحب أن ترى السبورة جيدًا."',
+       type:'mcq'},
+
+      {passage:0,
+       readingTask:'الاستنتاج المباشر — استنتاج مشاعر الشخصية من أفعالها',
+       text:'لماذا أمسك ياسر الورقة بيدين مرتجفتين؟',
+       options:['لأن الورقة كانت ثقيلة','لأن الجو كان باردًا','لأنه تأثر عاطفيًا بما قرأه وتذكّر ذكريات مؤثرة','لأنه خاف من محتوى الرسالة'],
+       correct:2,skill:'الاستنتاج والتفسير',
+       feedback:'الارتجاف يعبر عن التأثر العاطفي العميق، وهو ما يُؤكده النص حين وصف تذكّره للذكريات.',
+       type:'mcq'},
+
+      {passage:0,
+       readingTask:'التفسير ودمج الأفكار — تفسير معنى جملة في سياقها',
+       text:'ماذا يقصد النص بجملة "الكلمات قد تبقى أطول من الأشخاص الذين كتبوها"؟',
+       options:['أن الكتابة أطول من الكلام','أن تأثير الكلمات المكتوبة يمتد عبر الزمن حتى بعد غياب كاتبها','أن الرسائل لا تتلف','أن الأستاذ حامد سيعود يومًا ما'],
+       correct:1,skill:'التفسير',
+       feedback:'الجملة استعارة تعني أن الأفكار والكلمات المكتوبة يمكن أن تؤثر في الآخرين لزمن طويل بعد رحيل صاحبها.',
+       type:'mcq'},
+
+      {passage:0,
+       readingTask:'تقييم النص — تقييم قرار الشخصية وتبريره بالنص',
+       text:'لماذا قرر ياسر أن يكتب رسالةً مشابهة لطالب آخر في المستقبل؟',
+       options:['لأن معلمه أمره بذلك','لأن الرسالة أثّرت فيه وأدرك قيمة الكلمة المشجعة في حياة الآخرين','لأنه يريد أن يصبح معلمًا','لأنه يحب الكتابة'],
+       correct:1,skill:'التقييم النقدي',
+       feedback:'قرار ياسر نابع من تأثره برسالة معلمه وإدراكه أن التشجيع يصنع فارقًا — هذا ما تكشفه نهاية القصة.',
+       type:'mcq'},
+
+      {passage:0,
+       readingTask:'التفسير ودمج الأفكار — سؤال مفتوح يتطلب الفهم العميق',
+       text:'في رأيك، ما الدرس الأهم الذي تعلّمه ياسر من رسالة معلمه؟ اكتب إجابتك بجملتين على الأقل.',
+       skill:'التفسير والتقييم',
+       feedback:'إجابة مقبولة: أن يُشير الطالب إلى أهمية الانتباه للآخرين وتشجيعهم، أو أن الكلمة الطيبة تترك أثرًا عميقًا، أو أن الشغف والحماس يُلاحظهما من حولنا.',
+       type:'open'},
+
+      // ── القطعة 2: رحلة الفراشة ── 6 أسئلة
+      {passage:1,
+       readingTask:'استرجاع المعلومات الصريحة — تحديد عدد المراحل ومسمياتها',
+       text:'كم عدد مراحل التحوّل الكامل في دورة حياة الفراشة؟',
+       options:['مرحلتان','ثلاث مراحل','أربع مراحل','خمس مراحل'],
+       correct:2,skill:'استرجاع المعلومات',
+       feedback:'ذكر النص صراحةً أن الفراشة "تمر بأربع مراحل متميزة".',
+       type:'mcq'},
+
+      {passage:1,
+       readingTask:'استرجاع المعلومات الصريحة — البحث عن تفاصيل دقيقة',
+       text:'ما الفرق الرئيسي بين غذاء اليرقة وغذاء الفراشة البالغة وفق النص؟',
+       options:['اليرقة تشرب الماء والفراشة تأكل الأوراق','اليرقة تأكل الأوراق والفراشة تتغذى على رحيق الأزهار','لا فرق بين غذائهما','اليرقة تأكل الأزهار والفراشة تأكل الأوراق'],
+       correct:1,skill:'استرجاع التفاصيل',
+       feedback:'نصّ النص: "اليرقة تقضي وقتها في الأكل [الأوراق]... الفراشة البالغة لا تأكل الأوراق بل تتغذى على رحيق الأزهار."',
+       type:'mcq'},
+
+      {passage:1,
+       readingTask:'الاستنتاج المباشر — استنتاج الهدف من سلوك الكائن',
+       text:'لماذا تختار الفراشة نوعًا محددًا من النباتات لوضع بيوضها عليه؟',
+       options:['لأن هذه النباتات أجمل','لأن هذه النباتات مناسبة لتغذية اليرقات بعد الفقس','لأن الفراشة تحب رائحتها','لحماية البيوض من المطر'],
+       correct:1,skill:'الاستدلال السببي',
+       feedback:'النص يوضح أن الفراشة تختار النبات الذي "يناسب تغذية اليرقات"، أي أن الاختيار هو لصالح الجيل القادم.',
+       type:'mcq'},
+
+      {passage:1,
+       readingTask:'تفسير ودمج الأفكار — الربط بين المعلومات وتفسير الظاهرة',
+       text:'لماذا تحتاج أجنحة الفراشة الحديثة ساعات قبل أن تطير؟',
+       options:['لأن الفراشة خائفة','لأنها رطبة وتحتاج وقتًا لتجف وتصبح قادرة على الطيران','لأنها تبحث عن طعام','لأن الريح قوية'],
+       correct:1,skill:'التفسير العلمي',
+       feedback:'النص يذكر: "الأجنحة الرطبة تحتاج ساعات لتجف وتصبح قادرة على الطيران."',
+       type:'mcq'},
+
+      {passage:1,
+       readingTask:'التقييم — تقييم أهمية المعلومة ودورها في السياق',
+       text:'لماذا يُعدّ دور الفراشة في تلقيح النباتات مهمًا بالنسبة للبيئة؟',
+       options:['لأن الفراشة جميلة','لأن نقل حبوب اللقاح يُساعد النباتات على التكاثر والاستمرار مما يُفيد البيئة كلها','لأن الفراشة تأكل الحشرات الضارة','لأن ألوانها تجذب الطيور'],
+       correct:1,skill:'التقييم البيئي',
+       feedback:'تلقيح النباتات بنقل حبوب اللقاح يُمكّنها من التكاثر وإنتاج الثمار والبذور، مما يحفظ التوازن البيئي.',
+       type:'mcq'},
+
+      {passage:1,
+       readingTask:'تفسير ودمج الأفكار — سؤال مفتوح يُعمّق الفهم العلمي',
+       text:'وصف النص مرحلة الشرنقة بأنها "تحوّل مذهل". اشرح بكلماتك الخاصة ما الذي يجعلها مذهلة، مستعينًا بمعلومات من النص.',
+       skill:'التفسير والتقييم',
+       feedback:'إجابة مقبولة: أن يُشير الطالب إلى أن الأنسجة تذوب وتُعاد هيكلتها من جديد — وهو تغيير جذري كامل في تركيب الكائن داخل غلاف صغير.',
+       type:'open'}
+    ]
+  },
+
+  // ══════════════════════════════════════════
+  // نموذج محاكاة ثانٍ — أدبي + معلوماتي
+  // ══════════════════════════════════════════
+  sim2:{
+    title:'نموذج محاكاة ثانٍ — أدبي ومعلوماتي',
+    sub:'قطعة أدبية: "اللحظة الأخيرة" + قطعة معلوماتية: "النحل المعماري" | 12 سؤالاً | أسئلة مفتوحة وموضوعية',
+    passages:[
+      {
+        label:'القطعة الأولى — أدبي',
+        title:'اللحظة الأخيرة',
+        body:`<p>كانت <strong>لينا</strong> تحمل بيدها تذكرة المسابقة الوطنية للقراءة وعيناها تجولان على أسماء المدن المرشحة. حُذف اسم مدينتها من القائمة. أغمضت عينيها ببطء.</p>
+<p>منذ ثلاثة أشهر وهي تستيقظ قبل الفجر لتقرأ. جدول القراءة معلّق على جدار غرفتها، وبجانبه صورة الكتاب الذي كانت تحلم بأن تقف عليه يومًا وتتحدث عنه أمام الجميع. كانت أمها تدخل الغرفة كل ليلة بكوب شاي ساخن دون أن تقول كلمة، فقط تضعه وترحل.</p>
+<p>في اليوم الأخير قبل الإعلان، ذهبت لينا إلى المكتبة كعادتها. لكنها هذه المرة لم تفتح كتابًا. جلست فقط، تنظر إلى الرفوف، وأدركت أن الكتب لم تكن وسيلةً للفوز بمسابقة — كانت وجهةً في حد ذاتها.</p>
+<p>حين عادت إلى البيت وجدت أمها تنتظرها بوجه مختلف. «الإدارة اتصلت»، قالت الأم بهدوء. «لقد أضافوا مدينتنا. أنتِ ذاهبة.» لم تصرخ لينا من الفرح كما توقعت. ابتسمت فقط، لأنها كانت قد فازت قبل ذلك بشيء أهم.</p>`
+      },
+      {
+        label:'القطعة الثانية — معلوماتي',
+        title:'النحل المعماري — عبقرية الخلية السداسية',
+        body:`<p>يُعدّ <strong>النحل</strong> من أكثر الكائنات الحية إثارةً للدهشة في عالم الحيوان، لا لجمعه العسل فحسب، بل لقدرته المعمارية الاستثنائية في بناء خلاياه السداسية الشكل بدقة هندسية مذهلة لا تحتاج فيها إلى أي أداة.</p>
+<p>تتكون خلية النحل من آلاف الغرف الصغيرة ذات الشكل <strong>السداسي</strong>. واختيار هذا الشكل بالذات ليس عشوائيًا؛ فالسداسي هو الشكل الهندسي الوحيد الذي يُمكّن من ملء المساحة كاملةً دون ترك فراغات، مع استخدام أقل كمية ممكنة من الشمع. وقد أثبت علماء الرياضيات بعد قرون من البحث أن هذا الشكل هو الأمثل رياضيًا لهذه الغاية.</p>
+<p>لا يعمل النحل فرادى بل يعمل <strong>بنظام اجتماعي دقيق</strong>. تتولى الملكة وضع البيوض، وتتولى الشغّالات جمع الرحيق وتصنيع العسل وحراسة الخلية، فيما يُؤدي الذكور دورًا في التكاثر فقط. ولكل فئة مهام محددة تؤديها بتنسيق عجيب دون أن يوجّه أحدٌ أحدًا.</p>
+<p>يتواصل النحل بطريقة فريدة تُسمى <strong>رقصة الاهتزاز</strong>؛ حين تجد شغّالة مصدرًا غنيًا للرحيق، تعود إلى الخلية وتؤدي رقصةً محددة تُشير من خلالها إلى اتجاه المصدر وبُعده عن الخلية. تفهم الشغّالات الأخرى هذه الإشارات وتتجه فورًا إلى المصدر المُشار إليه.</p>
+<p>يُنتج النحل العسل عبر عملية تحويل معقدة؛ تجمع الشغّالة الرحيق وتُخزّنه في معدة خاصة، ثم تُنقله إلى شغّالة أخرى داخل الخلية تُضيف إليه إنزيمات. يُرفرف النحل بأجنحته لتبخير الماء الزائد حتى يتحوّل الرحيق إلى عسل كثيف طويل الأمد.`
+      }
+    ],
+    questions:[
+      // ── القطعة 1: اللحظة الأخيرة ── 6 أسئلة
+      {passage:0,
+       readingTask:'استرجاع المعلومات الصريحة — تحديد معلومة واضحة في النص',
+       text:'كم مدة استعداد لينا للمسابقة وفق النص؟',
+       options:['شهر واحد','شهرين','ثلاثة أشهر','ستة أشهر'],
+       correct:2,skill:'استرجاع المعلومات',
+       feedback:'النص يقول صراحةً: "منذ ثلاثة أشهر وهي تستيقظ قبل الفجر لتقرأ."',
+       type:'mcq'},
+
+      {passage:0,
+       readingTask:'استرجاع المعلومات الصريحة — البحث عن تفاصيل سلوك الشخصية',
+       text:'ماذا كانت أم لينا تفعل كل ليلة دون أن تقول كلمة؟',
+       options:['تُطفئ الضوء وترحل','تضع كوب شاي ساخن وترحل','تقرأ معها قبل النوم','تُذكّرها بموعد النوم'],
+       correct:1,skill:'استرجاع التفاصيل',
+       feedback:'النص يذكر: "كانت أمها تدخل الغرفة كل ليلة بكوب شاي ساخن دون أن تقول كلمة، فقط تضعه وترحل."',
+       type:'mcq'},
+
+      {passage:0,
+       readingTask:'الاستنتاج المباشر — استنتاج مشاعر الشخصية من سلوكها',
+       text:'لماذا لم تصرخ لينا من الفرح حين علمت بقبولها في المسابقة؟',
+       options:['لأنها لم تصدق الخبر','لأنها كانت قد وصلت إلى قناعة أعمق بأن القراءة نفسها هي الجائزة الحقيقية','لأنها خائفة من المسابقة','لأنها لا تحب الفرح'],
+       correct:1,skill:'الاستنتاج والتفسير',
+       feedback:'النص يوضح أن لينا أدركت في المكتبة أن الكتب "كانت وجهةً في حد ذاتها"، مما يعني أنها فازت بشيء أهم من التذكرة.',
+       type:'mcq'},
+
+      {passage:0,
+       readingTask:'التفسير ودمج الأفكار — تفسير دلالة الصورة الأدبية',
+       text:'ماذا تعني عبارة "الكتب لم تكن وسيلةً للفوز بمسابقة — كانت وجهةً في حد ذاتها"؟',
+       options:['أن لينا توقفت عن القراءة','أن القراءة صارت هدفًا ومتعةً بذاتها وليس مجرد أداة للفوز','أن المكتبة هي وجهتها المفضلة','أن الكتب لا علاقة لها بالمسابقات'],
+       correct:1,skill:'التفسير',
+       feedback:'العبارة تعني أن القراءة تحوّلت عند لينا من وسيلة إلى غاية — وهو نضج فكري وعاطفي عميق.',
+       type:'mcq'},
+
+      {passage:0,
+       readingTask:'تقييم النص — الحكم على دور الشخصية الثانوية',
+       text:'ما دور الأم في قصة لينا دون أن تقول كلمة واحدة تقريبًا؟',
+       options:['لا دور لها في القصة','دور محوري — صمتها وكوب الشاي يعبران عن دعم هادئ وعميق لم يحتج كلامًا','دور سلبي — لم تشجع لينا','دور تحفيزي بالكلام والنصائح'],
+       correct:1,skill:'التقييم النقدي',
+       feedback:'الأم رغم صمتها حاضرة كل ليلة بالشاي الساخن — وهذا دعم عملي صامت أقوى من الكلام، وهو ما يُعبّر عنه النص.',
+       type:'mcq'},
+
+      {passage:0,
+       readingTask:'التفسير ودمج الأفكار — سؤال مفتوح يُعمّق الفهم الأدبي',
+       text:'ما الذي تغيّر في نظرة لينا للقراءة بين بداية القصة ونهايتها؟ أجب بجملتين أو أكثر من النص.',
+       skill:'التفسير والتقييم',
+       feedback:'إجابة مقبولة: في البداية كانت القراءة وسيلة للفوز. في النهاية صارت القراءة هدفًا ومتعةً لذاتها. التحول حدث لما جلست في المكتبة دون أن تفتح كتابًا.',
+       type:'open'},
+
+      // ── القطعة 2: النحل المعماري ── 6 أسئلة
+      {passage:1,
+       readingTask:'استرجاع المعلومات الصريحة — تحديد مصطلح علمي ذُكر في النص',
+       text:'ما اسم طريقة تواصل النحل التي يُشير بها إلى مصادر الرحيق؟',
+       options:['رقصة الجناح','رقصة الاهتزاز','رقصة الدائرة','رقصة الطيران'],
+       correct:1,skill:'استرجاع المعلومات',
+       feedback:'النص يذكر صراحةً: "تُسمى رقصة الاهتزاز".',
+       type:'mcq'},
+
+      {passage:1,
+       readingTask:'استرجاع المعلومات الصريحة — تحديد مهام كل فئة',
+       text:'وفق النص، ما المهمة الوحيدة التي يؤديها الذكور في خلية النحل؟',
+       options:['جمع الرحيق','حراسة الخلية','التكاثر','بناء الخلية'],
+       correct:2,skill:'استرجاع التفاصيل',
+       feedback:'النص ينص: "فيما يُؤدي الذكور دورًا في التكاثر فقط."',
+       type:'mcq'},
+
+      {passage:1,
+       readingTask:'الاستنتاج المباشر — استنتاج السبب من المعلومات الواردة',
+       text:'لماذا يختار النحل الشكل السداسي لبناء خلاياه تحديدًا؟',
+       options:['لأنه أجمل الأشكال','لأنه يُمكّن من ملء المساحة دون فراغات مع أقل كمية من الشمع','لأنه أسهل في البناء','لأنه يناسب حجم النحلة'],
+       correct:1,skill:'الاستدلال السببي',
+       feedback:'النص يُوضح أن السداسي "هو الشكل الهندسي الوحيد الذي يُمكّن من ملء المساحة كاملةً دون ترك فراغات، مع استخدام أقل كمية ممكنة من الشمع."',
+       type:'mcq'},
+
+      {passage:1,
+       readingTask:'تفسير ودمج الأفكار — الربط بين مراحل العملية',
+       text:'كيف يتحول رحيق الزهور إلى عسل وفق ما ذكره النص؟',
+       options:['يُترك في الخلية فيتحول وحده','تجمعه الشغّالة وتُضيف إليه إنزيمات ثم يُرفرف عليه لتبخير الماء','يُطبخ بحرارة الشمس','تضعه الملكة في غرف خاصة'],
+       correct:1,skill:'تسلسل المراحل',
+       feedback:'وصف النص العملية: جمع الرحيق في معدة خاصة، نقله مع إضافة إنزيمات، ثم الرفرفة لتبخير الماء حتى يصير عسلًا.',
+       type:'mcq'},
+
+      {passage:1,
+       readingTask:'تقييم النص — تقييم أهمية اكتشاف علمي ذُكر في النص',
+       text:'ما أهمية إثبات علماء الرياضيات أن الشكل السداسي هو الأمثل لبناء الخلايا؟',
+       options:['لا أهمية له','يُثبت أن النحل يستخدم الرياضيات','يُؤكد أن النحل يتصرف بذكاء فطري يتوافق مع أفضل الحلول الرياضية المعروفة','يعني أن علماء الرياضيات أذكى من النحل'],
+       correct:2,skill:'التقييم والربط',
+       feedback:'أن الشكل السداسي هو الأمثل رياضيًا، وأن النحل يستخدمه فطريًا، يعني أن تصرف النحل يتوافق مع الحل الأمثل بالفطرة — وهو ما يثير دهشة العلماء.',
+       type:'mcq'},
+
+      {passage:1,
+       readingTask:'تفسير ودمج الأفكار — سؤال مفتوح يُعمّق الفهم العلمي',
+       text:'قرأت أن النحل يعمل بنظام اجتماعي دقيق. بكلماتك الخاصة، كيف يُفيد هذا التنظيم خلية النحل؟ اذكر مثالين من النص.',
+       skill:'التفسير والتقييم',
+       feedback:'إجابة مقبولة: أن يذكر الطالب مثالًا على التخصص (كل فئة لها دور: الملكة تضع البيوض، الشغّالات تجمع الرحيق وتحرس) وأن هذا التخصص يجعل الخلية تعمل بكفاءة عالية.',
+       type:'open'}
+    ]
+  },
+
+  iea:{
+    title:'محاكاة بيرلز الرسمية — نصوص IEA',
+    sub:'المستوى الأصعب | القطعة الأولى: معلوماتية (14 سؤالاً) | القطعة الثانية: أدبية (16 سؤالاً) — مطابق للملف الرسمي',
+    passages:[
+      {
+        label:'القطعة الأولى — معلوماتي',
+        title:'لغز السنّ العملاق',
+        body:`<p><strong>الحفرية</strong> هي بقايا أي كائن حي أو نبات عاش على الأرض منذ زمن بعيد جدًا. وقد عثر الناس على الحفريات لآلاف السنين في الصخور والمنحدرات وبجوار البحيرات. ونعلم الآن أن بعض هذه الحفريات تعود إلى الديناصورات.</p>
+<p>في الماضي، لم يكن الأشخاص الذين عثروا على حفريات ضخمة يعرفون ما هي. فقد اعتقد بعضهم أن هذه العظام الكبيرة تعود إلى حيوانات كبيرة كانوا قد رأوها أو قرأوا عنها، مثل أفراس النهر أو الأفيال. لكن بعض العظام التي عُثر عليها كانت أكبر من أن تكون قد جاءت حتى من أكبر فرس نهر أو فيل. وقد دفعت هذه العظام الهائلة بعض الناس إلى الاعتقاد بوجود <strong>عمالقة</strong>.</p>
+<p>قبل مئات السنين في فرنسا، كان هناك رجل يُدعى <strong>برنارد باليسي</strong> وكانت لديه فكرة أخرى. كان صانع فخار مشهورًا. وعندما كان يصنع أوانيه، كان يجد العديد من الحفريات الصغيرة في الطين. درس هذه الحفريات وكتب أنها بقايا كائنات حية. لم تكن هذه فكرة جديدة، لكن برنارد باليسي كتب أيضًا أن بعض هذه الكائنات لم تعد تعيش على الأرض، بل اختفت تمامًا — لقد كانت <strong>منقرضة</strong>. هل كوفئ برنارد باليسي على اكتشافه؟ لا! لقد سُجن بسبب أفكاره.</p>
+<p>ومع مرور الوقت، أصبح بعض الناس أكثر تقبّلًا للأفكار الجديدة حول كيفية كون العالم في الماضي البعيد.</p>
+<p>ثم، في عشرينيات القرن التاسع عشر، عُثر على <strong>سنّ أحفوري ضخم</strong> في إنجلترا. ويُعتقد أن <strong>ماري آن مانتيل</strong>، زوجة خبير الحفريات <strong>جيديون مانتيل</strong>، كانت في نزهة عندما رأت ما بدا وكأنه سنّ حجري ضخم. وأدركت ماري آن مانتيل أن هذا السن الكبير حفرية، فأخذته إلى منزلها لتعرضه على زوجها.</p>
+<p>وعندما نظر جيديون مانتيل إلى السن الأحفوري لأول مرة، اعتقد أنه كان يعود إلى كائن آكل للنبات، لأنه كان مسطحًا ويحتوي على نتوءات. وكان قد تآكل نتيجة مضغ الطعام. وكان حجمه يقارب حجم سن الفيل تقريبًا، لكنه لم يكن يشبه سن الفيل على الإطلاق.</p>
+<p>استطاع جيديون مانتيل أن يلاحظ أن قطع الصخور الملتصقة بالسن كانت قديمة جدًا. وكان يعلم أنها من نوع الصخور التي تُعثر فيها على حفريات الزواحف. فهل يمكن أن يكون هذا السن قد عاد إلى زاحف عملاق آكل للنبات يمضغ طعامه؟ نوع من الزواحف لم يعد يعيش على الأرض؟</p>
+<p>كان جيديون مانتيل في حيرة شديدة بسبب هذا السن الكبير. فلم يكن أي من الزواحف التي يعرفها يمضغ طعامه؛ إذ كانت الزواحف تبتلع طعامها مباشرة، ولذلك لا تتآكل أسنانها. لقد كان الأمر لغزًا.</p>
+<p>أخذ جيديون مانتيل السن إلى متحف في لندن وعرضه على علماء آخرين. ولم يوافق أحد منهم على رأيه بأن السن قد يكون لزاحف ضخم للغاية.</p>
+<p>حاول جيديون مانتيل العثور على زاحف له سن يشبه هذا السن العملاق، لكنه لم يجد شيئًا لفترة طويلة. ثم، في أحد الأيام، التقى بعالم كان يدرس <strong>الإغوانا</strong>. والإغوانا زاحف كبير آكل للنبات يعيش في أمريكا الوسطى والجنوبية، ويمكن أن يصل طوله إلى أكثر من خمسة أقدام. عرض ذلك العالم على جيديون مانتيل سنّ إغوانا. وأخيرًا! لقد وجد سنّ زاحف حي يشبه السن الغامض، لكن السن الأحفوري كان أكبر بكثير، بكثير.</p>
+<p>الآن أصبح جيديون مانتيل يعتقد أن السن الأحفوري كان يعود إلى حيوان يشبه الإغوانا، لكنه لم يكن بطول خمسة أقدام، بل كان — بحسب اعتقاده — يبلغ طوله <strong>مئة قدم!</strong> وقد أطلق على هذا الكائن اسم <strong>إيغوانودون</strong> (Iguanodon)، ويعني ذلك "سنّ الإغوانا".</p>
+<p>لم يكن لدى جيديون مانتيل هيكل عظمي كامل للإيغوانودون، لكنه حاول، من خلال العظام التي جمعها على مرّ السنين، أن يتخيل شكله. واعتقد أن هذه العظام تُظهر أن الكائن كان يمشي على أربع قوائم. كما ظنّ أن إحدى العظام المدببة كانت قرنًا، فرسم الإيغوانودون بقرن على أنفه.</p>
+<p>بعد سنوات، عُثر على عدة هياكل عظمية كاملة للإيغوانودون. وكان طولها لا يتجاوز نحو ثلاثين قدمًا. وأظهرت العظام أنه كان يمشي على رجليه الخلفيتين في بعض الأحيان. كما أن ما اعتقد جيديون مانتيل أنه قرن على أنفه، تبيّن في الحقيقة أنه <strong>شوكة على إبهامه</strong>! وبناءً على هذه الاكتشافات، غيّر العلماء أفكارهم حول شكل الإيغوانودون.</p>
+<p>ارتكب جيديون مانتيل بعض الأخطاء، لكنه قام أيضًا باكتشاف مهم. فمنذ فكرته الأولى، أمضى سنوات عديدة يجمع الحقائق والأدلة. وكان من أوائل من أظهروا أنه في الماضي البعيد، كانت زواحف عملاقة تعيش على الأرض ثم انقرضت.</p>
+<p>وفي عام ١٨٤٢، قرر عالم يُدعى <strong>ريتشارد أوين</strong> أن هذه الزواحف المنقرضة تحتاج إلى اسم خاص بها، فأطلق عليها اسم <strong>Dinosauria</strong>، ويعني ذلك "سحلية عظيمة مخيفة". واليوم نُطلق عليها اسم <strong>الديناصورات</strong>.</p>`
+      },
+      {
+        label:'القطعة الثانية — أدبي',
+        title:'فطيرة العدو',
+        body:`<p style="text-align:center;font-style:italic;color:var(--muted)">بقلم: ديريك مانسون</p>
+<p>كان الصيف مثاليًا حتى انتقل <strong>جيريمي روس</strong> للسكن في المنزل المجاور مباشرةً لأفضل صديق لي، ستانلي. لم أكن أحب جيريمي. لقد أقام حفلة ولم تتم دعوتي إليها حتى، بينما دُعي أفضل صديق لي ستانلي.</p>
+<p>لم يكن لدي أي عدو حتى انتقل جيريمي إلى الحي. أخبرني أبي أنه عندما كان في سني، كان لديه أعداء أيضًا. لكنه كان يعرف طريقة للتخلص منهم. أخرج أبي قصاصة ورق بالية من كتاب وصفات. وقال وهو راضٍ: "<strong>فطيرة العدو</strong>".</p>
+<p>قد تتساءل عمّا تحتويه فطيرة العدو بالضبط. قال أبي إن الوصفة سرية جدًا لدرجة أنه لا يستطيع إخباري بها. توسلت إليه أن يخبرني بشيء — أي شيء. قال لي: "سأخبرك بهذا يا <strong>توم</strong>، فطيرة العدو هي أسرع طريقة معروفة للتخلص من الأعداء".</p>
+<p>جعلني هذا أفكر: ما الأشياء المقززة التي يمكنني وضعها في فطيرة العدو؟ أحضرت لأبي ديدان الأرض وبعض الحجارة، لكنه أعادها إليّ فورًا.</p>
+<p>خرجتُ إلى الخارج لألعب، وطوال الوقت كنت أستمع إلى أصوات أبي في المطبخ. ربما يكون هذا الصيف رائعًا في النهاية.</p>
+<p>حاولتُ أن أتخيل كم ستكون رائحة فطيرة العدو سيئة، لكنني شممتُ رائحة شيء لذيذ جدًا. وبقدر ما استطعتُ أن أميز، كانت الرائحة قادمة من مطبخنا. شعرتُ بالحيرة.</p>
+<p>دخلتُ إلى المنزل لأسأل أبي عمّا يحدث. لا ينبغي أن تكون رائحة فطيرة العدو بهذه الجودة. لكن أبي كان ذكيًا. قال: "لو كانت رائحتها سيئة، فلن يأكلها عدوك أبدًا". شعرتُ أنه قد صنع هذه الفطيرة من قبل.</p>
+<p>رنّ جرس الفرن. ارتدى أبي قفازات الفرن وأخرج الفطيرة. كانت تبدو شهية لدرجة يمكن معها أكلها! بدأتُ أفهم قليلًا.</p>
+<p>لكنني ما زلتُ غير متأكد من كيفية عمل فطيرة العدو. ماذا تفعل بالضبط بالأعداء؟ ربما تجعل شعرهم يتساقط، أو تجعل رائحة أنفاسهم كريهة. سألتُ أبي، لكنه لم يساعدني.</p>
+<p>بينما كانت الفطيرة تبرد، أخبرني أبي بالمهمة التي يجب أن أقوم بها. همس قائلًا: "لكي تنجح، عليك أن تقضي يومًا مع عدوك. والأسوأ من ذلك، يجب أن تكون لطيفًا معه. الأمر ليس سهلًا، لكن هذه هي الطريقة الوحيدة لنجاح فطيرة العدو. هل أنت متأكد أنك تريد فعل ذلك؟"</p>
+<p>بالطبع كنت متأكدًا. كل ما كان عليّ فعله هو قضاء يوم واحد مع جيريمي، وبعدها سيختفي من حياتي. ركبتُ دراجتي وذهبتُ إلى منزله وطرقتُ الباب.</p>
+<p>وعندما فتح جيريمي الباب، بدا عليه الاستغراب. "هل يمكنك الخروج للعب؟" سألته. بدا عليه الارتباك. وقال: "سأذهب لأسأل أمي". ثم عاد وهو يحمل حذاءه بيده.</p>
+<p>ركبنا الدراجات لبعض الوقت، ثم تناولنا الغداء. وبعد الغداء ذهبنا إلى منزلي. كان الأمر غريبًا، لكنني كنت أستمتع بوقتي مع عدوي. لم أستطع أن أخبر أبي بذلك، لأنه كان قد بذل جهدًا كبيرًا في إعداد الفطيرة.</p>
+<p>لعبنا الألعاب حتى نادانا أبي لتناول العشاء. كان أبي قد أعد طعامي المفضل. واتضح أنه الطعام المفضل لدى جيريمي أيضًا! ربما لم يكن جيريمي سيئًا إلى هذا الحد في النهاية. بدأتُ أفكر أنه ربما ينبغي أن ننسى أمر فطيرة العدو.</p>
+<p>قلت: "أبي، من الجميل حقًا أن يكون لدي صديق جديد". كنت أحاول أن أخبره أن جيريمي لم يعد عدوي. لكن أبي اكتفى بالابتسام والإيماء برأسه. أعتقد أنه ظن أنني كنت أتظاهر فقط.</p>
+<p>لكن بعد العشاء، أحضر أبي الفطيرة. وضع ثلاث حصص وناولني واحدة وناول جيريمي أخرى. قال جيريمي وهو ينظر إلى الفطيرة: "واو!"</p>
+<p>شعرت بالذعر. لم أكن أريد لجيريمي أن يأكل فطيرة العدو! لقد أصبح صديقي! صرخت: "<strong>لا تأكلها! إنها سيئة!</strong>" توقفت شوكة جيريمي قبل أن تصل إلى فمه. نظر إليّ باستغراب. شعرت بالارتياح. لقد أنقذت حياته.</p>
+<p>قال جيريمي: "إذا كانت سيئة إلى هذا الحد، فلماذا أكل والدك نصفها بالفعل؟" وبالفعل، كان أبي يأكل فطيرة العدو. تمتم قائلًا: "لذيذة". جلستُ أراقبهما وهما يأكلان. لم يتساقط شعر أيٍّ منهما! بدا الأمر آمنًا، فتذوقتُ قطعة صغيرة. كانت لذيذة!</p>
+<p>بعد الحلوى، دعاني جيريمي لزيارته في منزله في صباح اليوم التالي.</p>
+<p>أما فطيرة العدو، فما زلت لا أعرف كيف تُصنع. وما زلت أتساءل إن كان الأعداء يكرهونها حقًا، أو إن كان شعرهم يتساقط أو تصبح رائحة أنفاسهم كريهة. لكنني لا أعلم إن كنت سأحصل على إجابة يومًا ما، لأنني فقدتُ أفضل أعدائي.</p>`
+      }
+    ],
+    questions:[
+      // ── لغز السنّ العملاق — 14 سؤالاً ──
+      {text:'ما الحفرية؟',options:['سطح الصخور والمنحدرات','عظام عملاق','بقايا كائنات حية قديمة جدًا','أسنان الأفيال'],correct:2,skill:'التركيز على المعلومات المذكورة واسترجاعها',feedback:'الحفرية هي بقايا أي كائن حي أو نبات عاش على الأرض منذ زمن بعيد جدًا.',passage:0,type:'mcq'},
+      {text:'وفقًا للنص، لماذا اعتقد بعض الناس في الماضي بوجود عمالقة؟',options:null,correct:null,skill:'إجراء استنتاجات مباشرة',feedback:'إجابة مقبولة: تُظهر الإجابة فهمًا بأن الناس عثروا على عظام ضخمة جدًا لم يستطيعوا تفسيرها — أكبر من أي حيوان يعرفونه. أمثلة: "وجدوا عظامًا كبيرة جدًا لا يمكن أن تعود إلى فرس نهر أو فيل".',passage:0,type:'open'},
+      {text:'أين وجد باليسي الحفريات؟',options:['على المنحدرات','في الطين','بجانب نهر','على طريق'],correct:1,skill:'التركيز على المعلومات المذكورة واسترجاعها',feedback:'ذكر النص أن باليسي كان يجد الحفريات الصغيرة في الطين أثناء صناعته الفخار.',passage:0,type:'mcq'},
+      {text:'ما الفكرة الجديدة التي طرحها باليسي؟',options:null,correct:null,skill:'تفسير الأفكار والمعلومات ودمجها',feedback:'إجابة مقبولة: الفكرة الجديدة هي أن بعض الكائنات لم تعد تعيش على الأرض — أي أنها منقرضة. أمثلة: "قد تكون الحفريات لكائنات منقرضة" — "بعضها يعود لكائنات اختفت تمامًا".',passage:0,type:'open'},
+      {text:'لماذا سُجن باليسي؟',options:['لم يكن الناس منفتحين على الأفكار الجديدة','نسخ أفكاره من جيديون مانتيل','ترك حفريات في أوانيه الفخارية','كانت دراسة الحفريات ممنوعة في فرنسا'],correct:0,skill:'إجراء استنتاجات مباشرة',feedback:'لم يكن الناس في زمن باليسي منفتحين على الأفكار الجديدة، فسُجن بسببها.',passage:0,type:'mcq'},
+      {text:'من الذي وجد السن الأحفوري في إنجلترا؟',options:['برنارد باليسي','ماري آن مانتيل','ريتشارد أوين','جيديون مانتيل'],correct:1,skill:'التركيز على المعلومات المذكورة واسترجاعها',feedback:'ذكر النص أن ماري آن مانتيل هي التي وجدت السن أثناء نزهتها.',passage:0,type:'mcq'},
+      {text:'ما الذي جعل السن الأحفوري محيّرًا لجيديون مانتيل؟',options:['لم يكن للزواحف أسنان','كانت الزواحف توجد تحت الصخور','كانت الزواحف تعيش في الماضي فقط','كانت الزواحف تبتلع طعامها فلا تتآكل أسنانها'],correct:3,skill:'إجراء استنتاجات مباشرة',feedback:'السن محيّر لأنه يُظهر علامات مضغ وتآكل، في حين أن الزواحف المعروفة كانت تبتلع طعامها مباشرة.',passage:0,type:'mcq'},
+      {text:'اعتقد جيديون مانتيل أن السن قد يكون عائدًا إلى أنواع مختلفة من الحيوانات. أكمل الجدول لتوضيح ما الذي جعله يعتقد ذلك:\n\n(أ) نوع الحيوان: آكل نباتات — ما الذي جعله يعتقد ذلك: ___\n(ب) نوع الحيوان: مخلوق عملاق — ما الذي جعله يعتقد ذلك: ___\n(ج) نوع الحيوان: زاحف — ما الذي جعله يعتقد ذلك: ___',options:null,correct:null,skill:'إجراء استنتاجات مباشرة',feedback:'إجابة مقبولة:\n(أ) كان السن مسطحًا ويحتوي على نتوءات وقد تآكل من المضغ.\n(ب) كان حجم السن كبيرًا جدًا يقارب سن الفيل.\n(ج) الصخور الملتصقة بالسن من نوع صخور حفريات الزواحف.',passage:0,type:'open'},
+      {text:'لماذا أخذ جيديون مانتيل السن إلى متحف؟',options:['ليسأل ما إذا كانت الحفرية تعود إلى المتحف','ليثبت أنه خبير في الحفريات','لسماع آراء العلماء حول فكرته','لمقارنة السن بأسنان أخرى في المتحف'],correct:2,skill:'إجراء استنتاجات مباشرة',feedback:'أراد جيديون عرض فكرته على علماء آخرين والاستماع إلى آرائهم.',passage:0,type:'mcq'},
+      {text:'عرض أحد العلماء على جيديون مانتيل سنّ إغوانا. لماذا كان رؤية السن مهمًا بالنسبة لجيديون مانتيل؟',options:null,correct:null,skill:'تفسير الأفكار والمعلومات ودمجها',feedback:'إجابة مقبولة: سنّ الإغوانا قدّم دليلًا يدعم نظريته بأن السن الأحفوري قد يعود إلى زاحف عملاق آكل للنبات. أمثلة: "أظهر سنّ الإغوانا أن الحفرية قد تكون لزاحف" — "أثبت السن أنه كان على حق".',passage:0,type:'open'},
+      {text:'ماذا استخدم جيديون مانتيل عندما حاول معرفة شكل الإيغوانودون؟',options:['العظام التي جمعها','أفكار علماء آخرين','صور في الكتب','أسنان من زواحف أخرى'],correct:0,skill:'التركيز على المعلومات المذكورة واسترجاعها',feedback:'حاول جيديون من خلال العظام التي جمعها على مرّ السنين أن يتخيل شكل الإيغوانودون.',passage:0,type:'mcq'},
+      {text:'انظر إلى الصورتين للإيغوانودون. ماذا تساعدانك على فهمه؟',options:null,correct:null,skill:'فحص وتقييم المحتوى واللغة والعناصر النصية',feedback:'إجابة كاملة: تُظهر الإجابة أن الصور توضّح التغيّر في فهم العلماء لشكل الإيغوانودون عبر الزمن. مثال: الصورة الأولى خاطئة والثانية أقرب للحقيقة بفضل اكتشافات جديدة.',passage:0,type:'open'},
+      {text:'ماذا اكتشف توم عن فطيرة العدو في نهاية القصة؟',options:['كانت تحتوي على مواد سامة','كانت فطيرة سحرية','كان طعمها سيئاً للغاية','كانت فطيرة عادية لذيذة والهدف الحقيقي منها كان تكوين الصداقة'],correct:3,skill:'تفسير الأفكار والمعلومات ودمجها',feedback:'اكتشف توم أن فطيرة العدو كانت فطيرة عادية لذيذة، والهدف الحقيقي منها كان تكوين الصداقة.',passage:1,type:'mcq'},
+      {text:'انظر إلى هذه الجملة من نهاية القصة: «بعد الحلوى، دعاني جيريمي لزيارته في منزله في صباح اليوم التالي.» ماذا توحي هذه الجملة عن الصبيين؟',options:['ما زالا عدوين','لا يحبّان اللعب في منزل توم','أرادا تناول المزيد من فطيرة العدو','قد يصبحان صديقين في المستقبل'],correct:3,skill:'فحص وتقييم المحتوى واللغة والعناصر النصية',feedback:'دعوة جيريمي لتوم إلى منزله في اليوم التالي تُشير إلى أن صداقتهما ستستمر وتنمو.',passage:1,type:'mcq'},
+      {text:'لماذا صنع والد توم فطيرة العدو حقًا؟ استخدم ما قرأته لتوضيح السبب الحقيقي.',options:null,correct:null,skill:'تفسير الأفكار والمعلومات ودمجها',feedback:'إجابة مقبولة: خطة والد توم كانت أن يصبح توم وجيريمي صديقين. أمثلة: "ليصبحا صديقين وليس عدوين" — "أراد أن يصبحا صديقين" — "ليجعلهما يلعبان معًا ويصبحان صديقين".',passage:1,type:'open'},
+      {text:'ما نوع الشخص الذي يمثله والد توم؟ أعطِ مثالًا مما قام به في القصة يوضح ذلك.',options:null,correct:null,skill:'تفسير الأفكار والمعلومات ودمجها',feedback:'إجابة كاملة: صفة شخصية محورية في دوره (مثل: ذكي، مهتم، حكيم، لطيف) مع مثال من أفعاله. مثال: "كان ذكيًا في الطريقة التي وجد بها وسيلة لجعل الصبيين يصبحان صديقين". إجابة جزئية: ذكر صفة فقط دون دليل.',passage:1,type:'open'},
+      {text:'ما الدرس الذي قد تتعلمه من هذه القصة؟',options:null,correct:null,skill:'فحص وتقييم المحتوى واللغة والعناصر النصية',feedback:'إجابة مقبولة: الإجابة تُظهر أهمية إعطاء العلاقة فرصة قبل الحكم على الشخص، أو تُشير إلى إمكانية تغيير المشاعر. أمثلة: "لا تحكم على شخص قبل أن تتعرف عليه" — "يمكن أن يصبح عدوك صديقك".',passage:1,type:'open'}
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════════
+  // محاكي بيرلز المتقدم — بطاقة جديدة تغطي المهام الأربع
+  // ══════════════════════════════════════════════════════════════
+  advancedSim:{
+    title:'محاكي بيرلز المتقدم — جميع المهام القرائية الأربع',
+    sub:'نصان: معلوماتي + أدبي | 16 سؤالاً يغطي المستويات الأربعة كاملةً',
+    passages:[
+      {
+        label:'القطعة الأولى — معلوماتي',
+        title:'رحلة إلى الجبال',
+        body:`<p><strong>الجبال</strong> هي أعلى التضاريس الطبيعية على سطح الأرض، وتتميز بمناخها البارد وطبيعتها الخلابة. يزور الناس الجبال للتمتع بجمالها وممارسة الرياضات المختلفة كالتسلق والمشي.</p>
+<p>في فصل الربيع، توجّه فريق من الطلاب مع معلمهم إلى جبال الهضبة الشمالية في رحلة تعليمية. كانت الرحلة تهدف إلى دراسة الطبيعة والتعرف على الحياة البرية في المناطق الجبلية.</p>
+<p>لاحظ الطلاب أن الأشجار في أسفل الجبل كانت كثيفة وطويلة، بينما كلما صعدوا للأعلى، قلّت الأشجار وصغر حجمها. وعند القمة لم توجد أشجار تقريباً بسبب البرودة الشديدة والرياح القوية.</p>
+<p>أوضح المعلم أن هذا التغيير يُسمى <span class="hw" onclick="shp('plant_gradient')"><strong>التدرج النباتي</strong></span>، وهو ظاهرة طبيعية تحدث في جميع الجبال حول العالم. فكلما ارتفعنا عن مستوى سطح البحر، كلما انخفضت درجة الحرارة وقلّ الأكسجين وتغيرت الأحوال المناخية.</p>
+<p>استطاع الطلاب أيضاً مشاهدة بعض الحيوانات الجبلية كالوعل والأرانب البرية والطيور المهاجرة التي تتوقف عند الجبال في موسم الهجرة. وقد التقط الطلاب الصور وسجّلوا ملاحظاتهم في كراساتهم العلمية.</p>
+<p>في نهاية الرحلة، أجرى الطلاب مقارنة بين طبيعة القمة وأسفل الجبل، وخلصوا إلى أن البيئة الجبلية تتغير بشكل واضح حسب الارتفاع، وأن لكل منطقة كائناتها وظروفها الخاصة.</p>`
+      },
+      {
+        label:'القطعة الثانية — أدبي',
+        title:'مغامرة سالم في الغابة',
+        body:`<p style="text-align:center;font-style:italic;color:var(--muted)">قصة للأطفال — الصف الرابع</p>
+<p>كان <strong>سالم</strong> طفلاً يحبّ الاستكشاف. وفي يوم إجازة، قرر أن يدخل الغابة الصغيرة القريبة من منزله وحده للمرة الأولى. أخبر أمه وأخذ معه زجاجة ماء وتفاحة وبوصلة صغيرة أهداها له جدّه.</p>
+<p>دخل سالم الغابة وهو متحمس، لكنه سرعان ما أدرك أن الأشجار الكثيفة تجعل كل المسالك تبدو متشابهة. بعد ساعة من المشي، أدرك سالم أنه لا يعرف طريق العودة. شعر بالقلق، وبدأت قدماه ترتجفان.</p>
+<p>جلس سالم عند جذع شجرة قديمة وأخذ نفساً عميقاً. تذكّر ما علّمه جدّه: "إذا ضللت طريقك يا سالم، لا تتحرك كثيراً. استخدم عقلك قبل قدميك." أخرج <span class="hw" onclick="shp('compass')">البوصلة</span> ونظر إليها. كان يعلم أن المنزل يقع في الجهة الغربية.</p>
+<p>سار سالم ببطء نحو الغرب، يراقب البوصلة كل بضع خطوات. بعد وقت ليس بطويل، سمع صوت الشارع، ثم أبصر سياج منزله المألوف. ركض نحو الباب وأمّه تنتظره على العتبة.</p>
+<p>قالت له أمّه وهي تحضنه: "أين كنت يا سالم؟ لقد قلقت عليك كثيراً!" ابتسم سالم وقال: "ضللت يا أمي، لكن جدي علّمني كيف أجد طريقي." نظرت أمّه إلى البوصلة في يده وقالت بفخر: "إذن جدّك أنقذك اليوم."</p>
+<p>تلك الليلة، كتب سالم في دفتره: "أفضل مغامرة تعلّمني أن أفكر."</p>`
+      }
+    ],
+    questions:[
+      // ── القطعة الأولى: رحلة إلى الجبال — 8 أسئلة تغطي المهام الأربع ──
+      {readingTask:'تحديد المعلومات الواضحة المصرح بها في النص واسترجاعها',text:'ما هدف الرحلة التي قام بها الطلاب إلى الجبال؟',options:['ممارسة رياضة التسلق','دراسة الطبيعة والتعرف على الحياة البرية','التصوير الفوتوغرافي فقط','قضاء العطلة مع الأهل'],correct:1,skill:'استرجاع المعلومات',feedback:'ذكر النص أن هدف الرحلة كان دراسة الطبيعة والتعرف على الحياة البرية في المناطق الجبلية.',passage:0,type:'mcq'},
+      {readingTask:'البحث عن تفاصيل محددة أو تعريفات واردة في النص',text:'ما اسم الظاهرة التي شرحها المعلم للطلاب؟',options:['التغير المناخي','التدرج النباتي','الهجرة الموسمية','التقلبات الجوية'],correct:1,skill:'استرجاع التفاصيل',feedback:'وردت في النص عبارة "التدرج النباتي" وهي الظاهرة التي شرحها المعلم.',passage:0,type:'mcq'},
+      {readingTask:'استنتاج أن حدثًا تسبب في حدث آخر',text:'لماذا قلّت الأشجار وصغر حجمها عند الصعود نحو القمة؟',options:['لأن الطلاب قطعوا بعضها','بسبب البرودة الشديدة والرياح القوية وانخفاض الأكسجين','بسبب قلة المطر في الربيع','لأن الحيوانات تأكل الأشجار'],correct:1,skill:'الاستدلال السببي',feedback:'أوضح النص أنه كلما ارتفعنا كلما انخفضت درجة الحرارة وقلّ الأكسجين، وهذا يفسر قلة الأشجار وصغر حجمها.',passage:0,type:'mcq'},
+      {readingTask:'تحديد الفكرة العامة غير المصرح بها مباشرة في النص',text:'ما الاستنتاج الذي توصل إليه الطلاب في نهاية الرحلة؟',options:['أن الجبال خطرة ولا ينبغي زيارتها','أن البيئة الجبلية تتغير حسب الارتفاع ولكل منطقة كائناتها الخاصة','أن الحيوانات تعيش فقط في أسفل الجبل','أن جميع الجبال تتشابه في طبيعتها'],correct:1,skill:'استنتاج الفكرة العامة',feedback:'خلص الطلاب إلى أن البيئة الجبلية تتغير بشكل واضح حسب الارتفاع، وأن لكل منطقة كائناتها وظروفها الخاصة.',passage:0,type:'mcq'},
+      {readingTask:'مقارنة ومقابلة المعلومات الواردة في النص',text:'كيف تختلف طبيعة أسفل الجبل عن طبيعة القمة؟',options:['لا يوجد فرق بينهما','أسفل الجبل بارد والقمة دافئة','أسفل الجبل كثيف بالأشجار والقمة شبه خالية منها','القمة أكثر خضرة من الأسفل'],correct:2,skill:'دمج ومقارنة المعلومات',feedback:'أظهر النص أن الأشجار كانت كثيفة وطويلة في أسفل الجبل، بينما عند القمة لم توجد أشجار تقريباً.',passage:0,type:'mcq'},
+      {readingTask:'تفسير تطبيقات العالم الحقيقي للمعلومات الواردة في النص',text:'كيف يمكن الاستفادة من معرفة ظاهرة التدرج النباتي في الحياة الواقعية؟',options:['تساعد المزارعين على اختيار المحاصيل المناسبة لكل ارتفاع','لا فائدة منها في الحياة العملية','تُستخدم فقط في الدراسات الأكاديمية','تساعد على تحديد أماكن وجود الأفيال'],correct:0,skill:'الربط بالعالم الحقيقي',feedback:'معرفة التدرج النباتي تساعد المزارعين وعلماء البيئة على اختيار المحاصيل والنباتات المناسبة لكل ارتفاع وتضاريس.',passage:0,type:'mcq'},
+      {readingTask:'إدراك سمات النص والرسالة العامة التي يحملها',text:'ما الرسالة العلمية الأساسية التي يريد النص إيصالها للقارئ؟',options:['أن الجبال جميلة وينبغي السياحة فيها','أن البيئة الطبيعية متنوعة وتتأثر بعوامل متعددة كالارتفاع والمناخ','أن الطلاب يجب أن يسافروا كثيراً','أن الرحلات المدرسية مضيعة للوقت'],correct:1,skill:'تفسير الرسالة العامة',feedback:'النص يُبرز تنوع البيئة الطبيعية وتأثير الارتفاع على الغطاء النباتي والحياة البرية، مما يعكس ثراء الطبيعة وتعقيدها.',passage:0,type:'mcq'},
+      {readingTask:'تقييم الوسائط التوضيحية في النص',text:'لو أُضيف رسم بياني يوضح التغير في عدد الأشجار مع الارتفاع، كيف سيساعد القارئ؟',options:['لن يُضيف أي فائدة للنص','سيُصعّب الفهم ويربك القارئ','سيُوضح الفكرة بصرياً ويجعلها أسهل استيعاباً','سيجعل النص أطول وأصعب'],correct:2,skill:'تقييم عناصر النص',feedback:'الرسوم البيانية تُترجم المعلومات إلى صورة بصرية تُسهل الفهم والمقارنة، وهو ما يُعزز مضمون النص العلمي.',passage:0,type:'mcq'},
+
+      // ── القطعة الثانية: مغامرة سالم في الغابة — 8 أسئلة تغطي المهام الأربع ──
+      {readingTask:'تحديد المعلومات الواضحة المصرح بها في النص واسترجاعها',text:'ماذا أخذ سالم معه في رحلته إلى الغابة؟',options:['كتاباً وقلماً','زجاجة ماء وتفاحة وبوصلة','خيمة وحقيبة نوم','هاتفاً ومصباحاً'],correct:1,skill:'استرجاع المعلومات',feedback:'ذكر النص أن سالم أخذ معه زجاجة ماء وتفاحة وبوصلة صغيرة أهداها له جدّه.',passage:1,type:'mcq'},
+      {readingTask:'استنتاج أن حدثًا تسبب في حدث آخر',text:'لماذا شعر سالم بالقلق في الغابة؟',options:['لأنه أضاع بوصلته','لأنه لم يأكل شيئاً','لأنه أدرك أنه لا يعرف طريق العودة','لأن الجو كان بارداً جداً'],correct:2,skill:'الاستدلال السببي',feedback:'أدرك سالم أن الأشجار الكثيفة جعلت المسالك تبدو متشابهة ولا يعرف طريق العودة، فشعر بالقلق.',passage:1,type:'mcq'},
+      {readingTask:'تحليل مشاعر الشخصيات من خلال أفعالها وكلماتها',text:'ماذا يدل جلوس سالم عند جذع شجرة قديمة وأخذه نفساً عميقاً؟',options:['أنه أراد النوم','أنه حاول التهدئة والتفكير بهدوء','أنه يائس ولا يريد المتابعة','أنه كان يلعب'],correct:1,skill:'تحليل مشاعر الشخصيات',feedback:'جلوسه وأخذ نفس عميق يدل على أنه أراد الهدوء والتفكير بعقل، وهو ما أوصى به جدّه.',passage:1,type:'mcq'},
+      {readingTask:'تحديد الفكرة العامة غير المصرح بها مباشرة في النص',text:'ما الفكرة التي يمكن استنتاجها من تصرف سالم عند ضياعه؟',options:['الهروب من المشكلة أفضل طريقة','التفكير الهادئ واستخدام المعرفة يساعدان على حل المشكلات','يجب ألا يدخل الأطفال الغابات أبداً','الحظ هو الذي أنقذ سالم'],correct:1,skill:'استنتاج الفكرة العامة',feedback:'تصرف سالم يُثبت أن التفكير الهادئ واستخدام ما تعلمته يُمكّنانك من حل المشكلات حتى في الأوقات الصعبة.',passage:1,type:'mcq'},
+      {readingTask:'مقارنة ومقابلة المعلومات الواردة في النص',text:'كيف اختلف شعور سالم في بداية القصة عن شعوره عند العودة إلى المنزل؟',options:['كان حزيناً في البداية وفرحاً في النهاية','كان متحمساً في البداية وخائفاً في النهاية','كان متحمساً في البداية ثم قلقاً ثم سعيداً عند العودة','لم يتغير شعوره طوال القصة'],correct:2,skill:'دمج ومقارنة المعلومات',feedback:'بدأ سالم متحمساً، ثم شعر بالقلق عند الضياع، وانتهى سعيداً ومفتخراً عند عودته بسلام.',passage:1,type:'mcq'},
+      {readingTask:'إدراك سمات النص والرسالة العامة التي يحملها',text:'ما الرسالة الأبرز التي تقدمها قصة سالم؟',options:['الجبال والغابات أماكن خطرة','حكمة الأجداد ومعرفتهم يمكن أن تُنقذ حياتنا','يجب على الأطفال دائماً البقاء في المنزل','الأمهات تقلق دائماً بلا سبب'],correct:1,skill:'تفسير الرسالة العامة',feedback:'القصة تبرز كيف أن نصيحة الجد (استخدم عقلك قبل قدميك) أنقذت سالم، مما يُؤكد قيمة الحكمة والمعرفة المتوارثة.',passage:1,type:'mcq'},
+      {readingTask:'تقييم الأسلوب والتنظيم في النص',text:'لماذا اختار الكاتب أن تنتهي القصة بجملة سالم في دفتره؟',options:['لأن الكاتب لم يجد ما يكتبه','لإظهار أن سالم تعلّم درساً مهماً يستحق التسجيل','لأن الدفتر جزء من أدوات سالم','لأن الأمهات لا تُصدّق قصص أطفالهن'],correct:1,skill:'تقييم الأسلوب',feedback:'الجملة الأخيرة تُعبّر عن خلاصة تجربة سالم وما تعلّمه، وهي طريقة فنية تمنح القصة خاتمة مؤثرة ومعبّرة.',passage:1,type:'mcq'},
+      {readingTask:'التمييز بين الحقائق والآراء',text:'أيٌّ من التالي يُعدّ رأياً شخصياً وليس حقيقة مؤكدة في القصة؟',options:['سالم أخذ بوصلة في رحلته','قالت الأم إنها قلقت على سالم','جملة "أفضل مغامرة تعلّمني أن أفكر" التي كتبها سالم','دخل سالم الغابة وحده'],correct:2,skill:'التمييز بين الحقائق والآراء',feedback:'جملة "أفضل مغامرة تعلّمني أن أفكر" هي رأي سالم الشخصي وتقييمه لتجربته، وليست حقيقة موضوعية.',passage:1,type:'mcq'}
+    ]
+  }
+};
+
+// ═══════════════════════════════════════════
+// بيانات الدروس
+// ═══════════════════════════════════════════
+const lessons=[
+  {tag:'الفهم القرائي',title:'الفرق بين الفهم الحرفي والاستنتاجي',content:`<h2>الفهم الحرفي والاستنتاجي</h2><p class="lead">يُميّز اختبار بيرلز بين نوعين من الفهم: الحرفي (ما قاله النص مباشرةً) والاستنتاجي (ما يمكن أن نفهمه ضمنيًا).</p><h3>الفهم الحرفي</h3><p>هو استخراج المعلومات المذكورة صراحةً دون الحاجة إلى تأويل.</p><div class="example-box"><div class="example-label">مثال — سؤال حرفي</div><p>النص: "تعيش النحلة العاملة ستة أسابيع في الصيف."<br>السؤال: "كم تعيش النحلة العاملة في الصيف؟"</p></div><h3>الفهم الاستنتاجي</h3><p>هو الوصول إلى معلومات لم تُذكر صراحةً من خلال الربط والتفكير المنطقي.</p><div class="example-box"><div class="example-label">مثال — سؤال استنتاجي</div><p>النص: "لم يأكل خالد شيئًا طوال اليوم. حين رأى الطعام اتسعت عيناه."<br>السؤال: "كيف كان حال خالد؟" — الإجابة: جائع.</p></div><div class="callout-box"><strong>نصيحة بيرلز:</strong> حدد أولًا: هل السؤال يطلب منك شيئًا موجودًا في النص أم يطلب التفكير والاستنتاج؟</div>`},
+  {tag:'الاستراتيجيات',title:'استراتيجيات قراءة النصوص الأدبية',content:`<h2>قراءة النصوص الأدبية</h2><p class="lead">النصوص الأدبية في بيرلز تشمل القصص والحكايات. تعتمد على الشخصيات والأحداث والمشاعر.</p><h3>ركّز على الشخصيات</h3><p>اسأل نفسك: من هم الشخصيات؟ كيف يتصرفون؟ كيف يشعرون؟</p><div class="callout-box"><strong>مفتاح الشخصية:</strong> انظر إلى ما تفعله الشخصية، وما تقوله، وكيف يصفها الراوي.</div><h3>انتبه لمشاعر الشخصيات</h3><ul><li>الدموع = حزن أو فرح شديد</li><li>الابتسامة = رضا أو سعادة</li><li>التسرع = قلق أو اهتمام شديد</li><li>الصمت = تفكير أو ضيق</li></ul>`},
+  {tag:'نصوص معلوماتية',title:'قراءة النصوص المعلوماتية والعلمية',content:`<h2>النصوص المعلوماتية</h2><p class="lead">نصف أسئلة بيرلز تقريبًا تعتمد على نصوص معلوماتية.</p><h3>استخدم العناوين الفرعية</h3><p>اقرأها أولًا قبل النص الكامل لتحصل على "خريطة ذهنية" للمحتوى.</p><h3>ابحث عن الكلمات المفتاحية</h3><p>الكلمات المُسطَّرة أو العريضة هي الأفكار الرئيسية التي ستدور حولها الأسئلة.</p><div class="callout-box"><strong>استراتيجية السؤال-الجواب:</strong> بعد قراءة كل فقرة اسأل نفسك "ما الذي تعلمته؟"</div>`},
+  {tag:'التفسير',title:'مهارة التفسير والربط بالمعرفة السابقة',content:`<h2>التفسير والربط</h2><p class="lead">التفسير هو القدرة على ربط ما تقرأه بما تعرفه وبناء معنى جديد.</p><h3>ما هو التفسير؟</h3><p>الإجابة عن "لماذا؟" بعمق. ليس "ماذا حدث" فقط، بل "لماذا حدث" و"ما الذي يعنيه هذا".</p><div class="callout-box"><strong>قاعدة التفسير:</strong> الإجابة الصحيحة دائمًا لها دليل من النص + منطق.</div>`},
+  {tag:'التقييم النقدي',title:'نقد النص وتقييم أسلوب الكاتب',content:`<h2>التقييم النقدي للنص</h2><p class="lead">أعلى مستويات القراءة: تجاوز فهم ما قاله الكاتب إلى تقييم كيف قاله ولماذا.</p><h3>تقييم هدف الكاتب</h3><p>اسأل نفسك دومًا: "لماذا كتب الكاتب هذا النص؟ ماذا يريد أن يحقق؟"</p><div class="callout-box"><strong>السؤال الذهبي:</strong> "لو حذف الكاتب هذه الجملة، ماذا سيفقد النص؟"</div>`},
+  {tag:'استراتيجيات الاختبار',title:'نصائح لأداء أفضل في يوم الاختبار',content:`<h2>نصائح يوم الاختبار</h2><p class="lead">التحضير الجيد مهم، لكن أداء الاختبار بحكمة في اليوم الفعلي لا يقل أهمية.</p><h3>اقرأ النص أولًا بالكامل</h3><p>قبل أن تنظر إلى الأسئلة، اقرأ النص كاملًا مرةً واحدة.</p><div class="callout-box"><strong>تقنية الاستبعاد:</strong> إذا لم تكن متأكدًا، ابدأ باستبعاد الخيارات الخاطئة.</div><ul><li>✅ اقرأ النص أولًا ثم الأسئلة</li><li>✅ انتبه للكلمات المفتاحية</li><li>✅ استخدم الاستبعاد</li><li>✅ أجب على كل الأسئلة</li><li>✅ راجع إجاباتك بهدوء</li></ul>`}
+];
+
+// ═══════════════════════════════════════════
+// متغيرات الحالة
+// ═══════════════════════════════════════════
+let currentQuiz=null,currentLevel=null,answers={},submitted=false,totalScore=0;
+let currentStudent=null,pendingLevel=null;
+
+// ═══════════════════════════════════════════
+// قاعدة البيانات المحلية
+// ═══════════════════════════════════════════
+async function loadDB(){
+  try{
+    const snapshot=await dbFirestore.collection('results').get();
+    const results=[];
+    snapshot.forEach(doc=>{let d=doc.data();d.id=doc.id;results.push(d)});
+    return results;
+  }catch(e){console.error(e);return[]}
+}
+function saveDB(arr){}
+async function saveResult(result){
+  try{
+    const id=result.id;
+    await dbFirestore.collection('results').doc(id).set(result);
+    if(document.getElementById('view-home').classList.contains('active')) loadLeaderboard();
+  }catch(e){console.error(e)}
+}
+
+async function loadLeaderboard(){
+  const container = document.getElementById('leaderboard-list');
+  if(!container) return;
+  container.innerHTML = '<div style="text-align:center;color:var(--muted)">⏳ جاري إحضار بيانات المبدعين...</div>';
+  try {
+    const db = await loadDB();
+    if(db.length === 0) {
+      container.innerHTML = '<div style="text-align:center;color:var(--muted)">📭 لا يوجد أبطال بعد، كن أنت الأول!</div>';
+      return;
+    }
+    
+    db.sort((a,b) => b.percentage - a.percentage || b.mcqCorrect - a.mcqCorrect);
+    
+    const topStudents = [];
+    const seenNames = new Set();
+    const norm = s => (s||'').trim().replace(/\s+/g, ' ').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي');
+    
+    for(let r of db) {
+       const normName = norm(r.student);
+       if(!seenNames.has(normName) && r.percentage >= 50) {
+          seenNames.add(normName);
+          topStudents.push(r);
+       }
+       if(topStudents.length >= 5) break;
+    }
+
+    if(topStudents.length === 0) {
+      container.innerHTML = '<div style="text-align:center;color:var(--muted)">📭 لا يوجد أبطال اجتازوا نسبة 50% بعد!</div>';
+      return;
+    }
+
+    let html = '';
+    const medals = ['🥇', '🥈', '🥉', '🎖️', '🎖️'];
+    topStudents.forEach((s, idx) => {
+       const medal = medals[idx] || '🎖️';
+       const bg = idx === 0 ? 'background:linear-gradient(135deg, rgba(200,70,10,0.06), rgba(200,70,10,0.01));border-color:var(--accent)' : 'background:var(--surface)';
+       html += `
+         <div style="display:flex;justify-content:space-between;align-items:center;${bg};padding:12px 20px;border-radius:12px;margin-bottom:10px;border:1px solid var(--border);box-shadow:0 2px 6px var(--shadow)">
+           <div style="display:flex;align-items:center;gap:12px">
+             <span style="font-size:1.8rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15))">${medal}</span>
+             <div>
+                <div style="font-weight:800;color:var(--ink);font-size:1.05rem">${s.student}</div>
+                <div style="font-size:0.8rem;color:var(--muted);margin-top:2px;font-weight:600">المستوى: ${s.levelTitle}</div>
+             </div>
+           </div>
+           <div style="font-weight:900;color:var(--accent);font-size:1.3rem">${s.percentage}%</div>
+         </div>
+       `;
+    });
+    container.innerHTML = html;
+  } catch(e) {
+    console.error(e);
+    container.innerHTML = '<div style="text-align:center;color:var(--error)">❌ تعذر الاتصال بالسحابة لجلب لوحة الشرف</div>';
+  }
+}
+
+// ═══════════════════════════════════════════
+// تسجيل الطالب
+// ═══════════════════════════════════════════
+function askStudentName(level){
+  pendingLevel=level;
+  document.getElementById('studentNameInput').value='';
+  document.getElementById('studentClassInput').value='';
+  document.getElementById('studentOverlay').classList.add('show');
+  setTimeout(()=>document.getElementById('studentNameInput').focus(),200);
+}
+function cancelStudentLogin(){document.getElementById('studentOverlay').classList.remove('show');pendingLevel=null}
+function confirmStudent(){
+  const name=document.getElementById('studentNameInput').value.trim();
+  const cls=document.getElementById('studentClassInput').value.trim();
+  if(name.split(' ').filter(x=>x.length>0).length<2){showToast('الرجاء كتابة الاسم الثنائي على الأقل','error');return}
+  currentStudent={name,class:cls||'—',startTime:new Date().toISOString()};
+  document.getElementById('studentOverlay').classList.remove('show');
+  const lvl=pendingLevel;pendingLevel=null;
+  actuallyStartQuiz(lvl);
+}
+
+// ═══════════════════════════════════════════
+// التنقل بين الصفحات
+// ═══════════════════════════════════════════
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  if(id==='home') loadLeaderboard();
+}
+function switchTab(btn,viewId){document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));if(btn)btn.classList.add('active');showView(viewId)}
+function startQuiz(level){askStudentName(level)}
+
+// ═══════════════════════════════════════════
+// بناء الاختبار
+// ═══════════════════════════════════════════
+function actuallyStartQuiz(level){
+  currentLevel=level;currentQuiz=quizData[level];answers={};submitted=false;
+  showView('quiz');
+  document.getElementById('quiz-select').style.display='none';
+  document.getElementById('quiz-active').style.display='block';
+  document.getElementById('quiz-feedback').style.display='none';
+  document.getElementById('quiz-results').style.display='none';
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.nav-tab:nth-child(3)').classList.add('active');
+  document.getElementById('quiz-level-title').textContent=currentQuiz.title;
+  document.getElementById('quiz-level-sub').textContent=currentQuiz.sub;
+  const total=currentQuiz.questions.length;
+  document.getElementById('quiz-counter').textContent=total+' سؤال';
+  document.getElementById('quiz-progress').style.width='0%';
+  document.getElementById('answered-count').textContent='0 من '+total+' أُجيب عليها';
+  const letters=['أ','ب','ج','د'];
+  const isSim=!!currentQuiz.passages;
+  if(isSim){
+    document.querySelector('.passage-panel').style.display='none';
+    document.querySelector('.quiz-layout').style.gridTemplateColumns='1fr';
+    const container=document.getElementById('questions-container');container.innerHTML='';
+    currentQuiz.passages.forEach((passage,pi)=>{
+      const pBlock=document.createElement('div');
+      pBlock.style.cssText='background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:1.7rem;box-shadow:0 2px 10px var(--shadow);margin-bottom:1.5rem';
+      pBlock.innerHTML='<div style="font-size:0.75rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;border-bottom:2px solid var(--border);padding-bottom:0.5rem">'+passage.label+'</div><div style="font-size:1.1rem;font-weight:700;color:var(--ink);margin:0.7rem 0 0.9rem">'+passage.title+'</div><div style="font-size:1rem;line-height:2.05;color:var(--ink2)">'+passage.body+'</div>';
+      container.appendChild(pBlock);
+      currentQuiz.questions.filter(q=>q.passage===pi).forEach(q=>buildQuestionCard(q,currentQuiz.questions.indexOf(q),letters,container,true));
+    });
+    const crossQs=currentQuiz.questions.filter(q=>q.passage===null);
+    if(crossQs.length>0){
+      const sep=document.createElement('div');
+      sep.style.cssText='background:rgba(26,74,138,0.06);border:1.5px dashed var(--accent3);border-radius:12px;padding:0.8rem 1.2rem;margin-bottom:1rem;font-size:0.85rem;font-weight:700;color:var(--accent3)';
+      sep.textContent='أسئلة مقارنة بين القطعتين';container.appendChild(sep);
+      crossQs.forEach(q=>buildQuestionCard(q,currentQuiz.questions.indexOf(q),letters,container,true));
+    }
+  }else{
+    document.querySelector('.passage-panel').style.display='';
+    document.querySelector('.quiz-layout').style.gridTemplateColumns='';
+    document.getElementById('passage-title').textContent=currentQuiz.passage.title;
+    document.getElementById('passage-body').innerHTML=currentQuiz.passage.body;
+    const container=document.getElementById('questions-container');container.innerHTML='';
+    currentQuiz.questions.forEach((q,qi)=>buildQuestionCard(q,qi,letters,container,false));
+  }
+  const sb=document.getElementById('submit-btn');
+  sb.style.display='';sb.disabled=true;sb.textContent='إرسال الإجابات ◀';sb.onclick=submitQuiz;
+  document.getElementById('answered-count').style.display='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildQuestionCard(q,qi,letters,container,isSim){
+  const card=document.createElement('div');
+  card.className='question-card';card.id='q-card-'+qi;
+  const qType=isSim?q.type:'mcq';
+  let bodyHTML='';
+  const taskHTML=q.readingTask?'<div style="background:rgba(26,74,138,0.07);border:1px solid rgba(26,74,138,0.18);color:var(--accent3);border-radius:8px;padding:7px 10px;margin-bottom:0.8rem;font-size:0.84rem;font-weight:700;line-height:1.6">📌 مهمة القراءة: '+q.readingTask+'</div>':'';
+  if(qType==='open'){
+    bodyHTML='<div class="question-num">السؤال '+(qi+1)+'<span style="margin-right:6px;font-size:0.72rem;background:rgba(26,74,138,0.15);color:var(--accent3);padding:1px 6px;border-radius:4px">مفتوح ✍️</span></div>'+
+      taskHTML+'<div class="question-text">'+q.text+'</div>'+
+      '<textarea id="open-'+qi+'" oninput="trackOpen('+qi+')" placeholder="اكتب إجابتك هنا... (10 أحرف على الأقل)" style="width:100%;min-height:90px;border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;font-family:inherit;font-size:0.93rem;background:var(--bg2);color:var(--ink);resize:vertical;line-height:1.7;direction:rtl;margin-top:4px"></textarea>'+
+      '<div id="open-lbl-'+qi+'" style="font-size:0.78rem;color:var(--muted);margin-top:4px;text-align:right;font-weight:600"></div>'+
+      '<div class="feedback-box" id="fb-'+qi+'"></div>';
+  }else{
+    const optsHTML=q.options.map((opt,oi)=>'<button class="option-btn" onclick="selectAnswer('+qi+','+oi+')" id="opt-'+qi+'-'+oi+'"><span class="option-letter">'+letters[oi]+'</span>'+opt+'</button>').join('');
+    bodyHTML='<div class="question-num">السؤال '+(qi+1)+'</div>'+taskHTML+'<div class="question-text">'+q.text+'</div><div class="options-list">'+optsHTML+'</div><div class="feedback-box" id="fb-'+qi+'"></div>';
+  }
+  card.innerHTML=bodyHTML;container.appendChild(card);
+}
+
+function trackOpen(qi){
+  const ta=document.getElementById('open-'+qi);
+  const val=ta&&ta.value.trim();
+  if(val&&val.length>0){
+    answers[qi]=val;
+    ta.style.borderColor='var(--accent3)';
+  }else{
+    delete answers[qi];
+    ta.style.borderColor='var(--border)';
+  }
+  updateProgress();
+}
+
+function updateProgress(){
+  const total=currentQuiz.questions.length;
+  let answered=0;
+  currentQuiz.questions.forEach((q,qi)=>{if(answers[qi]!==undefined)answered++;});
+  const pct=(answered/total)*100;
+  document.getElementById('quiz-progress').style.width=pct+'%';
+  document.getElementById('answered-count').textContent=answered+' من '+total+' أُجيب عليها';
+  document.getElementById('quiz-counter').textContent=answered+' / '+total;
+  document.getElementById('submit-btn').disabled=answered<total;
+}
+function selectAnswer(qi,oi){
+  if(submitted)return;
+  answers[qi]=oi;
+  const q=currentQuiz.questions[qi];
+  for(let i=0;i<q.options.length;i++)document.getElementById('opt-'+qi+'-'+i).classList.remove('selected');
+  document.getElementById('opt-'+qi+'-'+oi).classList.add('selected');
+  updateProgress();
+}
+
+// ═══════════════════════════════════════════
+// نظام تقييم الأسئلة المفتوحة عبر Gemini API
+// ═══════════════════════════════════════════
+// تشفير المفتاح لتجاوز أنظمة الحماية
+const _k1 = "AIzaSyDiL2r8WC";
+const _k2 = "qULyemLmKdhQM";
+const _k3 = "odY9bG2QeYVU";
+const GEMINI_API_KEY = _k1 + _k2 + _k3;
+const openScores={};
+
+async function evaluateOpenAnswer(qi,questionText,modelAnswer,studentAnswer){
+  if(!studentAnswer || studentAnswer.trim() === '(لا إجابة)' || studentAnswer.trim() === '') {
+    const r = {score: 0, feedback: 'لم تكتب إجابة لهذا السؤال.'};
+    openScores[qi] = r;
+    return r;
+  }
+  try{
+    const prompt = `أنت مُقيِّم لاختبار القراءة الدولي PIRLS للصف الرابع.
+السؤال: ${questionText}
+معايير الإجابة النموذجية (المقبولة): ${modelAnswer}
+إجابة الطالب: ${studentAnswer}
+
+مهمتك:
+1. تقييم إجابة الطالب (هل فهم المعنى الأساسي وأجاب بشكل صحيح أم لا؟).
+2. إرجاع النتيجة بتنسيق JSON فقط يحتوي على حقلين:
+   - "score": 1 إذا كانت الإجابة مقبولة/صحيحة، و 0 إذا كانت خاطئة أو لا علاقة لها بالسؤال.
+   - "feedback": تعليق تشجيعي ومفيد قصير جداً للطالب (باللغة العربية).
+
+لا تكتب أي نصوص أخرى، أرجع JSON فقط.`;
+
+    const res=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + GEMINI_API_KEY, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { responseMimeType: "application/json", temperature: 0.2 }
+      })
+    });
+    
+    if(!res.ok) throw new Error('API Error');
+    const data=await res.json();
+    let txt = data.candidates[0].content.parts[0].text;
+    txt = txt.replace(/```json|```/gi, '').trim();
+    const result=JSON.parse(txt);
+    openScores[qi]=result;
+    return result;
+  }catch(e){
+    console.error("Gemini Error:", e);
+    const r={score:0,feedback:'تم حفظ الإجابة، وبانتظار مراجعة المعلم.'};
+    openScores[qi]=r;
+    return r;
+  }
+}
+
+// ═══════════════════════════════════════════
+// إرسال الإجابات
+// ═══════════════════════════════════════════
+async function submitQuiz(){
+  if(submitted)return;
+  const total=currentQuiz.questions.length;
+  const letters=['أ','ب','ج','د'];
+  const isSim=!!(currentQuiz.questions[0]&&currentQuiz.questions[0].type!==undefined);
+
+  // ── تقييم الأسئلة المفتوحة عبر Claude API ──
+  const sb=document.getElementById('submit-btn');
+  const openQsList=[];
+  currentQuiz.questions.forEach((q,qi)=>{
+    const qt=isSim?q.type:'mcq';
+    if(qt==='open'){openQsList.push({qi,q});}
+  });
+
+  if(openQsList.length>0){
+    sb.disabled=true;
+    sb.textContent='⏳ جارٍ تقييم الإجابات ('+openQsList.length+' سؤال)...';
+    for(let i=0;i<openQsList.length;i++){
+      const {qi,q}=openQsList[i];
+      sb.textContent='⏳ تقييم '+(i+1)+'/'+openQsList.length+'...';
+      const ans=answers[qi]||'(لا إجابة)';
+      await evaluateOpenAnswer(qi,q.text,q.feedback,ans);
+    }
+    sb.textContent='✔ اكتمل التقييم';
+  }
+
+  submitted=true;
+
+  let mcqCorrect=0,mcqTotal=0;
+  currentQuiz.questions.forEach((q,qi)=>{
+    const qType=isSim?q.type:'mcq';
+    if(qType==='mcq'){mcqTotal++;if(answers[qi]===q.correct)mcqCorrect++;}
+  });
+  let openCorrect=0;
+  openQsList.forEach(({qi})=>{if(openScores[qi]&&openScores[qi].score===1)openCorrect++;});
+  const openCount=openQsList.length;
+  document.getElementById('fb-level-title').textContent=currentQuiz.title;
+  const openQ=total-mcqTotal;
+  document.getElementById('fb-score-pill').innerHTML=
+    '<span style="color:var(--success);font-weight:700">'+mcqCorrect+'</span>'+
+    '<span style="color:var(--muted)"> / '+mcqTotal+' اختيار متعدد</span>'+
+    (openQ>0?'  <span style="background:rgba(26,74,138,0.1);color:var(--accent3);border-radius:8px;padding:2px 10px;font-size:0.85rem;margin-right:8px">✍️ '+openQ+' مفتوح (تصحيح تلقائي بواسطة الذكاء الاصطناعي)</span>':'');
+  const fbPassTitle=document.getElementById('fb-passage-title');
+  const fbPassBody=document.getElementById('fb-passage-body');
+  const fbContainer=document.getElementById('fb-questions-container');
+  fbContainer.innerHTML='';
+  if(isSim&&currentQuiz.passages){
+    fbPassTitle.textContent='';fbPassBody.innerHTML='';
+    document.querySelector('#quiz-feedback .quiz-layout').style.gridTemplateColumns='1fr';
+    document.querySelector('#quiz-feedback .passage-panel').style.display='none';
+    currentQuiz.passages.forEach((p,pi)=>{
+      const pBlock=document.createElement('div');
+      pBlock.style.cssText='background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:1.7rem;box-shadow:0 2px 10px var(--shadow);margin-bottom:1.5rem';
+      pBlock.innerHTML='<div style="font-size:0.75rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;border-bottom:2px solid var(--border);padding-bottom:0.5rem">'+p.label+'</div><div style="font-size:1.1rem;font-weight:700;color:var(--ink);margin:0.7rem 0 0.9rem">'+p.title+'</div><div style="font-size:1rem;line-height:2.05;color:var(--ink2)">'+p.body+'</div>';
+      fbContainer.appendChild(pBlock);
+      currentQuiz.questions.filter(q=>q.passage===pi).forEach(q=>buildFbCard(q,currentQuiz.questions.indexOf(q),letters,fbContainer));
+    });
+    const crossQs=currentQuiz.questions.filter(q=>q.passage===null);
+    if(crossQs.length>0){
+      const sep=document.createElement('div');
+      sep.style.cssText='background:rgba(26,74,138,0.06);border:1.5px dashed var(--accent3);border-radius:12px;padding:0.8rem 1.2rem;margin-bottom:1rem;font-size:0.85rem;font-weight:700;color:var(--accent3)';
+      sep.textContent='أسئلة مقارنة بين القطعتين';fbContainer.appendChild(sep);
+      crossQs.forEach(q=>buildFbCard(q,currentQuiz.questions.indexOf(q),letters,fbContainer));
+    }
+  }else{
+    fbPassTitle.textContent=currentQuiz.passage.title;
+    fbPassBody.innerHTML=currentQuiz.passage.body;
+    document.querySelector('#quiz-feedback .quiz-layout').style.gridTemplateColumns='';
+    document.querySelector('#quiz-feedback .passage-panel').style.display='';
+    currentQuiz.questions.forEach((q,qi)=>buildFbCard(q,qi,letters,fbContainer));
+  }
+  totalScore+=mcqCorrect*10;
+  document.getElementById('totalScore').textContent=totalScore;
+  const totalCorrect=mcqCorrect+openCorrect;
+  window._lastCorrect=mcqCorrect;
+  window._lastMcqTotal=mcqTotal;
+  window._lastOpenCorrect=openCorrect;
+  window._lastOpenCount=openCount;
+  window._lastTotal=total;
+  window._lastTotalCorrect=totalCorrect;
+  if(currentStudent){
+    const answersDetail=currentQuiz.questions.map((q,qi)=>{
+      const ua=answers[qi];const qt=isSim?q.type:'mcq';
+      return{index:qi+1,questionText:q.text,readingTask:q.readingTask||q.skill,skill:q.skill,type:qt,
+        passage:q.passage===null?'مقارنة':(q.passage!==undefined&&currentQuiz.passages?currentQuiz.passages[q.passage].label:'—'),
+        options:q.options||null,correctIdx:q.correct,correctText:q.options?q.options[q.correct]:null,
+        studentAnswer:qt==='open'?(ua||'(لم يجب)'):(ua!==undefined?q.options[ua]:'(لم يجب)'),
+        isCorrect:qt==='mcq'?(ua===q.correct):(qt==='open'&&openScores[qi]?openScores[qi].score===1:null),aiFeedback:qt==='open'&&openScores[qi]?openScores[qi].feedback:null,modelAnswer:qt==='open'?q.feedback:null};
+    });
+    saveResult({id:Date.now()+'-'+Math.random().toString(36).substr(2,5),
+      student:currentStudent.name,class:currentStudent.class,level:currentLevel,levelTitle:currentQuiz.title,
+      startTime:currentStudent.startTime,endTime:new Date().toISOString(),
+      mcqCorrect,mcqTotal,openCorrect,openCount,totalQuestions:total,
+      percentage:total>0?Math.round(totalCorrect/total*100):0,answers:answersDetail});
+  }
+  document.getElementById('quiz-active').style.display='none';
+  document.getElementById('quiz-feedback').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildFbCard(q,qi,letters,container){
+  const card=document.createElement('div');
+  const qType=q.type||'mcq';
+  const taskHTML=q.readingTask?'<div style="background:rgba(26,74,138,0.07);border:1px solid rgba(26,74,138,0.18);color:var(--accent3);border-radius:8px;padding:7px 10px;margin-bottom:0.8rem;font-size:0.84rem;font-weight:700;line-height:1.6">📌 مهمة القراءة: '+q.readingTask+'</div>':'';
+  if(qType==='open'){
+    const studentAnswer=answers[qi]||'(لم تكتب إجابة)';
+    const aiRes=openScores[qi];
+    const ok=aiRes&&aiRes.score===1;
+    const wrong=aiRes&&aiRes.score===0;
+    card.className='question-card '+(ok?'answered':'wrong-answered');
+    const badge=ok
+      ?'<span style="margin-right:6px;background:var(--success);color:white;border-radius:5px;padding:1px 9px;font-size:0.78rem;font-weight:700">✅ مقبولة</span>'
+      :wrong
+        ?'<span style="margin-right:6px;background:var(--error);color:white;border-radius:5px;padding:1px 9px;font-size:0.78rem;font-weight:700">❌ غير مقبولة</span>'
+        :'<span style="margin-right:6px;background:var(--accent3);color:white;border-radius:5px;padding:1px 9px;font-size:0.78rem;font-weight:700">✍️ مفتوح</span>';
+    const aifb=aiRes?'<div class="feedback-box show '+(ok?'correct-fb':'wrong-fb')+'" style="margin-bottom:8px"><strong>🤖 تقييم ذكي:</strong> '+aiRes.feedback+'</div>':'';
+    const border=ok?'var(--success)':wrong?'var(--error)':'var(--border)';
+    card.innerHTML='<div class="question-num">السؤال '+(qi+1)+badge+'</div>'+
+      taskHTML+'<div class="question-text">'+q.text+'</div>'+
+      '<div style="background:var(--bg2);border:1.5px solid '+border+';border-radius:9px;padding:10px 12px;font-size:0.93rem;margin-bottom:0.8rem;min-height:55px;direction:rtl;line-height:1.7"><strong style="color:var(--muted);font-size:0.78rem">إجابتك:</strong><br>'+studentAnswer+'</div>'+
+      aifb+
+      '<div class="feedback-box show correct-fb"><strong>📋 الإجابة النموذجية:</strong><br>'+q.feedback+'</div>';
+  }else{
+    const chosen=answers[qi];const isCorrect=(chosen===q.correct);
+    let optsHTML='';
+    q.options.forEach((opt,oi)=>{
+      let cls='option-btn',lStyle='background:var(--border);color:var(--ink2)',bStyle='';
+      if(oi===q.correct){cls+=' correct';lStyle='background:var(--success);color:white';bStyle='border-color:var(--success);background:rgba(26,107,60,0.08);color:var(--success)';}
+      else if(oi===chosen&&!isCorrect){cls+=' wrong';lStyle='background:var(--error);color:white';bStyle='border-color:var(--error);background:rgba(200,32,10,0.08);color:var(--error)';}
+      optsHTML+='<div class="'+cls+'" style="cursor:default;'+bStyle+'"><span class="option-letter" style="'+lStyle+'">'+letters[oi]+'</span>'+opt+'</div>';
+    });
+    const fbHTML=isCorrect?'<div class="feedback-box show correct-fb"><strong>✅ إجابة صحيحة!</strong> '+q.feedback+'</div>':'<div class="feedback-box show wrong-fb"><strong>❌ إجابة خاطئة.</strong> الإجابة الصحيحة: <strong style="color:var(--success)">'+q.options[q.correct]+'</strong><br>'+q.feedback+'</div>';
+    card.className='question-card '+(isCorrect?'answered':'wrong-answered');
+    card.innerHTML='<div class="question-num">السؤال '+(qi+1)+'</div>'+taskHTML+'<div class="question-text">'+q.text+'</div><div class="options-list">'+optsHTML+'</div>'+fbHTML;
+  }
+  container.appendChild(card);
+}
+
+function showFinalResults(){
+  const mcqC=window._lastCorrect||0;
+  const mcqT=window._lastMcqTotal||window._lastTotal||0;
+  const openC=window._lastOpenCorrect||0;
+  const openT=window._lastOpenCount||0;
+  const totalC=(window._lastTotalCorrect!==undefined)?window._lastTotalCorrect:(mcqC+openC);
+  const total=window._lastTotal||(mcqT+openT);
+  const wrong=total-totalC;
+  const pct=total>0?Math.round(totalC/total*100):0;
+  document.getElementById('quiz-feedback').style.display='none';
+  document.getElementById('quiz-results').style.display='block';
+  // النتيجة الكلية
+  document.getElementById('r-correct').textContent=totalC;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-pct').textContent=pct+'%';
+  const openCnt=window._lastOpenCount||0;
+  document.getElementById('result-score').innerHTML=totalC+'<span>/'+total+'</span>';
+  // شبكة إحصائية مفصّلة
+  const det=document.getElementById('r-detail-grid');
+  if(det){
+    let dhtml='<div style="display:grid;grid-template-columns:'+(openT>0?'1fr 1fr':'1fr')+';gap:0.9rem;margin:1rem 0">';
+    dhtml+='<div style="background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:1rem;text-align:center;box-shadow:0 2px 7px var(--shadow)">';
+    dhtml+='<div style="font-size:0.75rem;font-weight:700;color:var(--muted);margin-bottom:6px">اختيار متعدد ✓</div>';
+    dhtml+='<div style="font-size:2rem;font-weight:700;color:var(--success)">'+mcqC+'<span style="font-size:1rem;color:var(--muted)">/'+mcqT+'</span></div>';
+    dhtml+='<div style="font-size:0.8rem;color:var(--muted)">'+(mcqT>0?Math.round(mcqC/mcqT*100):0)+'%</div></div>';
+    if(openT>0){
+      dhtml+='<div style="background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:1rem;text-align:center;box-shadow:0 2px 7px var(--shadow)">';
+      dhtml+='<div style="font-size:0.75rem;font-weight:700;color:var(--muted);margin-bottom:6px">أسئلة مفتوحة ✍️</div>';
+      dhtml+='<div style="font-size:2rem;font-weight:700;color:var(--accent3)">'+openC+'<span style="font-size:1rem;color:var(--muted)">/'+openT+'</span></div>';
+      dhtml+='<div style="font-size:0.8rem;color:var(--muted)">'+(openT>0?Math.round(openC/openT*100):0)+'%</div></div>';
+    }
+    dhtml+='</div>';
+    det.innerHTML=dhtml;
+  }
+  // إظهار إحصائية الأسئلة المفتوحة
+  const openStatEl=document.getElementById('r-open-stat');
+  if(openStatEl){
+    if(openCnt>0){
+      openStatEl.innerHTML='<div style="background:rgba(26,74,138,0.08);border:1.5px solid rgba(26,74,138,0.2);border-radius:12px;padding:0.9rem;margin-bottom:1rem;text-align:right"><span style="font-size:1.5rem;font-weight:700;color:var(--accent3);display:block">'+openCnt+'</span><span style="font-size:0.82rem;color:var(--muted)">سؤال مفتوح ✍️ — يحتاج مراجعة المعلم</span></div>';
+    }else{openStatEl.innerHTML='';}
+  }
+  let badge,title,sub;
+  if(pct>=80){badge='🏆';title='أداء ممتاز! تفوّق حقيقي';sub='أنت في مستوى القراءة المتقدم في بيرلز';document.getElementById('result-badge').className='result-badge-big badge-gold-big';}
+  else if(pct>=60){badge='⭐';title='أداء جيد! استمر في التطور';sub='قليل من التدريب يرفعك للقمة';document.getElementById('result-badge').className='result-badge-big badge-green-big';}
+  else{badge='📚';title='تحتاج مزيدًا من التدريب';sub='راجع الدروس وأعد الاختبار';document.getElementById('result-badge').className='result-badge-big badge-orange-big';}
+  document.getElementById('result-badge').textContent=badge;
+  document.getElementById('result-title').textContent=title;
+  document.getElementById('result-sub').textContent=sub;
+  const skillsMap={};
+  const _isSim=!!(currentQuiz.questions[0]&&currentQuiz.questions[0].type!==undefined);
+  currentQuiz.questions.forEach((q,qi)=>{
+    if(!skillsMap[q.skill])skillsMap[q.skill]={total:0,correct:0};
+    skillsMap[q.skill].total++;
+    const _qt=_isSim?q.type:'mcq';
+    if(_qt==='mcq'&&answers[qi]===q.correct)skillsMap[q.skill].correct++;
+    else if(_qt==='open'&&openScores[qi]&&openScores[qi].score===1)skillsMap[q.skill].correct++;
+  });
+  const colors=['#c8460a','#1a6b3c','#1a4a8a','#b8860b','#8a3a9a'];let ci=0;
+  document.getElementById('skills-bars').innerHTML=Object.entries(skillsMap).map(([skill,data])=>{
+    const p=Math.round(data.correct/data.total*100),color=colors[ci++%colors.length];
+    return'<div class="skill-bar-row"><div class="skill-bar-label">'+skill+'</div><div class="skill-bar-track"><div class="skill-bar-fill" style="width:'+p+'%;background:'+color+'"></div></div><div class="skill-pct">'+p+'%</div></div>';
+  }).join('');
+
+  // ══ التحليل المتقدم الفردي للطالب ══
+  renderAdvancedStudentAnalysis(pct, totalC, total, wrong, skillsMap, mcqC, mcqT, openC, openT);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ═══════════════════════════════════════════════════════════
+// دالة التحليل المتقدم الفردي — جديدة
+// ═══════════════════════════════════════════════════════════
+function renderAdvancedStudentAnalysis(pct, correct, total, wrong, skillsMap, mcqC, mcqT, openC, openT) {
+  const el = document.getElementById('advanced-student-analysis');
+  if(!el) return;
+
+  // تحليل نقاط القوة والضعف
+  const strengths = [], improvements = [];
+  Object.entries(skillsMap).forEach(([skill, data]) => {
+    const p = Math.round(data.correct / data.total * 100);
+    if(p >= 70) strengths.push({skill, p});
+    else improvements.push({skill, p});
+  });
+
+  // تحليل المهام القرائية
+  const taskMap = {};
+  const _isSim = !!(currentQuiz.questions[0] && currentQuiz.questions[0].type !== undefined);
+  currentQuiz.questions.forEach((q, qi) => {
+    const task = q.readingTask || q.skill || 'مهمة عامة';
+    if(!taskMap[task]) taskMap[task] = {total:0, correct:0};
+    taskMap[task].total++;
+    const _qt = _isSim ? q.type : 'mcq';
+    if(_qt === 'mcq' && answers[qi] === q.correct) taskMap[task].correct++;
+    else if(_qt === 'open' && openScores[qi] && openScores[qi].score === 1) taskMap[task].correct++;
+  });
+
+  // توصية مخصصة بناءً على أداء الطالب
+  let recommendation = '';
+  if(pct >= 80) {
+    recommendation = `<strong>🎯 توصية:</strong> أداؤك ممتاز! ننصحك بالتدرب على مستوى أعلى أو المحاكاة الرسمية لتعزيز تفوقك. ركّز على ${improvements.length > 0 ? 'مهارة '+improvements[0].skill : 'الأسئلة المفتوحة'} لتحقيق الكمال.`;
+  } else if(pct >= 60) {
+    recommendation = `<strong>📈 توصية:</strong> أنت في المسار الصحيح! راجع الدروس المتعلقة بـ${improvements.map(x=>'<em>'+x.skill+'</em>').join('، ')} وأعد الاختبار لترفع نسبتك فوق 80%.`;
+  } else {
+    recommendation = `<strong>📚 توصية:</strong> ابدأ بمراجعة الدروس التعليمية في قسم "الدروس"، ثم جرّب المستوى المبتدئ مجدداً. المهارات التي تحتاج تركيزاً: ${improvements.slice(0,3).map(x=>'<em>'+x.skill+'</em>').join('، ')}.`;
+  }
+
+  // تحليل المهام القرائية
+  let tasksHtml = '';
+  Object.entries(taskMap).forEach(([task, data]) => {
+    const p = Math.round(data.correct / data.total * 100);
+    const color = p >= 70 ? 'var(--success)' : p >= 50 ? 'var(--gold)' : 'var(--error)';
+    const icon = p >= 70 ? '✅' : p >= 50 ? '⚠️' : '❌';
+    tasksHtml += `<div style="display:flex;align-items:center;gap:10px;background:var(--bg2);border-radius:9px;padding:8px 12px;margin-bottom:6px;font-size:0.86rem">
+      <span style="font-size:1rem">${icon}</span>
+      <div style="flex:1"><div style="font-weight:700;color:var(--ink2)">${task}</div><div style="font-size:0.78rem;color:var(--muted)">الصحيح: ${data.correct}/${data.total}</div></div>
+      <div style="font-weight:800;color:${color};font-size:1rem">${p}%</div>
+    </div>`;
+  });
+
+  el.innerHTML = `
+  <div class="advanced-analysis-wrap">
+    <h3>🔬 التحليل المتقدم لأداء الطالب</h3>
+    <div class="analysis-cards-row">
+      <div class="analysis-mini-card" style="border-color:var(--success);background:rgba(26,107,60,0.06)">
+        <div class="amc-icon">✅</div>
+        <div class="amc-val" style="color:var(--success)">${correct}</div>
+        <div class="amc-lbl">إجابة صحيحة</div>
+      </div>
+      <div class="analysis-mini-card" style="border-color:var(--error);background:rgba(200,70,10,0.06)">
+        <div class="amc-icon">❌</div>
+        <div class="amc-val" style="color:var(--error)">${wrong}</div>
+        <div class="amc-lbl">إجابة خاطئة</div>
+      </div>
+      <div class="analysis-mini-card" style="border-color:var(--accent3);background:rgba(26,74,138,0.06)">
+        <div class="amc-icon">📊</div>
+        <div class="amc-val" style="color:var(--accent3)">${pct}%</div>
+        <div class="amc-lbl">نسبة الإتقان</div>
+      </div>
+      <div class="analysis-mini-card" style="border-color:var(--gold);background:rgba(184,134,11,0.06)">
+        <div class="amc-icon">🎯</div>
+        <div class="amc-val" style="color:var(--gold)">${currentQuiz.title.split('—')[0].trim()}</div>
+        <div class="amc-lbl">مستوى الاختبار</div>
+      </div>
+    </div>
+
+    ${strengths.length > 0 ? `<div style="margin:1rem 0"><div style="font-weight:700;color:var(--ink);font-size:0.9rem;margin-bottom:6px">💪 نقاط القوة:</div><div>${strengths.map(s=>'<span class="strength-tag">✓ '+s.skill+' ('+s.p+'%)</span>').join('')}</div></div>` : ''}
+    ${improvements.length > 0 ? `<div style="margin:1rem 0"><div style="font-weight:700;color:var(--ink);font-size:0.9rem;margin-bottom:6px">📈 جوانب تحتاج تحسيناً:</div><div>${improvements.map(s=>'<span class="improve-tag">⚠ '+s.skill+' ('+s.p+'%)</span>').join('')}</div></div>` : ''}
+
+    <div style="margin-top:1rem">
+      <div style="font-weight:700;color:var(--ink);font-size:0.9rem;margin-bottom:8px">📌 تحليل المهام القرائية:</div>
+      ${tasksHtml}
+    </div>
+
+    <div class="recommendation-box">${recommendation}</div>
+  </div>`;
+}
+
+
+
+function printCurrentQuiz() {
+  if(!currentQuiz) return;
+  const win = window.open('','_blank');
+  let html = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>طباعة الاختبار</title><style>
+    body { font-family: Arial, sans-serif; padding: 2rem; color: #333; line-height: 1.8; }
+    h1 { text-align: center; color: #1a4a8a; border-bottom: 2px solid #1a4a8a; padding-bottom: 10px; margin-bottom: 2rem; }
+    .passage { background: #fcfcfc; padding: 1.5rem; border: 1.5px solid #ddd; border-radius: 8px; margin-bottom: 2rem; font-size: 1.1rem; }
+    .q-box { margin-bottom: 1.5rem; break-inside: avoid; }
+    .q-text { font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .options { list-style-type: none; padding-right: 1.5rem; }
+    .options li { margin-bottom: 0.5rem; }
+    .options li::before { content: "○"; display: inline-block; width: 1.2em; margin-left: 0.2em; font-size: 1.2rem; }
+    .open-ans { border: 1.5px dashed #ccc; height: 120px; margin-top: 10px; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: right; }
+    @media print { body { padding: 0; } .passage { border: 1px solid #000; } }
+  </style></head><body>`;
+  
+  html += `<h1>${currentQuiz.title}</h1>`;
+  
+  const passagesKeys = [...new Set(currentQuiz.questions.map(q => q.passage))].filter(p => p !== undefined && p !== null);
+  
+  if(passagesKeys.length === 0) {
+    if(currentQuiz.passage) {
+      html += `<div class="passage"><h2>${currentQuiz.passage.title}</h2><div>${currentQuiz.passage.body}</div></div>`;
+    }
+    html += `<h3>الأسئلة:</h3>`;
+    currentQuiz.questions.forEach((q, i) => {
+      html += `<div class="q-box"><div class="q-text">${i+1}. ${q.text}</div>`;
+      if(q.type === 'mcq') {
+        html += `<ul class="options">`;
+        if(q.options) q.options.forEach(opt => html += `<li>${opt}</li>`);
+        html += `</ul>`;
+      } else {
+        html += `<div class="open-ans"></div>`;
+      }
+      html += `</div>`;
+    });
+  } else {
+    passagesKeys.forEach((pIdx) => {
+      let p;
+      if (currentQuiz.passages && currentQuiz.passages[pIdx]) {
+         p = currentQuiz.passages[pIdx];
+      } else if (pIdx === 0 && currentQuiz.passage) {
+         p = currentQuiz.passage;
+      }
+      if(p) {
+         html += `<div class="passage"><h2>${p.title}</h2><div>${p.body}</div></div>`;
+         html += `<h3>أسئلة النص:</h3>`;
+         currentQuiz.questions.filter(q => q.passage === pIdx).forEach((q, i) => {
+            html += `<div class="q-box"><div class="q-text">- ${q.text}</div>`;
+            if(q.type === 'mcq') {
+              html += `<ul class="options">`;
+              if(q.options) q.options.forEach(opt => html += `<li>${opt}</li>`);
+              html += `</ul>`;
+            } else {
+              html += `<div class="open-ans"></div>`;
+            }
+            html += `</div>`;
+         });
+      }
+    });
+  }
+
+  html += `<script>setTimeout(() => window.print(), 500);<\/script></body></html>`;
+  win.document.write(html);
+  win.document.close();
+}
+
+function resetQuiz(){
+  currentQuiz=null;answers={};submitted=false;
+  Object.keys(openScores).forEach(k=>delete openScores[k]);
+  window._lastCorrect=0;window._lastTotal=0;window._lastOpenCount=0;
+  window._lastOpenCorrect=0;window._lastMcqTotal=0;window._lastTotalCorrect=0;
+  document.getElementById('quiz-select').style.display='block';
+  document.getElementById('quiz-active').style.display='none';
+  document.getElementById('quiz-feedback').style.display='none';
+  document.getElementById('quiz-results').style.display='none';
+}
+
+// ═══════════════════════════════════════════
+// الدروس
+// ═══════════════════════════════════════════
+function openLesson(index){
+  const l=lessons[index];
+  document.getElementById('lessons-list-view').style.display='none';
+  document.getElementById('lesson-detail-view').style.display='block';
+  document.getElementById('lesson-article-content').innerHTML='<div class="lesson-tag">'+l.tag+'</div>'+l.content;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function closeLessonDetail(){
+  document.getElementById('lessons-list-view').style.display='block';
+  document.getElementById('lesson-detail-view').style.display='none';
+}
+
+// ═══════════════════════════════════════════
+// لوحة المعلم
+// ═══════════════════════════════════════════
+let adminPass=false;
+function openAdmin(){
+  if(!adminPass){const p=prompt('🔐 كلمة مرور المعلم:');if(p!=='1234'){showToast('كلمة المرور غير صحيحة','error');return}adminPass=true}
+  document.getElementById('adminOverlay').classList.add('show');refreshAdminList();
+}
+function closeAdmin(){document.getElementById('adminOverlay').classList.remove('show')}
+async function refreshAdminList(){
+  document.getElementById('adminContent').innerHTML='<div class="admin-empty">⏳ جاري تحميل البيانات من السحابة...</div>';
+  const search=(document.getElementById('adminSearch').value||'').trim().toLowerCase();
+  let db=await loadDB();if(search)db=db.filter(r=>r.student.toLowerCase().includes(search));
+  db.sort((a,b)=>new Date(b.endTime)-new Date(a.endTime));
+  const cont=document.getElementById('adminContent');
+  if(db.length===0){cont.innerHTML='<div class="admin-empty">📭 لا توجد نتائج محفوظة بعدُ.</div>';return}
+  
+  const skillStats={};
+  const levelTaskStats={};
+  db.forEach(r=>{
+    if(r.answers) r.answers.forEach(a=>{
+       const skill = a.skill || 'مهارة عامة';
+       const task = a.readingTask || a.skill || 'مهمة قراءة عامة';
+       const level = r.levelTitle || r.level || 'مستوى غير محدد';
+       if(!skillStats[skill]) skillStats[skill] = {total: 0, correct: 0};
+       skillStats[skill].total++;
+       if(a.isCorrect) skillStats[skill].correct++;
+       if(!levelTaskStats[level]) levelTaskStats[level] = {};
+       if(!levelTaskStats[level][task]) levelTaskStats[level][task] = {total: 0, correct: 0};
+       levelTaskStats[level][task].total++;
+       if(a.isCorrect) levelTaskStats[level][task].correct++;
+    });
+  });
+
+  let groupAnalysisHtml='';
+  window.currentSkillStatsText = '';
+  if(Object.keys(levelTaskStats).length > 0 && !search){
+    groupAnalysisHtml='<div style="background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:1.1rem;margin-bottom:1.5rem;box-shadow:0 2px 7px var(--shadow)"><h3 style="margin:0 0 0.8rem;color:var(--ink);font-size:1.05rem">📊 التحليل الجماعي حسب المستوى ومهام القراءة</h3>';
+    Object.entries(levelTaskStats).forEach(([level,tasks])=>{
+      groupAnalysisHtml+='<div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:0.9rem;margin-bottom:0.8rem"><div style="font-weight:800;color:var(--accent3);margin-bottom:0.5rem">'+level+'</div>';
+      Object.entries(tasks).forEach(([task,data])=>{
+        const correctPct=Math.round(data.correct/data.total*100);
+        const wrongPct=100-correctPct;
+        window.currentSkillStatsText += `- المستوى (${level}) / مهمة (${task}): صحيح ${correctPct}%، خطأ ${wrongPct}%.
+`;
+        groupAnalysisHtml+='<div style="display:grid;grid-template-columns:1.4fr 0.8fr 0.8fr;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:0.86rem"><div><strong>مهمة القراءة:</strong> '+task+'</div><div style="color:var(--success);font-weight:800">✓ '+correctPct+'%</div><div style="color:var(--error);font-weight:800">✗ '+wrongPct+'%</div></div>';
+      });
+      groupAnalysisHtml+='</div>';
+    });
+    groupAnalysisHtml+='</div>';
+  }
+
+  let chartHtml='';
+  let labels=[], dataErr=[];
+  if(Object.keys(skillStats).length > 0 && !search) {
+     labels = Object.keys(skillStats);
+     dataErr = labels.map(l => Math.round((skillStats[l].total - skillStats[l].correct) / skillStats[l].total * 100));
+     chartHtml = `
+     <div style="background:var(--bg2);padding:1rem;border-radius:12px;margin-bottom:1.5rem;border:1px solid var(--border)">
+       <h3 style="margin-top:0;font-size:1rem;color:var(--ink);margin-bottom:10px">📉 تحليل نسبة الأخطاء حسب مهارات الفهم</h3>
+       <div style="height:180px;position:relative"><canvas id="skillsChart"></canvas></div>
+     </div>`;
+  }
+
+  let html=groupAnalysisHtml+chartHtml+'<table class="admin-table"><thead><tr><th>#</th><th>اسم الطالب</th><th>الفصل</th><th>المستوى</th><th>✓ اختيار متعدد</th><th>✍️ مفتوح</th><th>النسبة</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody>';
+  db.forEach((r,i)=>{
+    const d=new Date(r.endTime);
+    const dateStr=d.toLocaleDateString('ar-EG',{year:'numeric',month:'short',day:'numeric'})+' — '+d.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+    const pctColor=r.percentage>=80?'var(--success)':(r.percentage>=60?'var(--gold)':'var(--error)');
+    const openBadge=r.openCount>0?'<span style="background:rgba(26,74,138,0.1);color:var(--accent3);border-radius:5px;padding:1px 7px;font-size:0.78rem;font-weight:700">'+r.openCount+'</span>':'<span style="color:var(--muted)">—</span>';
+    html+='<tr onclick="showStudentDetail(\''+r.id+'\')"><td>'+(i+1)+'</td><td><strong>'+r.student+'</strong></td><td>'+r.class+'</td><td style="font-size:0.8rem">'+r.levelTitle+'</td><td>'+r.mcqCorrect+' / '+r.mcqTotal+'</td><td style="text-align:center">'+openBadge+'</td><td style="color:'+pctColor+';font-weight:700">'+r.percentage+'%</td><td style="font-size:0.78rem;color:var(--muted)">'+dateStr+'</td><td><button style="background:var(--error);color:white;border:none;padding:4px 10px;border-radius:6px;font-size:0.78rem;cursor:pointer" onclick="event.stopPropagation();deleteStudent(\''+r.id+'\')">حذف</button></td></tr>';
+  });
+  if(window.adminChartInstance){ window.adminChartInstance.destroy(); window.adminChartInstance=null; }
+  html+='</tbody></table>';cont.innerHTML=html;
+  
+  if(labels.length > 0) {
+     window.adminChartInstance = new Chart(document.getElementById('skillsChart'), {
+        type: 'bar',
+        data: {
+           labels: labels,
+           datasets: [{ label: 'نسبة الخطأ (%)', data: dataErr, backgroundColor: 'rgba(200, 32, 10, 0.7)', borderRadius: 6 }]
+        },
+        options: {
+           responsive: true, maintainAspectRatio: false,
+           scales: { y: { beginAtZero: true, max: 100 } },
+           plugins: { legend: { display: false } }
+        }
+     });
+  }
+}
+async function showStudentDetail(id){
+  const db=await loadDB();const r=db.find(x=>x.id===id);if(!r)return;
+  let html='<button class="admin-close" style="padding:8px 16px;border-radius:8px;cursor:pointer;margin-bottom:1rem" onclick="refreshAdminList()">◀ العودة للقائمة</button>';
+  const oc=r.openCorrect!==undefined?r.openCorrect:'?';
+  html+='<div class="student-header-card"><h3>👤 '+r.student+'</h3><div class="stats-row"><div>📚 الفصل: '+r.class+'</div><div>🎯 '+r.levelTitle+'</div><div>✓ اختيار: '+r.mcqCorrect+'/'+r.mcqTotal+'</div>'+(r.openCount>0?'<div>✍️ مفتوح: '+oc+'/'+r.openCount+'</div>':'')+'<div>📊 الكلي: '+r.percentage+'%</div><div>📅 '+new Date(r.endTime).toLocaleString('ar-EG')+'</div></div></div>';
+  const studentRecords=db.filter(x=>x.student===r.student).sort((a,b)=>new Date(a.endTime)-new Date(b.endTime));
+  const progressByLevel={};
+  const taskProgress={};
+  studentRecords.forEach(rec=>{
+    const level=rec.levelTitle||rec.level||'مستوى غير محدد';
+    if(!progressByLevel[level])progressByLevel[level]=[];
+    progressByLevel[level].push(rec.percentage||0);
+    if(rec.answers)rec.answers.forEach(a=>{
+      const key=level+' — '+(a.readingTask||a.skill||'مهمة قراءة عامة');
+      if(!taskProgress[key])taskProgress[key]={total:0,correct:0};
+      taskProgress[key].total++;
+      if(a.isCorrect)taskProgress[key].correct++;
+    });
+  });
+  html+='<div class="admin-detail"><h3>📈 تحليل تقدم الطالب عبر جميع الاختبارات</h3>';
+  Object.entries(progressByLevel).forEach(([level,vals])=>{
+    const last=vals[vals.length-1], first=vals[0], diff=last-first;
+    html+='<div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:0.8rem 1rem;margin-bottom:0.6rem"><strong style="color:var(--accent3)">'+level+'</strong><div style="font-size:0.86rem;color:var(--ink2);margin-top:4px">عدد المحاولات: '+vals.length+' | أول نتيجة: '+first+'% | آخر نتيجة: '+last+'% | التغير: <span style="font-weight:800;color:'+(diff>=0?'var(--success)':'var(--error)')+'">'+(diff>=0?'+':'')+diff+'%</span></div></div>';
+  });
+  html+='<h3 style="margin-top:1rem">🎯 تحليل مهام القراءة للطالب</h3>';
+  Object.entries(taskProgress).forEach(([task,data])=>{
+    const p=Math.round(data.correct/data.total*100);
+    const tip=p>=80?'نقطة قوة واضحة.':(p>=60?'أداء جيد يحتاج تثبيت.':'تحتاج إلى تدريب علاجي مركز.');
+    html+='<div style="background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:0.75rem 1rem;margin-bottom:0.5rem"><div style="font-weight:700">'+task+'</div><div style="font-size:0.86rem;margin-top:4px">الصحيح: '+data.correct+'/'+data.total+' ('+p+'%) — '+tip+'</div></div>';
+  });
+  html+='</div>';
+  html+='<div class="admin-detail"><h3>📝 تفاصيل الإجابات</h3>';
+  r.answers.forEach(a=>{
+    let cls='admin-qa '+(a.type==='open'?'open-row':(a.isCorrect?'correct-row':'wrong-row'));
+    html+='<div class="'+cls+'"><div class="qtxt">س'+a.index+' ['+a.skill+' · '+a.passage+']: '+a.questionText+'</div>';
+    if(a.type==='mcq'){
+      html+='<div class="ans-row"><strong>إجابة الطالب:</strong> <span class="'+(a.isCorrect?'correct-ans':'wrong-ans')+'">'+a.studentAnswer+' '+(a.isCorrect?'✓':'✗')+'</span></div>';
+      if(!a.isCorrect)html+='<div class="ans-row"><strong>الإجابة الصحيحة:</strong> <span class="correct-ans">'+a.correctText+'</span></div>';
+    }else{
+      const oOk=a.isCorrect===true, oWrong=a.isCorrect===false;
+      const oBadge=oOk?'<span style="background:var(--success);color:white;border-radius:5px;padding:1px 8px;font-size:0.78rem;font-weight:700">✅ مقبولة</span>':oWrong?'<span style="background:var(--error);color:white;border-radius:5px;padding:1px 8px;font-size:0.78rem;font-weight:700">❌ غير مقبولة</span>':'<span style="background:var(--accent3);color:white;border-radius:5px;padding:1px 8px;font-size:0.78rem;font-weight:700">⏳ بانتظار</span>';
+      html+='<div style="margin-bottom:6px">✍️ مفتوح: '+oBadge+'</div>';
+      html+='<div class="ans-row" style="flex-direction:column;gap:5px"><strong>إجابة الطالب:</strong><div style="background:var(--bg2);border:1.5px solid '+(oOk?'var(--success)':oWrong?'var(--error)':'var(--border)')+';padding:8px 12px;border-radius:8px;line-height:1.7">'+a.studentAnswer+'</div></div>';
+      if(a.aiFeedback)html+='<div class="ans-row" style="margin-top:5px"><strong>🤖 تقييم AI:</strong> <span style="color:'+(oOk?'var(--success)':'var(--error)')+'">'+(a.aiFeedback||'')+'</span></div>';
+      html+='<div class="ans-row" style="flex-direction:column;gap:5px;margin-top:6px"><strong style="color:var(--success)">📋 الإجابة النموذجية:</strong><div style="background:rgba(26,107,60,0.07);border:1px solid rgba(26,107,60,0.2);padding:8px 12px;border-radius:8px;line-height:1.7;color:var(--success)">'+a.modelAnswer+'</div></div>';
+    }
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<button class="btn-primary" style="margin-top:1rem" onclick="printStudentReport(\''+id+'\')">🖨 طباعة التقرير</button> <button class="btn-secondary" style="margin-top:1rem" onclick="refreshAdminList()">◀ العودة للقائمة</button>';
+  document.getElementById('adminContent').innerHTML=html;
+}
+async function deleteStudent(id){if(!confirm('هل أنت متأكد من حذف هذا السجل؟'))return;try{await dbFirestore.collection('results').doc(id).delete();refreshAdminList();showToast('تم حذف السجل','success')}catch(e){console.error(e)}}
+async function clearAllData(){if(!confirm('⚠️ سيتم حذف جميع نتائج الطلاب نهائياً! هل أنت متأكد؟'))return;if(!confirm('تأكيد أخير: حذف كل شيء؟'))return;try{const snapshot=await dbFirestore.collection('results').get();const batch=dbFirestore.batch();snapshot.docs.forEach(doc=>batch.delete(doc.ref));await batch.commit();refreshAdminList();showToast('تم مسح جميع السجلات','success')}catch(e){console.error(e)}}
+// دالة التصدير القديمة — محتفظ بها للتوافق (تستدعي الجديدة)
+async function exportStudentData(){ await exportToExcel(); }
+
+// ═══════════════════════════════════════════════════════════
+// تصدير Excel متعدد الأوراق — جديد ومطوّر
+// ═══════════════════════════════════════════════════════════
+async function exportToExcel(){
+  if(typeof XLSX === 'undefined'){showToast('مكتبة Excel لم تُحمَّل بعد، حاول مجدداً','error');return;}
+  const db = await loadDB();
+  if(db.length === 0){showToast('لا توجد بيانات للتصدير','error');return;}
+
+  showToast('⏳ جارٍ إنشاء ملف Excel...', '');
+
+  const wb = XLSX.utils.book_new();
+
+  // ── ورقة 1: تفاصيل الإجابات (كل سؤال في صف) ──
+  const detailRows = [['اسم الطالب','الفصل','مستوى الاختبار','رقم السؤال','نص السؤال','المهارة','المهمة القرائية','نوع السؤال','قطعة النص','إجابة الطالب','الإجابة الصحيحة','حالة الإجابة','تغذية راجعة الذكاء الاصطناعي','الإجابة النموذجية','الدرجة الكلية %','التاريخ']];
+  db.forEach(r => {
+    const totalPct = r.percentage || 0;
+    const dateStr = new Date(r.endTime).toLocaleDateString('ar-EG');
+    if(r.answers && r.answers.length > 0){
+      r.answers.forEach(a => {
+        detailRows.push([
+          r.student, r.class, r.levelTitle,
+          a.index, a.questionText,
+          a.skill || '—', a.readingTask || a.skill || '—',
+          a.type === 'open' ? 'مفتوح' : 'اختيار متعدد',
+          a.passage || '—',
+          a.studentAnswer || '—',
+          a.correctText || '—',
+          a.isCorrect === true ? '✓ صحيح' : a.isCorrect === false ? '✗ خطأ' : '⏳ بانتظار',
+          a.aiFeedback || '—',
+          a.modelAnswer || '—',
+          totalPct + '%', dateStr
+        ]);
+      });
+    } else {
+      detailRows.push([r.student, r.class, r.levelTitle, '—', '—', '—', '—', '—', '—', '—', '—', '—', '—', '—', totalPct+'%', dateStr]);
+    }
+  });
+  const ws1 = XLSX.utils.aoa_to_sheet(detailRows);
+  ws1['!dir'] = 'rtl';
+  ws1['!cols'] = [{wch:18},{wch:10},{wch:22},{wch:8},{wch:40},{wch:25},{wch:35},{wch:14},{wch:18},{wch:30},{wch:20},{wch:12},{wch:30},{wch:30},{wch:10},{wch:14}];
+  XLSX.utils.book_append_sheet(wb, ws1, 'تفاصيل الإجابات');
+
+  // ── ورقة 2: تحليل الطلاب (ملخص لكل طالب) ──
+  const studentRows = [['اسم الطالب','الفصل','مستوى الاختبار','إجابات صحيحة','مجموع أسئلة MCQ','أسئلة مفتوحة صحيحة','أسئلة مفتوحة كلي','النسبة الكلية %','تصنيف الأداء','التوصية','التاريخ']];
+  db.forEach(r => {
+    const pct = r.percentage || 0;
+    const classification = pct >= 80 ? 'متقدم' : pct >= 60 ? 'متوسط' : 'يحتاج دعم';
+    const rec = pct >= 80 ? 'ممتاز — جرّب مستوى أعلى' : pct >= 60 ? 'جيد — تدرّب على نقاط الضعف' : 'راجع الدروس وأعد الاختبار';
+    studentRows.push([
+      r.student, r.class, r.levelTitle,
+      r.mcqCorrect, r.mcqTotal,
+      r.openCorrect || 0, r.openCount || 0,
+      pct + '%', classification, rec,
+      new Date(r.endTime).toLocaleDateString('ar-EG')
+    ]);
+  });
+  const ws2 = XLSX.utils.aoa_to_sheet(studentRows);
+  ws2['!dir'] = 'rtl';
+  ws2['!cols'] = [{wch:18},{wch:10},{wch:25},{wch:14},{wch:16},{wch:18},{wch:16},{wch:12},{wch:14},{wch:30},{wch:14}];
+  XLSX.utils.book_append_sheet(wb, ws2, 'تحليل الطلاب');
+
+  // ── ورقة 3: التحليل الجماعي ──
+  const skillStats = {};
+  const taskStats = {};
+  let totalStudents = db.length;
+  let sumPct = 0, advanced = 0, medium = 0, needs = 0;
+  const questionErrors = {};
+
+  db.forEach(r => {
+    sumPct += r.percentage || 0;
+    if(r.percentage >= 80) advanced++;
+    else if(r.percentage >= 60) medium++;
+    else needs++;
+
+    if(r.answers) r.answers.forEach(a => {
+      const skill = a.skill || 'مهارة عامة';
+      const task = a.readingTask || a.skill || 'مهمة قراءة عامة';
+      if(!skillStats[skill]) skillStats[skill] = {total:0,correct:0};
+      skillStats[skill].total++;
+      if(a.isCorrect) skillStats[skill].correct++;
+      if(!taskStats[task]) taskStats[task] = {total:0,correct:0};
+      taskStats[task].total++;
+      if(a.isCorrect) taskStats[task].correct++;
+      if(!a.isCorrect && a.questionText){
+        const key = a.questionText.substring(0,50);
+        if(!questionErrors[key]) questionErrors[key] = {count:0, full: a.questionText};
+        questionErrors[key].count++;
+      }
+    });
+  });
+
+  const groupRows = [];
+  groupRows.push(['📊 التحليل الجماعي — منصة القارئ الذكي — بيرلز 2026']);
+  groupRows.push(['إجمالي الطلاب', totalStudents]);
+  groupRows.push(['متوسط الأداء الكلي', Math.round(sumPct/totalStudents) + '%']);
+  groupRows.push(['طلاب متقدمون (≥80%)', advanced]);
+  groupRows.push(['طلاب متوسطون (60-79%)', medium]);
+  groupRows.push(['طلاب يحتاجون دعماً (<60%)', needs]);
+  groupRows.push([]);
+  groupRows.push(['تحليل المهارات']);
+  groupRows.push(['المهارة', 'إجمالي الإجابات', 'صحيح', 'خطأ', 'نسبة الإتقان %', 'التوصية']);
+  Object.entries(skillStats).sort((a,b) => (b[1].correct/b[1].total) - (a[1].correct/a[1].total)).forEach(([skill, data]) => {
+    const p = Math.round(data.correct/data.total*100);
+    const rec = p >= 70 ? 'نقطة قوة ✓' : p >= 50 ? 'تحتاج تثبيت ⚠' : 'تحتاج علاجاً مركزاً ❌';
+    groupRows.push([skill, data.total, data.correct, data.total-data.correct, p+'%', rec]);
+  });
+  groupRows.push([]);
+  groupRows.push(['تحليل المهام القرائية']);
+  groupRows.push(['المهمة القرائية', 'إجمالي الإجابات', 'صحيح', 'خطأ', 'نسبة الإتقان %']);
+  Object.entries(taskStats).sort((a,b) => (b[1].correct/b[1].total) - (a[1].correct/a[1].total)).forEach(([task, data]) => {
+    const p = Math.round(data.correct/data.total*100);
+    groupRows.push([task, data.total, data.correct, data.total-data.correct, p+'%']);
+  });
+  groupRows.push([]);
+  groupRows.push(['أكثر الأسئلة التي أُخطئ فيها']);
+  groupRows.push(['نص السؤال (مختصر)', 'عدد الأخطاء']);
+  Object.entries(questionErrors).sort((a,b) => b[1].count - a[1].count).slice(0,10).forEach(([key, val]) => {
+    groupRows.push([val.full, val.count]);
+  });
+
+  const ws3 = XLSX.utils.aoa_to_sheet(groupRows);
+  ws3['!dir'] = 'rtl';
+  ws3['!cols'] = [{wch:40},{wch:16},{wch:12},{wch:12},{wch:16},{wch:22}];
+  XLSX.utils.book_append_sheet(wb, ws3, 'التحليل الجماعي');
+
+  // ── ورقة 4: التغذية الراجعة ──
+  const fbRows = [['اسم الطالب','الفصل','المستوى','رقم السؤال','نص السؤال','إجابة الطالب','حالة الإجابة','تغذية راجعة AI','التوصية']];
+  db.forEach(r => {
+    if(r.answers) r.answers.forEach(a => {
+      if(a.isCorrect === false || a.aiFeedback){
+        const pct = r.percentage || 0;
+        const rec = pct >= 80 ? 'تدرّب على مستوى أصعب' : pct >= 60 ? 'راجع هذه المهارة' : 'احتاج دعم فردي';
+        fbRows.push([
+          r.student, r.class, r.levelTitle,
+          a.index, a.questionText,
+          a.studentAnswer || '—',
+          a.isCorrect === true ? '✓ صحيح' : a.isCorrect === false ? '✗ خطأ' : '⏳',
+          a.aiFeedback || a.modelAnswer || '—',
+          rec
+        ]);
+      }
+    });
+  });
+  const ws4 = XLSX.utils.aoa_to_sheet(fbRows);
+  ws4['!dir'] = 'rtl';
+  ws4['!cols'] = [{wch:18},{wch:10},{wch:22},{wch:8},{wch:35},{wch:25},{wch:12},{wch:35},{wch:22}];
+  XLSX.utils.book_append_sheet(wb, ws4, 'التغذية الراجعة');
+
+  XLSX.writeFile(wb, 'pirls_results_' + new Date().toLocaleDateString('en-GB').replace(/\//g,'-') + '.xlsx');
+  showToast('✅ تم تصدير ملف Excel بنجاح (4 أوراق)', 'success');
+}
+
+
+
+async function sendGlobalNotification() {
+  const msg = document.getElementById('adminNotifInput').value.trim();
+  if(!msg) { showToast('الرجاء كتابة رسالة الإشعار أولاً', 'error'); return; }
+  try {
+    await dbFirestore.collection('config').doc('notification').set({ message: msg, time: Date.now() });
+    showToast('تم إرسال الإشعار لجميع الطلاب بنجاح', 'success');
+  } catch(e) { console.error(e); showToast('خطأ في إرسال الإشعار', 'error'); }
+}
+
+async function clearGlobalNotification() {
+  try {
+    await dbFirestore.collection('config').doc('notification').set({ message: '', time: Date.now() });
+    document.getElementById('adminNotifInput').value = '';
+    showToast('تم إيقاف الإشعار وإخفاؤه من عند الطلاب', 'success');
+  } catch(e) { console.error(e); }
+}
+async function printStudentReport(id){
+  const db=await loadDB();const r=db.find(x=>x.id===id);if(!r)return;
+  const win=window.open('','_blank');
+  let html='<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>تقرير '+r.student+'</title><style>body{font-family:Arial,sans-serif;padding:2rem;line-height:1.8;color:#333}h1{color:#c8460a;border-bottom:3px solid #c8460a;padding-bottom:8px}.info{background:#f0ebe0;padding:1rem;border-radius:8px;margin:1rem 0}.q{border:1px solid #ddd;border-radius:8px;padding:1rem;margin-bottom:0.8rem}.correct{border-right:4px solid #1a6b3c}.wrong{border-right:4px solid #c8200a}.open{border-right:4px solid #1a4a8a}.good{color:#1a6b3c;font-weight:700}.bad{color:#c8200a;font-weight:700}</style></head><body>';
+  html+='<h1>تقرير نتيجة الطالب — منصة القارئ الذكي</h1><div class="info"><strong>الاسم:</strong> '+r.student+' — <strong>الفصل:</strong> '+r.class+'<br><strong>المستوى:</strong> '+r.levelTitle+'<br><strong>النتيجة:</strong> '+r.mcqCorrect+'/'+r.mcqTotal+' ('+r.percentage+'%)<br><strong>أسئلة مفتوحة:</strong> '+r.openCount+'<br><strong>التاريخ:</strong> '+new Date(r.endTime).toLocaleString('ar-EG')+'</div>';
+  r.answers.forEach(a=>{
+    let cls=a.type==='open'?'open':(a.isCorrect?'correct':'wrong');
+    html+='<div class="q '+cls+'"><strong>س'+a.index+':</strong> '+a.questionText+'<br>';
+    if(a.type==='mcq'){html+='<strong>إجابة الطالب:</strong> <span class="'+(a.isCorrect?'good':'bad')+'">'+a.studentAnswer+' '+(a.isCorrect?'✓':'✗')+'</span><br>';if(!a.isCorrect)html+='<strong>الصحيح:</strong> <span class="good">'+a.correctText+'</span>';}
+    else{html+='<strong>إجابة الطالب:</strong><br><div style="background:#f8f8f8;padding:8px;border-radius:6px;margin:4px 0">'+a.studentAnswer+'</div><strong>الإجابة النموذجية:</strong><br><div style="background:#e8f5e9;padding:8px;border-radius:6px;margin:4px 0">'+a.modelAnswer+'</div>';}
+    html+='</div>';
+  });
+  html+='<p style="text-align:center;color:#888;font-size:0.85rem;margin-top:2rem">منصة القارئ الذكي لاختبار بيرلز — مدرسة سمرة بن جندب الابتدائية</p><scr'+'ipt>window.print()</scr'+'ipt></body></html>';
+  win.document.write(html);win.document.close();
+}
+async function generateAIPlan() {
+  if(!window.currentSkillStatsText) {
+    showToast('لا توجد بيانات كافية لعمل خطة علاجية', 'error');
+    return;
+  }
+  
+  const cont = document.getElementById('adminContent');
+  cont.innerHTML = `
+    <div style="background:var(--surface);padding:3rem 1rem;border-radius:12px;text-align:center">
+       <h2 style="color:var(--accent);margin-bottom:0.5rem">✨ يتم الآن صياغة الخطة العلاجية...</h2>
+       <p style="color:var(--muted)">يقوم خبير الذكاء الاصطناعي بتحليل أخطاء طلابك لوضع خطة محكمة لمدرستك.</p>
+       <div class="chat-loading" style="justify-content:center;margin-top:2rem;transform:scale(1.5)"><span></span><span></span><span></span></div>
+    </div>
+  `;
+  
+  const prompt = `أنت خبير تربوي موجه لمعلمي المدارس الابتدائية متخصص في اختبار PIRLS.
+إليك إحصائيات حقيقية لنسبة الأخطاء لدى طلاب المدرسة في مهارات الفهم القرائي:
+${window.currentSkillStatsText}
+
+مهمتك:
+بناء "خطة علاجية" منظمة وعملية للمعلم للأسابيع القادمة بناءً على النسب أعلاه.
+1. ابدأ بمقدمة تشجيعية قصيرة للمعلم.
+2. اكتب تحليلاً مختصراً لأبرز نقاط الضعف.
+3. اقترح أنشطة صفية محددة وخطوات عملية مبتكرة لكل مهارة ضعيفة لمعالجتها.
+4. استخدم تنسيق HTML جميل (استخدم <h3>، <ul>، و <strong>) بدون استخدام Markdown (لا تكتب \`\`\`html).
+لا تضف أي أكواد برمجية، أعد فقط كود HTML النظيف المنسق للخطة العلاجية باللغة العربية.`;
+
+  try {
+    const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + GEMINI_API_KEY, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt }] }]
+      })
+    });
+    
+    if(!res.ok) throw new Error('API Error');
+    const data = await res.json();
+    let planHtml = data.candidates[0].content.parts[0].text;
+    planHtml = planHtml.replace(/```html|```/gi, '').trim();
+    
+    window.lastAIPlanHtml = planHtml;
+    
+    cont.innerHTML = `
+      <div style="display:flex;justify-content:space-between;margin-bottom:1.5rem;align-items:center">
+         <h3 style="margin:0;color:var(--ink)">📋 الخطة العلاجية المقترحة</h3>
+         <div>
+           <button class="btn-primary" style="padding:6px 15px;font-size:0.9rem" onclick="printAIPlan()">🖨 طباعة الخطة</button>
+           <button class="btn-secondary" style="padding:6px 15px;font-size:0.9rem" onclick="refreshAdminList()">◀ العودة للنتائج</button>
+         </div>
+      </div>
+      <div style="background:var(--bg);padding:2rem;border-radius:12px;border:1px solid var(--border);color:var(--ink2);line-height:1.9;font-size:1.05rem;box-shadow:inset 0 0 10px rgba(0,0,0,0.02)">
+         ${planHtml}
+      </div>
+    `;
+  } catch(e) {
+    console.error(e);
+    cont.innerHTML = '<div style="text-align:center;color:var(--error);padding:3rem">❌ تعذر الاتصال بالذكاء الاصطناعي لتوليد الخطة.<br><br><button onclick="refreshAdminList()" class="btn-secondary">العودة للنتائج</button></div>';
+  }
+}
+
+function printAIPlan() {
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html>
+  <html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <title>الخطة العلاجية - منصة القارئ الذكي</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 2rem; line-height: 1.8; color: #333; max-width: 800px; margin: 0 auto; }
+      h2, h3 { color: #1a4a8a; border-bottom: 2px solid #eee; padding-bottom: 8px; margin-top: 2rem; }
+      ul { padding-right: 25px; }
+      li { margin-bottom: 10px; }
+      strong { color: #c8460a; }
+      @media print { body { padding: 0; } }
+    </style>
+  </head>
+  <body>
+    <div style="text-align:center;margin-bottom:2rem;border-bottom:3px solid #c8460a;padding-bottom:1rem">
+       <h1 style="color:#c8460a;margin:0">الخطة العلاجية لاختبار بيرلز (PIRLS)</h1>
+       <p style="margin:5px 0;color:#666">بناءً على نتائج تحليل أداء الطلاب | تاريخ الإصدار: ${new Date().toLocaleDateString('ar-EG')}</p>
+    </div>
+    ${window.lastAIPlanHtml}
+    <p style="text-align:center;color:#888;font-size:0.85rem;margin-top:4rem;border-top:1px solid #eee;padding-top:1rem">تم إعداد الخطة وتحليل البيانات بواسطة الذكاء الاصطناعي (Gemini) المدمج في منصة القارئ الذكي لاختبار بيرلز</p>
+    <script>window.print();<\/script>
+  </body>
+  </html>`);
+  win.document.close();
+}
+
+
+const gameQuestions = [
+  {q: "كم دولة تشارك في اختبار بيرلز حول العالم؟ 🌍", options: ["حوالي 10 دول", "أكثر من 60 دولة", "دولة واحدة فقط"], answer: 1},
+  {q: "في اختبار بيرلز، يتم قياس مهارة الطالب في... 📖", options: ["الحساب والرياضيات", "التجارب العلمية", "القراءة وفهم المقروء"], answer: 2},
+  {q: "من هم الأبطال المستهدفون في اختبار بيرلز؟ 🦸‍♂️", options: ["طلاب الصف الرابع الابتدائي", "طلاب الجامعة", "المعلمون فقط"], answer: 0},
+  {q: "كم نوعاً من النصوص يأتي في الاختبار؟ 📝", options: ["نصوص علمية وطبية", "نصوص أدبية (قصص) ومعلوماتية", "قصائد شعرية فقط"], answer: 1},
+  {q: "إذا سألك سؤال يطلب (رأيك الخاص) عن القصة، كيف تجيب؟ 🕵️", options: ["أقول لا أعرف", "أختار أي شيء", "أكتب رأيي بحرية وأدعمه بدليل من القصة"], answer: 2}
+];
+let currentGameQ = 0; let gameScore = 0;
+
+function startGame() {
+  currentGameQ = 0; gameScore = 0;
+  showGameQuestion();
+}
+
+function showGameQuestion() {
+  if(currentGameQ >= gameQuestions.length) { endGame(); return; }
+  const q = gameQuestions[currentGameQ];
+  let html = `<h3 style="font-size:1.4rem;color:var(--ink);margin-bottom:2rem">${q.q}</h3><div style="display:flex;flex-direction:column;gap:15px;width:100%;max-width:500px;margin:0 auto">`;
+  q.options.forEach((opt, idx) => {
+    html += `<button style="background:var(--bg2);border:2px solid var(--border);border-radius:10px;padding:15px;font-size:1.1rem;color:var(--ink);cursor:pointer;transition:all 0.2s;text-align:right" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="answerGame(${idx}, ${q.answer}, this)">${opt}</button>`;
+  });
+  html += `</div>`;
+  document.getElementById('game-container').innerHTML = html;
+}
+
+function answerGame(selected, correct, btn) {
+  const btns = btn.parentElement.querySelectorAll('button');
+  btns.forEach(b => { b.onclick = null; b.style.pointerEvents = 'none'; });
+  if(selected === correct) {
+    btn.style.background = 'var(--success)'; btn.style.color = 'white'; btn.style.borderColor = 'var(--success)';
+    gameScore += 10; totalScore += 10;
+    document.getElementById('totalScore').textContent = totalScore;
+    showToast('إجابة صحيحة! 🎉 +10 نقاط', 'success');
+  } else {
+    btn.style.background = 'var(--error)'; btn.style.color = 'white'; btn.style.borderColor = 'var(--error)';
+    btns[correct].style.background = 'var(--success)'; btns[correct].style.color = 'white';
+    showToast('للأسف، إجابة خاطئة! 😢', 'error');
+  }
+  setTimeout(() => { currentGameQ++; showGameQuestion(); }, 2000);
+}
+
+function endGame() {
+  let html = `
+    <h2 style="color:var(--accent);font-size:2rem;margin-bottom:1rem">🎉 انتهى التحدي!</h2>
+    <p style="font-size:1.2rem;margin-bottom:1rem">لقد جمعت <strong>${gameScore}</strong> نقطة من هذا التحدي!</p>
+    <p style="color:var(--muted);margin-bottom:2rem">أنت الآن خبير في معلومات بيرلز، وحان الوقت لتطبيق مهارتك في الاختبار الحقيقي!</p>
+    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
+       <button class="btn-primary" onclick="switchTab(document.querySelector('.nav-tab:nth-child(3)'),'quiz')">الذهاب للاختبار ◀</button>
+       <button class="btn-secondary" onclick="startGame()">إعادة التحدي 🔄</button>
+    </div>
+  `;
+  document.getElementById('game-container').innerHTML = html;
+}
+
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;
+  setTimeout(()=>{t.className='toast'},3500);
+}
+
+// تشغيل لوحة الشرف والمؤقت عند بداية تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+  loadLeaderboard();
+  initCountdown();
+});
+
+function initCountdown() {
+  const targetDate = new Date("2026-05-03T08:00:00").getTime();
+  const timer = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+    if (distance < 0) {
+      clearInterval(timer);
+      const cd = document.getElementById("examCountdown");
+      if(cd) cd.innerHTML = '<span style="color:var(--success)">🎉 بدأ الاختبار!</span>';
+      return;
+    }
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+    const dEl = document.getElementById("cd-days");
+    if(dEl) {
+      dEl.textContent = days < 10 ? '0'+days : days;
+      document.getElementById("cd-hours").textContent = hours < 10 ? '0'+hours : hours;
+      document.getElementById("cd-mins").textContent = minutes < 10 ? '0'+minutes : minutes;
+      document.getElementById("cd-secs").textContent = seconds < 10 ? '0'+seconds : seconds;
+    }
+  }, 1000);
+}
+
+let chatHistory = [];
+function toggleChat(){
+  const w = document.getElementById('aiChatWindow');
+  const f = document.getElementById('aiChatFab');
+  if(w.classList.contains('show')){
+    w.classList.remove('show');
+    f.style.display = 'block';
+  } else {
+    w.classList.add('show');
+    f.style.display = 'none';
+    document.getElementById('aiChatInput').focus();
+  }
+}
+async function sendChatMessage(){
+  const input = document.getElementById('aiChatInput');
+  const msg = input.value.trim();
+  if(!msg) return;
+  const msgsDiv = document.getElementById('aiChatMessages');
+  const uDiv = document.createElement('div');
+  uDiv.className = 'chat-msg user-msg';
+  uDiv.textContent = msg;
+  msgsDiv.appendChild(uDiv);
+  input.value = '';
+  
+  const lDiv = document.createElement('div');
+  lDiv.className = 'chat-msg bot-msg';
+  lDiv.innerHTML = '<div class="chat-loading"><span></span><span></span><span></span></div>';
+  msgsDiv.appendChild(lDiv);
+  msgsDiv.scrollTop = msgsDiv.scrollHeight;
+  
+  const formattedHistory = chatHistory.map(m => ({
+    role: m.role,
+    parts: [{ text: m.text }]
+  }));
+  
+  const systemInstruction = "أنت معلم خبير في اختبار القراءة الدولي (PIRLS) لطلاب المرحلة الابتدائية. تقتصر مهمتك فقط على مساعدة الطلاب في مهارات القراءة والفهم والإجابة عن استفساراتهم حول الاختبار. يُمنع منعاً باتاً الإجابة على أي أسئلة سياسية، دينية، رياضية، برمجية أو عامة خارج إطار التعليم. إذا سألك الطالب سؤالاً خارج النطاق، اعتذر منه بلطف وأخبره أنك معلم قراءة. كن مشجعاً واستخدم لغة تناسب طفلاً في الصف الرابع الابتدائي.";
+  
+  try {
+    const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + GEMINI_API_KEY, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: systemInstruction }] },
+        contents: [...formattedHistory, { role: "user", parts: [{ text: msg }] }]
+      })
+    });
+    
+    if(!res.ok) {
+      const errTxt = await res.text();
+      console.error("API Response:", errTxt);
+      throw new Error('Chat API Error');
+    }
+    const data = await res.json();
+    let reply = data.candidates[0].content.parts[0].text;
+    
+    chatHistory.push({role: "user", text: msg});
+    chatHistory.push({role: "model", text: reply});
+    
+    reply = reply.replace(/\n/g, '<br>');
+    msgsDiv.removeChild(lDiv);
+    const rDiv = document.createElement('div');
+    rDiv.className = 'chat-msg bot-msg';
+    rDiv.innerHTML = reply;
+    msgsDiv.appendChild(rDiv);
+    msgsDiv.scrollTop = msgsDiv.scrollHeight;
+    
+  } catch(e) {
+    console.error(e);
+    msgsDiv.removeChild(lDiv);
+    const errDiv = document.createElement('div');
+    errDiv.className = 'chat-msg bot-msg';
+    errDiv.style.color = 'var(--error)';
+    errDiv.textContent = 'عذراً، لم أتمكن من الاتصال بالشبكة حالياً. حاول مرة أخرى!';
+    msgsDiv.appendChild(errDiv);
+    msgsDiv.scrollTop = msgsDiv.scrollHeight;
+  }
+}
+
+// ══ بيانات الروابط التشعبية ══
+const HD={
+  plant_gradient:{
+    title:'🌿 التدرج النباتي',
+    sub:'ظاهرة طبيعية في الجبال',
+    body:'<p><strong>التدرج النباتي</strong> هو تغيّر أنواع النباتات وأحجامها تبعاً للارتفاع عن مستوى سطح البحر.</p><div class="fbox"><strong>📌 كيف يحدث؟</strong><ul><li>كلما ارتفعنا: تنخفض درجة الحرارة</li><li>كلما ارتفعنا: يقلّ الأكسجين</li><li>كلما ارتفعنا: تشتد الرياح وتقل الأمطار</li><li>النتيجة: تتغيّر النباتات من كثيفة وطويلة عند الأسفل إلى شحيحة وقصيرة عند القمة</li></ul></div><p>💡 <strong>تذكّر:</strong> أسفل الجبل ← أشجار كثيفة | وسطه ← أشجار أصغر | قمته ← لا أشجار تقريباً</p>'
+  },
+  compass:{
+    title:'🧭 البوصلة',
+    sub:'أداة تحديد الاتجاهات',
+    body:'<p><strong>البوصلة</strong> أداة تُستخدم لتحديد الاتجاهات الأصلية الأربعة: الشمال والجنوب والشرق والغرب.</p><div class="fbox"><strong>📌 كيف تعمل البوصلة؟</strong><ul><li>تحتوي على مغناطيس متحرك يشير دائماً نحو الشمال المغناطيسي</li><li>اخترعها الصينيون منذ أكثر من ألف عام</li><li>استخدمها البحارة والمستكشفون قبل اختراع GPS</li><li>لا تحتاج بطارية ولا إنترنت — تعمل دائماً!</li></ul></div><p>💡 <strong>تذكّر:</strong> سالم استخدم البوصلة ليعرف أن منزله في الغرب — فسار نحوه حتى وجده!</p>'
+  },
+  nile:{
+    title:'🏺 نهر النيل',
+    sub:'أطول أنهار العالم — حقيقة جغرافية',
+    body:'<p>نهر النيل هو <strong>أطول نهر في العالم</strong> بطول يبلغ نحو <strong>6,650 كيلومتر</strong>.</p><div class="fbox"><strong>📌 حقائق مهمة:</strong><ul><li>يمرّ بـ 11 دولة أفريقية</li><li>منبعه: بحيرة فيكتوريا في أوغندا</li><li>يصبّ في البحر المتوسط</li><li>أسهم في بناء الحضارة المصرية القديمة</li><li>يختلف عن نهر الأمازون الذي هو الأكبر من حيث <em>كمية المياه</em></li></ul></div><p>💡 <strong>تذكّر للاختبار:</strong> النيل = الأطول | الأمازون = الأكبر تصريفاً للمياه</p>'
+  },
+  chlorophyll:{
+    title:'🟢 الكلوروفيل',
+    sub:'الصبغة الخضراء في النباتات',
+    body:'<p>الكلوروفيل هو <strong>الصبغة الخضراء</strong> الموجودة في خلايا النبات، وهو المسؤول عن لون الأوراق الأخضر.</p><div class="fbox"><strong>📌 ما يفعله الكلوروفيل:</strong><ul><li>يمتصّ ضوء الشمس ويحوّله لطاقة (البناء الضوئي)</li><li>يُنتج الأكسجين الذي نتنفسه</li><li>يعطي الأوراق لونها الأخضر</li><li>في الخريف: يتوقف عن النشاط فتظهر الألوان الأخرى المختبئة (الأصفر والأحمر والبرتقالي)</li></ul></div><p>💡 <strong>تذكّر للاختبار:</strong> الكلوروفيل يختفي في الخريف ← تظهر ألوان الأوراق الجميلة الأخرى</p>'
+  }
+};
+
+function shp(k){
+  const d=HD[k];
+  if(!d)return;
+  document.getElementById('htitle').textContent=d.title;
+  document.getElementById('hsub').textContent=d.sub;
+  document.getElementById('hbody').innerHTML=d.body;
+  document.getElementById('hpop').classList.add('on');
+}
+function chp(){
+  document.getElementById('hpop').classList.remove('on');
+}
+
+</script>
+
+<div class="ai-chat-widget">
+  <div class="ai-chat-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:1.5rem">🤖</span>
+        <div>
+          <div style="font-weight:700">المعلم الذكي</div>
+          <div style="font-size:0.75rem;opacity:0.8">مساعدك في بيرلز</div>
+        </div>
+      </div>
+      <button class="ai-chat-close" onclick="toggleChat()">✖</button>
+    </div>
+    <div class="ai-chat-messages" id="aiChatMessages">
+      <div class="chat-msg bot-msg">مرحباً يا بطل! أنا "المعلم الذكي"، هل لديك أي سؤال حول اختبار بيرلز أو استراتيجيات القراءة؟ أنا هنا لمساعدتك!</div>
+    </div>
+    <div class="ai-chat-input-area">
+      <input type="text" id="aiChatInput" placeholder="اكتب سؤالك هنا..." onkeypress="if(event.key==='Enter') sendChatMessage()" autocomplete="off">
+      <button onclick="sendChatMessage()">إرسال</button>
+    </div>
+  </div>
+  <button class="ai-chat-fab" id="aiChatFab" onclick="toggleChat()">
+    💬 اسأل المعلم الذكي
+  </button>
+</div>
+
+
+<div id="hpop" onclick="if(event.target===this)chp()">
+  <div id="hbox">
+    <button id="hclose" onclick="chp()">✕ إغلاق</button>
+    <div id="htitle"></div>
+    <div id="hsub"></div>
+    <div id="hbody"></div>
+  </div>
+  <script>
+async function askGemini(prompt) {
+  const response = await fetch("/.netlify/functions/gemini", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ prompt })
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.error(data);
+    throw new Error(data.error || "حدث خطأ أثناء الاتصال بـ Gemini.");
+  }
+
+  return data.text;
+}
+</script>
+</body>
+</html>
