@@ -2043,18 +2043,19 @@ ${window.currentSkillStatsText}
 لا تضف أي أكواد برمجية، أعد فقط كود HTML النظيف المنسق للخطة العلاجية باللغة العربية.`;
 
   try {
-    const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + GEMINI_API_KEY, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }]
-      })
-    });
-    
-    if(!res.ok) throw new Error('API Error');
-    const data = await res.json();
-    let planHtml = data.candidates[0].content.parts[0].text;
-    planHtml = planHtml.replace(/```html|```/gi, '').trim();
+    const res = await fetch("/.netlify/functions/gemini", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ prompt })
+});
+
+if (!res.ok) throw new Error("API Error");
+
+const data = await res.json();
+let planHtml = data.text || "";
+planHtml = planHtml.replace(/```html|```/gi, "").trim();
     
     window.lastAIPlanHtml = planHtml;
     
