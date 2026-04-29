@@ -1,0 +1,25 @@
+# netlify.toml
+# ══════════════════════════════════════════════════════════════
+# إعدادات Netlify لمنصة القارئ الذكي
+# ══════════════════════════════════════════════════════════════
+
+[build]
+  # مجلد البناء — الملف الرئيسي index.html في الجذر
+  publish = "."
+  
+  # مجلد الـ Functions
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# إعادة توجيه طلبات الـ API
+[[redirects]]
+  from = "/.netlify/functions/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# ملاحظة: يجب ضبط المتغير البيئي في Netlify Dashboard:
+# Site Settings → Environment Variables → Add:
+#   Key:   GEMINI_API_KEY
+#   Value: [مفتاحك من Google AI Studio]
