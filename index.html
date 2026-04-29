@@ -2234,22 +2234,30 @@ async function sendChatMessage(){
   const systemInstruction = "أنت معلم خبير في اختبار القراءة الدولي (PIRLS) لطلاب المرحلة الابتدائية. تقتصر مهمتك فقط على مساعدة الطلاب في مهارات القراءة والفهم والإجابة عن استفساراتهم حول الاختبار. يُمنع منعاً باتاً الإجابة على أي أسئلة سياسية، دينية، رياضية، برمجية أو عامة خارج إطار التعليم. إذا سألك الطالب سؤالاً خارج النطاق، اعتذر منه بلطف وأخبره أنك معلم قراءة. كن مشجعاً واستخدم لغة تناسب طفلاً في الصف الرابع الابتدائي.";
   
   try {
-    const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + GEMINI_API_KEY, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        system_instruction: { parts: [{ text: systemInstruction }] },
-        contents: [...formattedHistory, { role: "user", parts: [{ text: msg }] }]
-      })
-    });
-    
-    if(!res.ok) {
-      const errTxt = await res.text();
-      console.error("API Response:", errTxt);
-      throw new Error('Chat API Error');
-    }
-    const data = await res.json();
-    let reply = data.candidates[0].content.parts[0].text;
+  const prompt = `${systemInstruction}
+
+سجل المحادثة السابق:
+${formattedHistory.map(item => `${item.role}: ${item.parts[0].text}`).join("\n")}
+
+سؤال الطالب:
+${msg}`;
+
+  const res = await fetch("/.netlify/functions/gemini", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ prompt })
+  });
+
+  if (!res.ok) {
+    const errTxt = await res.text();
+    console.error("Netlify Function Response:", errTxt);
+    throw new Error("Chat API Error");
+  }
+
+  const data = await res.json();
+  let reply = data.text || "لم أتمكن من توليد رد مناسب.";
     
     chatHistory.push({role: "user", text: msg});
     chatHistory.push({role: "model", text: reply});
